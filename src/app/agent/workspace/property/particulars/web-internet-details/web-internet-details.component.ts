@@ -48,9 +48,9 @@ export class WebInternetDetailsComponent implements OnInit {
 
   private initForm() {
     this.webInternetDetailForm = this.formBuilder.group({
-      numberOfBedroom : [''],
-      noOfSingleBedrooms:[''],
-      noOfDoubleBedrooms:[''],
+      numberOfBedroom : null,
+      noOfSingleBedrooms:null,
+      noOfDoubleBedrooms:null,
       isStudio:[false],
       publishedAddress:[''],
       hasUploadedToWebsite:[false],
@@ -59,31 +59,31 @@ export class WebInternetDetailsComponent implements OnInit {
       showerRooms:[''],
       advertisementRent:[''],
       advertisementRentFrequency: [''],
-      isPropertyOfWeek:[false],
-      numberOfReception:[''],
+      isPropertyOfTheWeek:[false],
+      numberOfReceptions:[''],
       numberOfFloors: [''],
-      availableFrom:[''],
-      availableTo:[''],
-      isLiftAccess:[false],
+      availableFromDate:[''],
+      availableToDate:[''],
+      hasLiftAccess:[false],
       houseType:[''],
       furnishingType:[''],
       kitchenStyle:[''],
-      isStudentLettingEnabled:[false],
+      doesStudentLet:[false],
       propertyStyle:[''],
       propertyAge:[''],
       decorativeCondition: [''],
       overAllCondition:[''],
-      isStudentFriendly:[false],
+      doesStudentFriendly:[false],
       parking:[''],
       garage:[''],
       heatingType:[''],
       garden:[''],
-      isExclWaterTax:[false],
+      doesExclusiveWaterTax:[false],
       floorArea:[''],
       floorAreaType:[''],
       landArea:[''],
       landAreaTypes:[''],
-      isExclCouncilTax:[false],
+      doesExclusiveCouncilTax:[false],
       isReferral:[false]
     })
   }
@@ -180,7 +180,7 @@ export class WebInternetDetailsComponent implements OnInit {
     this.webInternetDetailForm.patchValue(propertyDetails);
     this.webInternetDetailForm.patchValue({    
       showerRooms: propertyDetails.showerRooms ? propertyDetails.showerRooms : 0,
-      isLiftAccess: propertyDetails.isLiftAccess ? true : false,
+      hasLiftAccess: propertyDetails.hasLiftAccess ? true : false,
       parking: Number(propertyDetails.parking)
     })
   }
@@ -195,9 +195,9 @@ export class WebInternetDetailsComponent implements OnInit {
   
   private patchPropertyWebInfo(propertyWebInfo: IPropertyDetails) {
       this.webInternetDetailForm.patchValue(propertyWebInfo);
-      this.webInternetDetailForm.patchValue({
-        hasUploadedToWebsite: propertyWebInfo.hasUploadedToWebsite ? false : true
-      });
+      // this.webInternetDetailForm.patchValue({
+      //   hasUploadedToWebsite: propertyWebInfo.hasUploadedToWebsite ? false : true
+      // });
   }
   
 }

@@ -17,7 +17,7 @@ export class ParticularsService {
     private commonService: CommonService,
     private agentService: AgentService
   ) { }
-  updateDetails(formName : any, entityId: any) {
+  updateDetails(formName: any, entityId: any) {
     formName.valueChanges.pipe(
       debounceTime(1000),
       tap(() => {
@@ -25,32 +25,47 @@ export class ParticularsService {
         this.commonService.showAutoSaveLoader(this.formStatus);
         const changedData = this.commonService.getDirtyValues(formName)
         const controlName = Object.keys(changedData);
-        this.formChangedValue = changedData ?? {};
         
+        if (controlName instanceof Array) {
+          if(controlName.indexOf('availableFromDate') != -1){
+            let updatedValue = this.commonService.getFormatedDate(changedData?.availableFromDate);
+            changedData.availableFromDate = updatedValue;
+          }
+          if(controlName.indexOf('availableToDate') != -1){
+            let updatedValue = this.commonService.getFormatedDate(changedData?.availableToDate);
+            changedData.availableToDate = updatedValue;
+          }
+          if(controlName.indexOf('fullPublishedDescription') != -1){
+            changedData.fullDescription = changedData.fullPublishedDescription;
+            delete changedData.fullPublishedDescription;
+          }
+        }
+        this.formChangedValue = changedData ?? {};
+
       }),
       switchMap((value) => {
-        if(Object.keys(this.formChangedValue).length > 0) {
+        if (Object.keys(this.formChangedValue).length > 0) {
           return this.agentService.updatePropertyDetails(entityId, this.formChangedValue);
         }
       }),
       takeUntil(this.unsubscribe)
-      ).subscribe(async (value) => {
-        formName.markAsPristine();
-        formName.markAsUntouched();
-        this.formStatus = FormStatus.Saved;
-        this.commonService.showAutoSaveLoader(this.formStatus);
-        await this.sleep(2000);
-        if (this.formStatus === FormStatus.Saved) {
-          this.formStatus = FormStatus.Idle;
-         this.commonService.showAutoSaveLoader(this.formStatus);
-        }
-      }, (error) => {
-        formName.markAsPristine();
-        formName.markAsUntouched();
+    ).subscribe(async (value) => {
+      formName.markAsPristine();
+      formName.markAsUntouched();
+      this.formStatus = FormStatus.Saved;
+      this.commonService.showAutoSaveLoader(this.formStatus);
+      await this.sleep(2000);
+      if (this.formStatus === FormStatus.Saved) {
         this.formStatus = FormStatus.Idle;
         this.commonService.showAutoSaveLoader(this.formStatus);
-        this.updateDetails(formName, entityId);
       }
+    }, (error) => {
+      formName.markAsPristine();
+      formName.markAsUntouched();
+      this.formStatus = FormStatus.Idle;
+      this.commonService.showAutoSaveLoader(this.formStatus);
+      this.updateDetails(formName, entityId);
+    }
     );
   }
   sleep(ms: number): Promise<any> {
