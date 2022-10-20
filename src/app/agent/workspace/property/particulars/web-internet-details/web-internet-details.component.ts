@@ -195,9 +195,13 @@ export class WebInternetDetailsComponent implements OnInit {
   
   private patchPropertyWebInfo(propertyWebInfo: IPropertyDetails) {
       this.webInternetDetailForm.patchValue(propertyWebInfo);
-      // this.webInternetDetailForm.patchValue({
-      //   hasUploadedToWebsite: propertyWebInfo.hasUploadedToWebsite ? false : true
-      // });
+      /**
+       * Required for investigation
+       * 
+       * this.webInternetDetailForm.patchValue({
+        hasUploadedToWebsite: propertyWebInfo.hasUploadedToWebsite ? false : true
+      });
+      */
   }
   
 }

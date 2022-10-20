@@ -28,14 +28,14 @@ export class ParticularsService {
         
         if (controlName instanceof Array) {
           if(controlName.indexOf('availableFromDate') != -1){
-            let updatedValue = this.commonService.getFormatedDate(changedData?.availableFromDate);
+            const updatedValue = this.commonService.getFormatedDate(changedData?.availableFromDate);
             changedData.availableFromDate = updatedValue;
           }
-          if(controlName.indexOf('availableToDate') != -1){
-            let updatedValue = this.commonService.getFormatedDate(changedData?.availableToDate);
+         else if(controlName.indexOf('availableToDate') != -1){
+          const updatedValue = this.commonService.getFormatedDate(changedData?.availableToDate);
             changedData.availableToDate = updatedValue;
           }
-          if(controlName.indexOf('fullPublishedDescription') != -1){
+        else if(controlName.indexOf('fullPublishedDescription') != -1){
             changedData.fullDescription = changedData.fullPublishedDescription;
             delete changedData.fullPublishedDescription;
           }

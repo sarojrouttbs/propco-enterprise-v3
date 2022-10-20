@@ -21,7 +21,7 @@
       <ion-col size="50">
         <ion-text class="label">Available To</ion-text>
         <br>
-        <ion-text class="value">{{property?.propertyInfo?.availableToDate ? (property?.propertyInfo?.availableToDate | date: DATE_FORMAT.DATE) : notAvailable}}</ion-text>
+        <ion-text class="value">{{(property?.propertyInfo?.availableToDate ? (property?.propertyInfo?.availableToDate | date: DATE_FORMAT.DATE) : notAvailable)}}</ion-text>
       </ion-col>
       <ion-col size="50">
         <ion-text class="label">Booking Office</ion-text>
