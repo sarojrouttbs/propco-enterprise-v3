@@ -59,7 +59,7 @@ export class RentSalesFiguresComponent implements OnInit {
       rentFrequency: this.property?.propertyRentInfo?.rentFrequency,
       frequencyType: this.property?.propertyRentInfo?.frequencyType,
       depositAmount: this.property?.propertyRentInfo?.depositAmount || 0,
-      depositSchemeNo: this.property?.propertyRentInfo?.depositSchemeNo,
+      depositSchemeNumber: this.property?.propertyRentInfo?.depositSchemeNumber,
       depositScheme: parseInt(this.property?.propertyRentInfo?.depositScheme),
       salePriceType: this.property?.propertyRentInfo?.salePriceType,
       salePrice: this.property?.propertyRentInfo?.salePrice || 0,
