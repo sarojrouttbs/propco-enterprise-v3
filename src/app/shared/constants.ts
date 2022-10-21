@@ -16,7 +16,8 @@ export const PROPCO = {
   REFERENCING_INFO: 'referencing_info',
   PROPERTY_LOOKUP_DATA: 'property_lookup_data',
   SSO_URL_ROUTE: 'sso_url_route',
-  SOLR_SERACH_TERMS: 'solr_search_terms'
+  SOLR_SERACH_TERMS: 'solr_search_terms',
+  PORTAL: 'portal'
 };
 
 export const USER_TYPES = {
@@ -253,7 +254,7 @@ export const SYSTEM_CONFIG = {
 export const SYSTEM_OPTIONS = {
   REPAIR_ESTIMATE_QUOTE_THRESHOLD: 'REPAIR_ESTIMATE_QUOTE_THRESHOLD',
   INVOICE_VERIFICATION_THRESHOLD: 'INVOICE_VERIFICATION_THRESHOLD',
-  WEB_IMAGE_URL : 'WEB_IMAGE_URL',
+  WEB_IMAGE_URL: 'WEB_IMAGE_URL',
   STDVATRATE: 'STDVATRATE'
 };
 
@@ -664,8 +665,8 @@ export const AGENT_WORKSPACE_CONFIGS = {
       'whitegoods': 'Service/White Goods',
       'safety': 'Safety Devices/Alarms',
       'clauses': 'Clauses',
-      'media' : 'Media',
-      'user-assignments' : 'User Assignments'
+      'media': 'Media',
+      'user-assignments': 'User Assignments'
     }
   },
   landlord: {
@@ -820,11 +821,11 @@ export const HMRC_ERROR_MESSAGES = {
 }
 
 export const HMRC_PREFERENCE_ORDER = [
-  { order: 1, index:1 },
-  { order: 2, index:2 },
-  { order: 3, index:3 },
-  { order: 4, index:4 },
-  { order: 5, index:6 },
-  { order: 6, index:5 },
-  { order: 7, index:0 }
+  { order: 1, index: 1 },
+  { order: 2, index: 2 },
+  { order: 3, index: 3 },
+  { order: 4, index: 4 },
+  { order: 5, index: 6 },
+  { order: 6, index: 5 },
+  { order: 7, index: 0 }
 ]

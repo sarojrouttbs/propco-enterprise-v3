@@ -83,7 +83,7 @@
               <ion-col size="33.3">
                 <ion-item>
                   <ion-label position="floating">No. Of Visits Per Annum (TOB)</ion-label>
-                  <ion-input formControlName="visitsPerAnnum"></ion-input>
+                  <ion-input formControlName="visitsPerAnnum" (ionChange)='onVisitChange($event.target.value)'></ion-input>
                 </ion-item>
               </ion-col>
               <ion-col size="33.3">
