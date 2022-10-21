@@ -64,6 +64,7 @@ export class LoginPage implements OnInit {
     this.loginService.authenticateUser(this.loginForm.value).subscribe((res) => {
       this.commonService.setItem(PROPCO.ACCESS_TOKEN, res.loginId);
       this.commonService.setItem(PROPCO.WEB_KEY, res.webKey);
+      this.commonService.setItem(PROPCO.PORTAL, true);
       this.router.navigate(['/agent/dashboard'], { replaceUrl: true });
     }, error => {
       this.commonService.showMessage(error.error || ERROR_MESSAGE.DEFAULT, 'Login', 'Error');

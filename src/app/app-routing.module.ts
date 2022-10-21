@@ -32,7 +32,8 @@ const routes: Routes = [
   {
     path: 'solr',
     loadChildren: () => import('./solr/solr.module').then(m => m.SolrPageModule),
-    data: { preload: true, delay: 0 }
+    data: { preload: true, delay: 0 },
+    canActivate: [AuthGuard]
   },
   {
     path: 'barclaycard',

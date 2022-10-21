@@ -90,14 +90,10 @@ export class DashboardPage implements OnInit {
   private async initApiCalls() {
     const accessToken = this.commonService.getItem(PROPCO.ACCESS_TOKEN);
     const webKey = this.commonService.getItem(PROPCO.WEB_KEY);
-    let ssoKey = encodeURIComponent(this.routeSnapShot.queryParams.ssoKey);
-    const oldSsoKey = this.commonService.getItem(PROPCO.SSO_KEY);
-    if (accessToken && webKey && ssoKey == 'undefined') {
-      ssoKey = oldSsoKey;
-    }
-    if (accessToken && webKey && (ssoKey && ssoKey === oldSsoKey)) {
+    const userData = this.commonService.getItem(PROPCO.USER_DETAILS, true);
+    if (accessToken && webKey && userData) {
       this.setDefaultHome(true);
-      this.loggedInUserData = this.commonService.getItem(PROPCO.USER_DETAILS, true);
+      this.loggedInUserData = userData;
       this.isSolrTourDone = this.loggedInUserData.isSolrTourDone;
       this.showTourGuide();
       this.loaded = true;
