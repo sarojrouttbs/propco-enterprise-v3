@@ -66,7 +66,8 @@ export class PeriodicVisitModalPage implements OnInit {
       return;
     }
     this.visitForm.value.dueDate = this.commonService.getFormatedDate(this.visitForm.value.dueDate);
-    this.visitForm.value.bookedDate = this.commonService.getFormatedDate(this.visitForm.value.bookedDate);
+    if (this.visitForm.value.bookedDate)
+      this.visitForm.value.bookedDate = this.commonService.getFormatedDate(this.visitForm.value.bookedDate);
     this.agentService.createPeriodicVisit(this.propertyId, this.visitForm.value).subscribe((res) => {
       this.modalController.dismiss('success');
     }, (error) => {
@@ -80,7 +81,8 @@ export class PeriodicVisitModalPage implements OnInit {
       return;
     }
     this.visitForm.value.dueDate = this.commonService.getFormatedDate(this.visitForm.value.dueDate);
-    this.visitForm.value.bookedDate = this.commonService.getFormatedDate(this.visitForm.value.bookedDate);
+    if (this.visitForm.value.bookedDate)
+      this.visitForm.value.bookedDate = this.commonService.getFormatedDate(this.visitForm.value.bookedDate);
     this.agentService.updatePeriodicVisit(this.visitData.visitId, this.visitForm.value).subscribe((res) => {
       this.modalController.dismiss('success');
     }, (error) => {
