@@ -28,10 +28,9 @@ export class AuthGuard implements CanActivate {
     async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         const accessToken = this.commonService.getItem(PROPCO.ACCESS_TOKEN);
         const webKey = this.commonService.getItem(PROPCO.WEB_KEY);
-        let ssoRaw = encodeURIComponent(route.queryParams.ssoKey);
-        let ssoKey;
-        ssoKey = (ssoRaw && ssoRaw !== 'undefined') ? ssoRaw : null;
-        let existingSso = this.commonService.getItem(PROPCO.SSO_KEY);
+        const ssoRaw = encodeURIComponent(route.queryParams.ssoKey);
+        const ssoKey = (ssoRaw && ssoRaw !== 'undefined') ? ssoRaw : null;
+        const existingSso = this.commonService.getItem(PROPCO.SSO_KEY);
         if ((accessToken && webKey) && !ssoKey) {
             return true;
         }
@@ -48,9 +47,8 @@ export class AuthGuard implements CanActivate {
         else if (!this.commonService.getItem(PROPCO.PORTAL) && ssoKey) {
             /** Embeded */
             if (accessToken && webKey) {
-                if (ssoKey === existingSso) {
+                if (ssoKey === existingSso)
                     return true;
-                }
                 else if (ssoKey !== existingSso) {
                     await this.authenticateSSO(state.url, ssoKey);
                     return true;
