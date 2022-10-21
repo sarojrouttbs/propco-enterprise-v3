@@ -48,9 +48,9 @@ export class PeriodicVisitModalPage implements OnInit {
 
     if (this.action === 'edit' && this.visitData) {
       this.visitForm.patchValue(this.visitData);
-      this.visitForm.get('dueDate').setValue(this.visitData.visitDate);
+      this.visitForm.get('dueDate').setValue(this.visitData?.visitDate);
+      this.visitData.get('description').setValue(this.visitData?.description);
     }
-
   }
 
   save() {
