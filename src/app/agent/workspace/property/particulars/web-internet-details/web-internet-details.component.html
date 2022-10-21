@@ -22,20 +22,20 @@
             <ion-item>
               <ion-label position="floating">Bedrooms <ion-text class="mandatory">*</ion-text>
               </ion-label>
-              <ion-input formControlName="numberOfBedroom"></ion-input>
+              <ion-input formControlName="numberOfBedroom" type="number" min="0"></ion-input>
             </ion-item>
             <app-validation-message [control]="webInternetDetailForm.controls.numberOfBedroom"></app-validation-message>
           </ion-col>
           <ion-col size="10">
             <ion-item>
               <ion-label position="floating">Single Bedrooms</ion-label>
-              <ion-input formControlName="noOfSingleBedrooms"></ion-input>
+              <ion-input formControlName="noOfSingleBedrooms" type="number" min="0"></ion-input>
             </ion-item>
           </ion-col>
           <ion-col size="10">
             <ion-item>
               <ion-label position="floating">Double Bedrooms</ion-label>
-              <ion-input formControlName="noOfDoubleBedrooms"></ion-input>
+              <ion-input formControlName="noOfDoubleBedrooms" type="number" min="0"></ion-input>
             </ion-item>
           </ion-col>
           <ion-col size="10">
@@ -66,21 +66,21 @@
           <ion-col size="14">
             <ion-item>
               <ion-label position="floating">Bathrooms</ion-label>
-              <ion-input formControlName="numberOfBathroom"></ion-input>
+              <ion-input formControlName="numberOfBathroom" type="number" min="0"></ion-input>
             </ion-item>
           </ion-col>
 
           <ion-col size="14">
             <ion-item>
               <ion-label position="floating">En-suites</ion-label>
-              <ion-input formControlName="ensuite"></ion-input>
+              <ion-input formControlName="ensuite"  type="number" min="0"></ion-input>
             </ion-item>
           </ion-col>
 
           <ion-col size="12">
             <ion-item>
               <ion-label position="floating">Shower Rooms</ion-label>
-              <ion-input formControlName="showerRooms"></ion-input>
+              <ion-input formControlName="showerRooms"  type="number" min="0"></ion-input>
             </ion-item>
           </ion-col>
           <ion-col size="15">
@@ -107,7 +107,7 @@
           </ion-col>
           <ion-col size="25">
             <ion-item lines="none">
-              <ion-toggle color="primary" formControlName="isPropertyOfWeek"></ion-toggle>
+              <ion-toggle color="primary" formControlName="isPropertyOfTheWeek"></ion-toggle>
               <ion-text>Property of the Week</ion-text>
             </ion-item>
           </ion-col>
@@ -117,27 +117,27 @@
           <ion-col size="20">
             <ion-item>
               <ion-label position="floating">Receptions</ion-label>
-              <ion-input formControlName="numberOfReception"></ion-input>
+              <ion-input formControlName="numberOfReceptions" type="number" min="0"></ion-input>
             </ion-item>
           </ion-col>
 
           <ion-col size="20">
             <ion-item>
               <ion-label position="floating">Floors</ion-label>
-              <ion-input formControlName="numberOfFloors"></ion-input>
+              <ion-input formControlName="numberOfFloors" type="number" min="0"></ion-input>
             </ion-item>
           </ion-col>
 
           <ion-col size="15">
             <ion-item id="availableFromDate">
               <ion-label position="floating">Available From</ion-label>
-              <ion-input value="{{ webInternetDetailForm.controls.availableFrom.value | date: DATE_FORMAT.DATE }}"
+              <ion-input value="{{ webInternetDetailForm.controls.availableFromDate.value | date: DATE_FORMAT.DATE }}"
                 readonly>
               </ion-input>
               <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
               <ion-popover class="ion-datepicker-popover" trigger="availableFromDate" show-backdrop="false">
                 <ng-template>
-                  <ion-datetime showDefaultButtons="true" presentation="date" formControlName="availableFrom">
+                  <ion-datetime showDefaultButtons="true" presentation="date" formControlName="availableFromDate">
                   </ion-datetime>
                 </ng-template>
               </ion-popover>
@@ -146,13 +146,13 @@
           <ion-col size="15">
             <ion-item id="availableToDate">
               <ion-label position="floating">Available To</ion-label>
-              <ion-input value="{{ webInternetDetailForm.controls.availableTo.value | date: DATE_FORMAT.DATE }}"
+              <ion-input value="{{ webInternetDetailForm.controls.availableToDate.value | date: DATE_FORMAT.DATE }}"
                 readonly>
               </ion-input>
               <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
               <ion-popover class="ion-datepicker-popover" trigger="availableToDate" show-backdrop="false">
                 <ng-template>
-                  <ion-datetime showDefaultButtons="true" presentation="date" formControlName="availableTo">
+                  <ion-datetime showDefaultButtons="true" presentation="date" formControlName="availableToDate">
                   </ion-datetime>
                 </ng-template>
               </ion-popover>
@@ -160,7 +160,7 @@
           </ion-col>
           <ion-col size="25">
             <ion-item lines="none">
-              <ion-toggle color="primary" formControlName="isLiftAccess"></ion-toggle>
+              <ion-toggle color="primary" formControlName="hasLiftAccess"></ion-toggle>
               <ion-text>Lift Access</ion-text>
             </ion-item>
           </ion-col>
@@ -204,7 +204,7 @@
 
           <ion-col size="30">
             <ion-item lines="none">
-              <ion-toggle color="primary" formControlName="isStudentLettingEnabled"></ion-toggle>
+              <ion-toggle color="primary" formControlName="doesStudentLet"></ion-toggle>
               <ion-text>Student Lettings</ion-text>
             </ion-item>
           </ion-col>
@@ -257,7 +257,7 @@
 
           <ion-col size="30">
             <ion-item lines="none">
-              <ion-toggle color="primary" formControlName="isStudentFriendly"></ion-toggle>
+              <ion-toggle color="primary" formControlName="doesStudentFriendly"></ion-toggle>
               <ion-text>Student Friendly</ion-text>
             </ion-item>
           </ion-col>
@@ -310,7 +310,7 @@
 
           <ion-col size="30">
             <ion-item lines="none">
-              <ion-toggle color="primary" formControlName="isExclWaterTax"></ion-toggle>
+              <ion-toggle color="primary" formControlName="doesExclusiveWaterTax"></ion-toggle>
               <ion-text>Exclusive Water</ion-text>
             </ion-item>
           </ion-col>
@@ -355,7 +355,7 @@
 
           <ion-col size="30">
             <ion-item lines="none">
-              <ion-toggle color="primary" formControlName="isExclCouncilTax"></ion-toggle>
+              <ion-toggle color="primary" formControlName="doesExclusiveCouncilTax"></ion-toggle>
               <ion-text>Exclusive Tax</ion-text>
             </ion-item>
           </ion-col>
