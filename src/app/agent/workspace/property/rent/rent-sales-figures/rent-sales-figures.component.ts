@@ -32,7 +32,6 @@ export class RentSalesFiguresComponent implements OnInit {
   property: any;
   isRentForm = false;
   DATE_FORMAT = DATE_FORMAT;
-  dateChanged = new FormControl('');
   systemOptions: any;
 
   constructor(private commonService: CommonService, private agentService: AgentService, private modalController: ModalController) { }
@@ -84,7 +83,7 @@ export class RentSalesFiguresComponent implements OnInit {
         cancelledDate: this.property?.propertyRentInfo?.emergencyResponseService?.cancelledDate
       },
       managementCommission: this.property?.propertyRentInfo?.managementCommission,
-      vatInclusive: this.property?.propertyRentInfo?.vatInclusive,
+      vatInclusiveCommission: this.property?.propertyRentInfo?.vatInclusiveCommission,
       secondLevelCommission: this.property?.propertyRentInfo?.secondLevelCommission,
       narrativeForFees: this.property?.propertyRentInfo?.narrativeForFees,
       narrativeForFeesVat: this.property?.propertyRentInfo?.narrativeForFeesVat,
@@ -170,9 +169,9 @@ export class RentSalesFiguresComponent implements OnInit {
         const commission = parseFloat(res.data);
         const vat = (commission * ((this.systemOptions / 100) + 1)).toFixed(2);
         this.group.get('managementCommission').patchValue(commission);
-        this.group.get('vatInclusive').patchValue(vat);
+        this.group.get('vatInclusiveCommission').patchValue(vat);
         this.group.get('managementCommission').markAsDirty();
-        this.group.get('vatInclusive').markAsDirty();
+        this.group.get('vatInclusiveCommission').markAsDirty();
         this.group.updateValueAndValidity();
       }
     });
@@ -191,10 +190,10 @@ export class RentSalesFiguresComponent implements OnInit {
       if (res && res.data) {
         const vat = parseFloat(res.data);
         const commission = (vat / ((this.systemOptions / 100) + 1)).toFixed(2);
-        this.group.get('vatInclusive').patchValue(vat);
+        this.group.get('vatInclusiveCommission').patchValue(vat);
         this.group.get('managementCommission').patchValue(commission);
         this.group.get('managementCommission').markAsDirty();
-        this.group.get('vatInclusive').markAsDirty();
+        this.group.get('vatInclusiveCommission').markAsDirty();
         this.group.updateValueAndValidity();
       }
     });
@@ -216,6 +215,7 @@ export class RentSalesFiguresComponent implements OnInit {
   removeDate(control: string) {
     if (control) {
       this.group.controls.emergencyResponseService.get(control).setValue(null);
+      this.group.controls.emergencyResponseService.get(control).markAsDirty();
     }
   }
 
@@ -257,6 +257,15 @@ export class RentSalesFiguresComponent implements OnInit {
         }
       );
     });
+  }
+
+  onInceptionDateChange() {    
+    const inceptionDate = this.group.get('emergencyResponseService')['controls'].inceptionDate.value;
+    const renewalDate = this.commonService.getFormatedDate(new Date(inceptionDate).setFullYear(new Date().getFullYear() + 1));    
+    this.group.get('emergencyResponseService.renewalDate').patchValue(renewalDate);
+    this.group.get('emergencyResponseService.renewalDate').markAsDirty();
+    this.group.get('emergencyResponseService.renewalDate').updateValueAndValidity();
+
   }
 }
 

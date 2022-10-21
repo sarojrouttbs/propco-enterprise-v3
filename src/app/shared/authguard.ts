@@ -28,10 +28,20 @@ export class AuthGuard implements CanActivate {
     async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         const accessToken = this.commonService.getItem(PROPCO.ACCESS_TOKEN);
         const webKey = this.commonService.getItem(PROPCO.WEB_KEY);
+<<<<<<< Updated upstream
         const ssoRaw = encodeURIComponent(route.queryParams.ssoKey);
         const ssoKey = (ssoRaw && ssoRaw !== 'undefined') ? ssoRaw : null;
         const existingSso = this.commonService.getItem(PROPCO.SSO_KEY);
         if ((accessToken && webKey) && !ssoKey) {
+=======
+        let ssoKey = encodeURIComponent(route.queryParams.ssoKey);
+        let oldSsoKey = this.commonService.getItem(PROPCO.SSO_KEY);
+        if (accessToken && webKey && ssoKey == 'undefined') {
+            ssoKey = oldSsoKey;
+        }
+
+        if (accessToken && webKey) {
+>>>>>>> Stashed changes
             return true;
         }
         else if (this.commonService.getItem(PROPCO.PORTAL) && !ssoKey) {
