@@ -77,17 +77,18 @@ export class RentComponent implements OnInit {
             eriProduct: null,
             inceptionDate: null,
             renewalDate: null,
-            cancelledDate: null
+            cancelledDate: null,
+            dateChanged: this.commonService.getFormatedDate(new Date())
           }
         ),
         managementCommission: null,
-        vatInclusive: null,
+        vatInclusiveCommission: null,
         secondLevelCommission: null,
         narrativeForFees: null,
         narrativeForFeesVat: null,
         lastRentReview: null,
         nextRentReview: null,
-        isLandlordArrearsExcluded: null
+        isLandlordArrearsExcluded: null,
       })
     });
   }
@@ -132,11 +133,10 @@ export class RentComponent implements OnInit {
       tap(() => {
         this.formStatus = FormStatus.Saving;
         this.commonService.showAutoSaveLoader(this.formStatus);
-        const changedData = this.commonService.getDirtyValues(this.rentForm)
+        const changedData = this.commonService.getDirtyValues(this.rentForm);
         const controlName = Object.keys(changedData);
         const formArray = Object.keys(changedData[controlName[0]]);
         const formArrayValue = changedData[controlName[0]][formArray[0]];
-
         if (typeof formArrayValue === 'object') {
           /* to get nested controls */
           this.formChangedValue = formArrayValue;

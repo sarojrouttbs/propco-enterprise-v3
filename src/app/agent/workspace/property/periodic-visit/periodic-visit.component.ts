@@ -179,10 +179,10 @@ export class PeriodicVisitComponent implements OnInit, OnDestroy {
 
   initForm() {
     this.requirementForm = this.formBuilder.group({
-      visitsPerAnnum: [''],
-      visitsPerAnnumHMO: [{ value: '', disabled: true }],
+      numberOfVisitsPerAnnum: [''],
+      numberOfVisitsPerAnnumHmo: [{ value: '', disabled: true }],
       visitSequenceStartDate: [''],
-      visitIntervalInMonths: [{ value: '', disabled: true }],
+      numberOfVisitIntervalInMonths: [{ value: '', disabled: true }],
       visitIntervalInMonthsHMO: [{ value: '', disabled: true }]
     });
   }
@@ -323,8 +323,10 @@ export class PeriodicVisitComponent implements OnInit, OnDestroy {
   onVisitChange(val) {
     if (val) {
       const calculateInterval = Math.round(12 / val);
-      this.requirementForm.get('visitIntervalInMonths').patchValue(calculateInterval);
-      this.requirementForm.get('visitIntervalInMonths').markAsDirty();
+      this.requirementForm.get('numberOfVisitsPerAnnum').patchValue(+val);
+      this.requirementForm.get('numberOfVisitIntervalInMonths').patchValue(calculateInterval);
+      this.requirementForm.get('numberOfVisitsPerAnnum').markAsDirty();
+      this.requirementForm.get('numberOfVisitIntervalInMonths').markAsDirty();
       this.requirementForm.updateValueAndValidity();
     }
   }
