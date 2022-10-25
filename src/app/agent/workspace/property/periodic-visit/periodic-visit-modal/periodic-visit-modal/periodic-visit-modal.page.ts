@@ -39,7 +39,7 @@ export class PeriodicVisitModalPage implements OnInit {
       contactName: [''],
       contactNumber: [''],
       status: ['', Validators.required],
-      visitNumber: ['', Validators.required],
+      visitNumber: [1, Validators.required],
       dueDate: ['', Validators.required],
       bookedDate: [''],
       comments: [''],
