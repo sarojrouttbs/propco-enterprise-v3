@@ -1,4 +1,13 @@
 #office-filter-modal {
+    .checklist-leaf-node-label {
+        display: inline-block;
+        width: 100px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding-top: 7px;
+    }
+
     .header-section {
         border-bottom: 1px solid var(--ion-color-four);
         padding: 10px 0px;
@@ -19,29 +28,29 @@
     .margin-20-search-box {
         margin-top: -17px;
         padding-left: 0;
-      }
-    
-    @media screen and (max-width: 768px){
+    }
+
+    @media screen and (max-width: 768px) {
         .margin-20-search-box {
             padding-left: 60px;
         }
-    } 
+    }
 
-    table{
+    table {
         width: 100%
     }
 
-    .filter-list{
-        padding: 5px 12px;        
+    .filter-list {
+        padding: 5px 12px;
         border-bottom: 1px solid var(--ion-color-four);
         font-size: 14px;
     }
 
-    ion-grid{
-        padding:0px;
+    ion-grid {
+        padding: 0px;
     }
 
-    mat-tree{
+    mat-tree {
         width: 100%
     }
 }
