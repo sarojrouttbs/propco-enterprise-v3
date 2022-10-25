@@ -132,7 +132,7 @@ export class AgreementDetailsComponent implements OnInit {
     }
   }
 
-  private setLookupData(data: any) {
+  private setLookupData(data: any) {    
     this.frequencyTypes = data.frequencyTypes;
     this.agreementStatuses = data.agreementStatuses;
     this.managementTypes = data.managementTypes;
@@ -154,8 +154,8 @@ export class AgreementDetailsComponent implements OnInit {
     });
   }
 
-  private patchAgreementDetails() {
-    this.agreementDetailsForm.patchValue(this.agreementDetails)
+  private patchAgreementDetails() {    
+    this.agreementDetailsForm.patchValue(this.agreementDetails);
     this.agreementDetailsForm.patchValue({
       commissionPercentage: this.agreementDetails?.commissionPercentage ? this.agreementDetails?.commissionPercentage.toString() + '%' : '0%',
       directDebitDueDay: this.agreementDetails?.directDebitDueDay ? this.agreementDetails?.directDebitDueDay : '0',
@@ -166,7 +166,7 @@ export class AgreementDetailsComponent implements OnInit {
       rent: this.agreementDetails.agreementTenantDetail[0].rent,
       nextClaimDate: this.agreementDetails.agreementTenantDetail[0].nextClaimDate,
       lastRentRequestDate: this.agreementDetails.agreementTenantDetail[0].lastRentRequestDate,
-      renewalRent: this.agreementDetails.agreementTenantDetail[0].renewalRent,
+      renewalRent: this.agreementDetails.renewalRent,
       room: this.agreementDetails.agreementTenantDetail[0].room
     });
   }
