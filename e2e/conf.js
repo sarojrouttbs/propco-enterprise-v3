@@ -48,7 +48,7 @@ exports.config = {
             './features/maintenance/iqf-faultqualification/service.contract.spec.js',
             './features/maintenance/iqf-faultqualification/appliance.cover.spec.js',
             './features/maintenance/idb-dashboard/fault.dashboard.spec.js',
-            './features/maintenance/ch-chronologicalhistory/chronological.history.spec.js',          
+            './features/maintenance/ch-chronologicalhistory/chronological.history.spec.js',  
        ]
     },
     onPrepare: () => {
