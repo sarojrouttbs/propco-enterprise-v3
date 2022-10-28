@@ -740,7 +740,7 @@ export const DATE_FORMAT = {
   YEAR_DATE_TIME: 'yyyy-MM-dd HH:mm:ss',
   YEAR_DATE_TIME_1: 'yyyy-MM-ddTHH:mm',
   YEAR_DATE: 'yyyy-MM-dd',
-  MAX_YEAR: 10
+  MAX_DATE: '2050-12-31'
 }
 
 export const HMRC = {

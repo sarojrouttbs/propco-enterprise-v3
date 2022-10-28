@@ -47,7 +47,7 @@ export class RentSalesFiguresComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.maxDate = this.commonService.getFormatedDate(new Date().setFullYear(new Date().getFullYear() + DATE_FORMAT.MAX_YEAR));
+    this.maxDate = this.commonService.getFormatedDate(DATE_FORMAT.MAX_DATE);
     this.getLookupData();
     this.getPropertyLookupData();
     this.getRentIndemnityProducts();
