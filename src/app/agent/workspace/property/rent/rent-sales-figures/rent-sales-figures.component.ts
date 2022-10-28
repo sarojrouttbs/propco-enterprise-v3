@@ -33,6 +33,7 @@ export class RentSalesFiguresComponent implements OnInit {
   isRentForm = false;
   DATE_FORMAT = DATE_FORMAT;
   systemOptions: any;
+  maxDate: any;
 
   constructor(private commonService: CommonService, private agentService: AgentService, private modalController: ModalController) { }
 
@@ -46,6 +47,7 @@ export class RentSalesFiguresComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.maxDate = this.commonService.getFormatedDate(DATE_FORMAT.MAX_DATE);
     this.getLookupData();
     this.getPropertyLookupData();
     this.getRentIndemnityProducts();
