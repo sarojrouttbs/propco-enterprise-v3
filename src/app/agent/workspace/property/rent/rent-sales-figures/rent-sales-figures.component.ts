@@ -47,7 +47,7 @@ export class RentSalesFiguresComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.maxDate = this.commonService.getFormatedDate(DATE_FORMAT.MAX_DATE);
+    this.maxDate = this.commonService.getFormatedDate(new Date().setFullYear(new Date().getFullYear() + DATE_FORMAT.MAX_YEAR));
     this.getLookupData();
     this.getPropertyLookupData();
     this.getRentIndemnityProducts();
@@ -261,13 +261,12 @@ export class RentSalesFiguresComponent implements OnInit {
     });
   }
 
-  onInceptionDateChange() {    
+  onInceptionDateChange() {
     const inceptionDate = this.group.get('emergencyResponseService')['controls'].inceptionDate.value;
-    const renewalDate = this.commonService.getFormatedDate(new Date(inceptionDate).setFullYear(new Date().getFullYear() + 1));    
+    const renewalDate = this.commonService.getFormatedDate(new Date(inceptionDate).setFullYear(new Date().getFullYear() + 1));
     this.group.get('emergencyResponseService.renewalDate').patchValue(renewalDate);
     this.group.get('emergencyResponseService.renewalDate').markAsDirty();
     this.group.get('emergencyResponseService.renewalDate').updateValueAndValidity();
-
   }
 }
 
