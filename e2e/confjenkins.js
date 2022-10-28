@@ -48,7 +48,10 @@ exports.config = {
             './features/maintenance/iqf-faultqualification/service.contract.spec.js',
             './features/maintenance/iqf-faultqualification/appliance.cover.spec.js',
             './features/maintenance/idb-dashboard/fault.dashboard.spec.js'                      
-       ]
+        ],
+        hmrc: [
+            './features/hmrc/hmrc-selfassessment-form.spec.js',
+        ]
     },
     onPrepare: () => {
         require('./util/custom.matcher');
