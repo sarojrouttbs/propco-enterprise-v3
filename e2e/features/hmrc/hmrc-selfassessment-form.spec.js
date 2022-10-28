@@ -6,44 +6,59 @@ var hmrc = require('./hmrc-selfassessment-form.page');
 
     it('should validate navigation to HMRC reporting page', function(){
         let userLogin = new login();  
-        userLogin.navigateToHMRC();        
+        let hmrcPage = new hmrc();
+        userLogin.navigateToHMRC(); 
+        hmrcPage.waitForHMRCPageToLoad("verify");
+        userLogin.logoutFromPortal();      
     });
 
     it('should validate HMRC form send via email', function(){
+        let userLogin = new login();  
         let hmrcPage = new hmrc();
+        userLogin.navigateToHMRC();
         hmrcPage.waitForHMRCPageToLoad();
-        hmrcPage.applyFilter()
-        hmrcPage.selectTableRecord()
-        hmrcPage.navigateToNextScreen()
-        hmrcPage.selectFinancialYear()
-        hmrcPage.navigateToNextScreen()
-        hmrcPage.hmrcReportPreview()
-        hmrcPage.clickOnSendButton()
-        hmrcPage.validateProgress()
-        hmrcPage.validateFinish()
+        hmrcPage.applyFilter();
+        hmrcPage.selectTableRecord();
+        hmrcPage.navigateToNextScreen();
+        hmrcPage.selectFinancialYear();
+        hmrcPage.navigateToNextScreen();
+        hmrcPage.hmrcReportPreview();
+        hmrcPage.clickOnSendButton();
+        hmrcPage.validateProgress();
+        hmrcPage.validateFinish();
+        userLogin.logoutFromPortal();
     });
 
     it('should validate reset filter', function(){
+        let userLogin = new login();  
         let hmrcPage = new hmrc();
-        hmrcPage.applyFilter()
-        hmrcPage.validateSelection()
-        hmrcPage.resetFilter()
-        hmrcPage.validateFilterReset()
-
+        userLogin.navigateToHMRC();
+        hmrcPage.waitForHMRCPageToLoad();
+        hmrcPage.applyFilter();
+        hmrcPage.validateSelection();
+        hmrcPage.resetFilter();
+        hmrcPage.validateFilterReset();
+        userLogin.logoutFromPortal();
     });
 
-   it('should validate select all select none', function(){
-    let hmrcPage = new hmrc();
-    hmrcPage.clickSelectAll()
-    hmrcPage.validateCheckBoxSelection("check")
-    hmrcPage.clickSelectNone()
-    hmrcPage.validateCheckBoxSelection("uncheck")
-
+    it('should validate select all select none', function(){
+        let userLogin = new login();  
+        let hmrcPage = new hmrc();
+        userLogin.navigateToHMRC();
+        hmrcPage.waitForHMRCPageToLoad();
+        hmrcPage.clickSelectAll();
+        hmrcPage.validateCheckBoxSelection("check");
+        hmrcPage.clickSelectNone();
+        hmrcPage.validateCheckBoxSelection("uncheck");
+        userLogin.logoutFromPortal();
     });
 
     it('should validate pagination', function(){
+        let userLogin = new login();  
         let hmrcPage = new hmrc();
-        hmrcPage.validateCheckBoxSelection()
-
+        userLogin.navigateToHMRC();
+        hmrcPage.waitForHMRCPageToLoad();
+        hmrcPage.validateCheckBoxSelection();
+        userLogin.logoutFromPortal();
     });
 })
