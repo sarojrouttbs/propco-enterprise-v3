@@ -6,7 +6,7 @@
         replaceUrl="false"
           (click)="activeLink = item?.reference;navigate(item)" [active]="activeLink == item?.reference">
           <div class="record">
-            <div><i class="propcoicon no-background propcoicon-property"></i></div>
+            <div><i class="propcoicon no-background propcoicon-property" [ngClass]="{'propcoicon-property': item?.entity === 'PROPERTY', 'propcoicon-landlord': item?.entity === 'LANDLORD'}"></i></div>
             <div class="flex">
               <div class="number">{{item?.reference}}</div>
               <div class="name">{{item?.entityTitle}}</div>

@@ -1,6 +1,6 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -24,7 +24,7 @@ export class ApplicationListPage implements OnInit {
     pageSizeOptions: [5, 10, 25, 100],
     showFirstLastButtons: true
   };
-  maxDate = new Date();
+  maxDate = this.commonService.getFormatedDate(new Date());
   @ViewChild('paginator') paginator: MatPaginator;
   obsApplicationList: Observable<any>;
   filteredApplicationList: MatTableDataSource<ApplicationData> = new MatTableDataSource<ApplicationData>([]);
@@ -40,8 +40,6 @@ export class ApplicationListPage implements OnInit {
   applicationStatusTypes: any;
   offlinePaymentTypes: any;
   toblookupdata: any;
-  fromDate = new FormControl('', []);
-  toDate = new FormControl('', []);
   referencingInfodata: any;
   referencingInfo: any;
   isRecordsAvailable = true;
@@ -49,8 +47,16 @@ export class ApplicationListPage implements OnInit {
   isApplicationListAvailable = false;
   DEFAULTS = DEFAULTS;
   DATE_FORMAT = DATE_FORMAT;
+  filterForm: FormGroup;
 
-  constructor(private modalController: ModalController, private router: Router, private route: ActivatedRoute, private tobService: TobService, private commonService: CommonService) {
+  constructor(
+    private modalController: ModalController,
+    private router: Router,
+    private route: ActivatedRoute,
+    private tobService: TobService,
+    private commonService: CommonService,
+    private formBuilder: FormBuilder
+    ) {
     this.getTobLookupData();
     this.getLookUpData();
     this.getReferancingInfo();
@@ -62,6 +68,7 @@ export class ApplicationListPage implements OnInit {
   ionViewDidEnter() { 
     this.obsApplicationList = this.filteredApplicationList.connect();
     this.initData();
+    this.initFilterForm();
   }
 
   private initData() {
@@ -70,6 +77,13 @@ export class ApplicationListPage implements OnInit {
       this.propertyId = this.route.snapshot.parent.parent.paramMap.get('propertyId');
     }
     this.initApiCalls();
+  }
+
+  private initFilterForm() {
+    this.filterForm = this.formBuilder.group({
+      fromDate: [''],
+      toDate: ['']
+    });
   }
 
   private async initApiCalls() {
@@ -244,13 +258,13 @@ export class ApplicationListPage implements OnInit {
 
   filterByDate() {
     this.filteredApplicationList.data = this.applicationList;
-    this.filteredApplicationList.data = this.filteredApplicationList.data.filter(e => new Date(this.commonService.getFormatedDate(e.createdAt, this.DATE_FORMAT.YEAR_DATE)) >= new Date(this.commonService.getFormatedDate(this.fromDate.value, this.DATE_FORMAT.YEAR_DATE)) && new Date(this.commonService.getFormatedDate(e.createdAt, this.DATE_FORMAT.YEAR_DATE)) <= new Date(this.commonService.getFormatedDate(this.toDate.value, this.DATE_FORMAT.YEAR_DATE)));
+    this.filteredApplicationList.data = this.filteredApplicationList.data.filter(e => new Date(this.commonService.getFormatedDate(e.createdAt, this.DATE_FORMAT.YEAR_DATE)) >= new Date(this.commonService.getFormatedDate(this.filterForm.controls.fromDate.value, this.DATE_FORMAT.YEAR_DATE)) && new Date(this.commonService.getFormatedDate(e.createdAt, this.DATE_FORMAT.YEAR_DATE)) <= new Date(this.commonService.getFormatedDate(this.filterForm.controls.toDate.value, this.DATE_FORMAT.YEAR_DATE)));
     this.checkApplicationsAvailable();
   }
 
   resetFilters() {
-    this.fromDate.reset();
-    this.toDate.reset();
+    this.filterForm.controls.fromDate.reset();
+    this.filterForm.controls.toDate.reset();
     this.filteredApplicationList.data = this.applicationList;
     this.checkApplicationsAvailable();
   }

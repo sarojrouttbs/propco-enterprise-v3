@@ -20,7 +20,7 @@
         <ion-grid>
           <ion-row>
             <ion-col class="ion-align-self-center">
-              <ion-button color="success">Add</ion-button>
+              <ion-button color="success" (click)="openWhiteGoodModal()">Add</ion-button>
             </ion-col>
             <ion-col>
               <ion-item lines="none" class="ion-float-right">
@@ -77,6 +77,8 @@
         </table>
         <div id="whitegoods-overlay" class="overlay-class">
           <ion-button>Edit</ion-button>
+          <ion-button>Add Note</ion-button>
+          <ion-button>Remove</ion-button>
           <i (click)="hideMenu($event,'whitegoods-overlay')" class="propcoicon propcoicon-actions-on"></i>
         </div>
       </div>

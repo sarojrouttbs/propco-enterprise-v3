@@ -9,7 +9,17 @@ export interface Params {
 export interface Property {
   state: string;
   params: Params;
-  entityType: number;
+  entityId: string;
+  entity: string;
+  entityTitle: string;
+  reference: string;
+  isSelected: boolean;
+  pageRef: string;
+}
+
+export interface LANDLORD {
+  state: string;
+  params: Params;
   entityId: string;
   entity: string;
   entityTitle: string;
@@ -63,41 +73,41 @@ export interface PropertHmoLicence {
 }
 
 export interface IPropertyDetails {
-  numberOfBedroom : string,
-  noOfSingleBedrooms:string,
-  noOfDoubleBedrooms:string,
+  numberOfBedroom : number,
+  noOfSingleBedrooms:number,
+  noOfDoubleBedrooms:number,
   isStudio:boolean,
   publishedAddress:string,
   hasUploadedToWebsite:boolean,
-  numberOfBathroom:string,
-  ensuite:string,
-  showerRooms:string,
+  numberOfBathroom:number,
+  ensuite:number,
+  showerRooms:number,
   advertisementRent:string,
   advertisementRentFrequency: string,
-  isPropertyOfWeek:boolean,
-  numberOfReception:string,
-  numberOfFloors: string,
-  availableFrom:string,
-  availableTo:string,
-  isLiftAccess:boolean,
+  isPropertyOfTheWeek:boolean,
+  numberOfReceptions:number,
+  numberOfFloors: number,
+  availableFromDate:string,
+  availableToDate:string,
+  hasLiftAccess:boolean,
   houseType:string,
   furnishingType:string,
   kitchenStyle:string,
-  isStudentLettingEnabled:boolean,
+  doesStudentLet:boolean,
   propertyStyle:string,
   propertyAge:string,
   decorativeCondition: string,
   overAllCondition:string,
-  isStudentFriendly:boolean,
+  doesStudentFriendly:boolean,
   parking:string,
   garage:string,
   heatingType:string,
   garden:string,
-  isExclWaterTax:boolean,
+  doesExclusiveWaterTax:boolean,
   floorArea:string,
   floorAreaType:string,
   landArea:string,
   landAreaTypes:string,
-  isExclCouncilTax:boolean,
+  doesExclusiveCouncilTax:boolean,
   isReferral:boolean
 }

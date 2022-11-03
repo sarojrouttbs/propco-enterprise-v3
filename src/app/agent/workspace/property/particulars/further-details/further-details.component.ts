@@ -45,7 +45,7 @@ export class FurtherDetailsComponent implements OnInit {
       propertyCategory: [''],
       overAllCondition: [''],
       decorativeCondition: [''],
-      isLiftAccess: [false]
+      hasLiftAccess: [false]
     })
   }
 
@@ -131,7 +131,7 @@ export class FurtherDetailsComponent implements OnInit {
     this.furtherDetailsForm.patchValue({
       showerRooms: propertyDetails.showerRooms ? propertyDetails.showerRooms : 0,
       memberNo: propertyDetails.memberNo ? propertyDetails.memberNo : 0,
-      isLiftAccess: propertyDetails.isLiftAccess ? true : false
+      hasLiftAccess: propertyDetails.hasLiftAccess ? true : false
     })
   }
 }

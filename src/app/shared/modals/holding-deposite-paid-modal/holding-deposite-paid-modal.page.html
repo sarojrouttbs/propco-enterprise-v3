@@ -36,18 +36,20 @@
           <app-validation-message [control]="holdingDepositForm.controls.offlinePaymentReference"></app-validation-message>
         </ion-col>
 
-        <ion-col size-xs="100" size-sm="50" style="margin-top: 20px;">
-          <mat-form-field appearance="fill">
-            <mat-label> Payment Date</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="offlinePaymentDate" readonly>
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-          </mat-form-field>
-          <div style="margin-top: -20px !important;">
-            <app-validation-message [control]="holdingDepositForm.controls.offlinePaymentDate"></app-validation-message>
-          </div>
+        <ion-col size-xs="100" size-sm="50">
+          <ion-item id="offlinePaymentDate">
+            <ion-label position="floating">Payment Date<ion-text class="mandatory"> * </ion-text></ion-label>
+            <ion-input value="{{ holdingDepositForm.controls.offlinePaymentDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
+            <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+            <ion-popover class="ion-datepicker-popover" trigger="offlinePaymentDate" show-backdrop="false">
+              <ng-template>
+                <ion-datetime [showDefaultButtons]="true" presentation="date" formControlName="offlinePaymentDate">
+                </ion-datetime>
+              </ng-template>
+            </ion-popover>
+          </ion-item>
+          <app-validation-message [control]="holdingDepositForm.controls.offlinePaymentDate"></app-validation-message>
         </ion-col>
-       
       </ion-row>
     </ion-grid>
   </form>

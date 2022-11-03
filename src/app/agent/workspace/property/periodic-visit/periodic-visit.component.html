@@ -20,12 +20,12 @@
         <ion-grid>
           <ion-row>
             <ion-col class="ion-align-self-center">
-              <ion-button color="success" (click)="openVisitModal()">Add</ion-button>
+              <ion-button color="success" (click)="openVisitModal('add')">Add</ion-button>
             </ion-col>
             <ion-col>
               <ion-item lines="none" class="ion-float-right">
-                <ion-checkbox class="ma-checkbox" color="medium" slot="start"
-                  name="repairCheckbox" [formControl]="isDisableAutoManagementInspection">
+                <ion-checkbox class="ma-checkbox" color="medium" slot="start" name="repairCheckbox"
+                  [formControl]="isDisableAutoManagementInspection">
                 </ion-checkbox>
                 <ion-label>Disable automated Management Inspection for this property</ion-label>
               </ion-item>
@@ -47,8 +47,8 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let data of visitList" class="table-row pointer" (click)="onClickRow(data); $event.stopPropagation();"
-              [ngClass]="{'row-selected' : data.isSelected}">
+            <tr *ngFor="let data of visitList" class="table-row pointer"
+              (click)="onClickRow(data); $event.stopPropagation();" [ngClass]="{'row-selected' : data.isSelected}">
               <td>{{(data?.visitType| lookup: propertyVisitTypes) || notAvailable}}</td>
               <td>{{(data?.status | lookup: inspectionStatuses) || notAvailable}}</td>
               <td>{{data?.visitNumber || notAvailable}}</td>
@@ -60,14 +60,15 @@
               </td>
             </tr>
             <tr *ngIf="visitList?.length === 0">
-              <td colspan="6" class="no-data-available ion-text-center"><strong>{{DEFAULT_MESSAGES.NO_DATA_FOUND}}</strong>
+              <td colspan="6" class="no-data-available ion-text-center">
+                <strong>{{DEFAULT_MESSAGES.NO_DATA_FOUND}}</strong>
               </td>
             </tr>
           </tbody>
         </table>
         <div id="periodic-overlay" class="overlay-class">
           <ion-button (click)="addNotes()">Add Note</ion-button>
-          <ion-button>Edit</ion-button>
+          <ion-button (click)="openVisitModal('edit')">Edit</ion-button>
           <i (click)="hideMenu($event,'periodic-overlay')" class="propcoicon propcoicon-actions-on"></i>
         </div>
       </div>
@@ -82,23 +83,26 @@
               <ion-col size="33.3">
                 <ion-item>
                   <ion-label position="floating">No. Of Visits Per Annum (TOB)</ion-label>
-                  <ion-input formControlName="visitsPerAnnum"></ion-input>
+                  <ion-input formControlName="numberOfVisitsPerAnnum" (ionChange)='onVisitChange($event.target.value)'></ion-input>
                 </ion-item>
               </ion-col>
               <ion-col size="33.3">
                 <ion-item>
                   <ion-label position="floating">No. Of Visits Per Annum (HMO Licence)</ion-label>
-                  <ion-input formControlName="visitsPerAnnumHMO"></ion-input>
+                  <ion-input formControlName="numberOfVisitsPerAnnumHmo"></ion-input>
                 </ion-item>
               </ion-col>
               <ion-col size="33.3">
                 <ion-item id="visitSequenceStartDate">
                   <ion-label position="floating">Visit Sequence Start Date</ion-label>
-                  <ion-input value="{{ requirementForm.controls.visitSequenceStartDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
+                  <ion-input
+                    value="{{ requirementForm.controls.visitSequenceStartDate.value | date: DATE_FORMAT.DATE }}">
+                  </ion-input>
                   <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
                   <ion-popover class="ion-datepicker-popover" trigger="visitSequenceStartDate" show-backdrop="false">
                     <ng-template>
-                      <ion-datetime [showDefaultButtons]="true" presentation="date" formControlName="visitSequenceStartDate">
+                      <ion-datetime [showDefaultButtons]="true" presentation="date"
+                        formControlName="visitSequenceStartDate">
                       </ion-datetime>
                     </ng-template>
                   </ion-popover>
@@ -107,7 +111,7 @@
               <ion-col size="33.3">
                 <ion-item>
                   <ion-label position="floating">Visit Interval In Months (TOB)</ion-label>
-                  <ion-input formControlName="visitIntervalInMonths"></ion-input>
+                  <ion-input formControlName="numberOfVisitIntervalInMonths"></ion-input>
                 </ion-item>
               </ion-col>
               <ion-col size="33.3">
@@ -150,7 +154,8 @@
           </tbody>
           <tbody *ngIf="visitNotes?.length === 0">
             <tr>
-              <td colspan="7" class="no-data-available ion-text-center"><strong>{{DEFAULT_MESSAGES.NO_DATA_FOUND}}</strong>
+              <td colspan="7" class="no-data-available ion-text-center">
+                <strong>{{DEFAULT_MESSAGES.NO_DATA_FOUND}}</strong>
               </td>
             </tr>
           </tbody>

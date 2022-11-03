@@ -10,6 +10,7 @@ import { AGENT_WORKSPACE_CONFIGS, DATE_FORMAT, DEFAULTS, DEFAULT_MESSAGES, NOTES
 import { NotesModalPage } from 'src/app/shared/modals/notes-modal/notes-modal.page';
 import { PeriodicVisitModalPage } from './periodic-visit-modal/periodic-visit-modal/periodic-visit-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
+import { debounceTime, switchMap, takeUntil, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-periodic-visit',
@@ -41,6 +42,10 @@ export class PeriodicVisitComponent implements OnInit, OnDestroy {
   selectedData: any;
   isDisableAutoManagementInspection = new FormControl('false');
   DATE_FORMAT = DATE_FORMAT;
+  private unsubscribe = new Subject<void>();
+  formStatus: FormStatus.Saving | FormStatus.Saved | FormStatus.Idle = FormStatus.Idle;
+  formChangedValue = {}
+  isPeriodicVisitModal = false;
 
   constructor(
     private agentService: AgentService,
@@ -70,6 +75,7 @@ export class PeriodicVisitComponent implements OnInit, OnDestroy {
     this.selectedEntityDetails = await this.getActiveTabEntityInfo();
     this.propertyDetails = await this.getPropertyDetails(this.selectedEntityDetails.entityId);
     await this.getVisitHmoLicence(this.selectedEntityDetails.entityId);
+    this.updateDetails();
   }
 
   private initDataTable(): void {
@@ -130,10 +136,12 @@ export class PeriodicVisitComponent implements OnInit, OnDestroy {
       this.agentService.getPropertyDetails(propertyId, params).subscribe(
         (res) => {
           if (res && res.data) {
-            this.requirementForm.get('visitsPerAnnum').setValue(res.data?.visitsPerAnnum);
-            this.requirementForm.get('visitIntervalInMonths').setValue(res.data?.visitIntervalInMonths);
-            this.requirementForm.get('visitSequenceStartDate').setValue(res.data?.visitSequenceStartDate);
-            this.isDisableAutoManagementInspection.setValue(res.data?.propertyDetails?.isDisableAutoManagementInspection);
+            this.requirementForm.patchValue({
+              visitsPerAnnum: res.data?.visitsPerAnnum,
+              visitIntervalInMonths: res.data?.visitIntervalInMonths,
+              visitSequenceStartDate: res.data?.visitSequenceStartDate
+            });
+            this.isDisableAutoManagementInspection.patchValue(res.data?.propertyDetails?.isDisableAutoManagementInspection);
           }
           resolve(res.data);
         },
@@ -171,10 +179,10 @@ export class PeriodicVisitComponent implements OnInit, OnDestroy {
 
   initForm() {
     this.requirementForm = this.formBuilder.group({
-      visitsPerAnnum: [''],
-      visitsPerAnnumHMO: [{ value: '', disabled: true }],
+      numberOfVisitsPerAnnum: [''],
+      numberOfVisitsPerAnnumHmo: [{ value: '', disabled: true }],
       visitSequenceStartDate: [''],
-      visitIntervalInMonths: [{ value: '', disabled: true }],
+      numberOfVisitIntervalInMonths: [{ value: '', disabled: true }],
       visitIntervalInMonthsHMO: [{ value: '', disabled: true }]
     });
   }
@@ -224,19 +232,34 @@ export class PeriodicVisitComponent implements OnInit, OnDestroy {
     }
   }
 
-  async openVisitModal() {
-    const modal = await this.modalController.create({
-      component: PeriodicVisitModalPage,
-      cssClass: 'modal-container property-modal-container',
-      componentProps: {
-        propertyVisitTypes: this.propertyVisitTypes,
-        inspectionStatuses: this.inspectionStatuses
-      },
-      backdropDismiss: false
-    });
+  async openVisitModal(action) {
+    if (!this.isPeriodicVisitModal) {
+      this.isPeriodicVisitModal = true;
+      const modal = await this.modalController.create({
+        component: PeriodicVisitModalPage,
+        cssClass: 'modal-container property-modal-container',
+        componentProps: {
+          propertyVisitTypes: this.propertyVisitTypes,
+          inspectionStatuses: this.inspectionStatuses,
+          propertyId: this.selectedEntityDetails.entityId,
+          visitData: this.selectedData,
+          action: action
+        },
+        backdropDismiss: false
+      });
+      modal.onDidDismiss().then(async res => {
+        this.isPeriodicVisitModal = false;
+        if (res.data && res.data == 'success') {
+          if (action === 'add')
+            this.commonService.showMessage('Periodic Visit has been added successfully.', 'Periodic Visit', 'success');
+          else
+            this.commonService.showMessage('Periodic Visit has been updated successfully.', 'Periodic Visit', 'success');
+          this.rerenderVisits();
+        }
+      });
+      await modal.present();
+    }
 
-    modal.onDidDismiss();
-    await modal.present();
   }
 
   showMenu(event: any, id: any, data: any, className: any) {
@@ -254,8 +277,10 @@ export class PeriodicVisitComponent implements OnInit, OnDestroy {
       this.agentService.getVisitHmoLicence(propertyId, params).subscribe(
         (res) => {
           if (res && res.data) {
-            this.requirementForm.get('visitsPerAnnumHMO').setValue(res.data?.visitsPerAnnumHMO);
-            this.requirementForm.get('visitIntervalInMonthsHMO').setValue(res.data?.visitIntervalInMonthsHMO);
+            this.requirementForm.patchValue({
+              visitsPerAnnumHMO: res.data?.visitsPerAnnumHMO,
+              visitIntervalInMonthsHMO: res.data?.visitIntervalInMonthsHMO
+            });
           }
           resolve(true);
         },
@@ -287,7 +312,76 @@ export class PeriodicVisitComponent implements OnInit, OnDestroy {
     await modal.present();
   }
 
+  private rerenderVisits(resetPaging?: any): void {
+    if (this.dtElements && this.dtElements.first.dtInstance) {
+      this.dtElements.first.dtInstance.then((dtInstance: DataTables.Api) => {
+        dtInstance.ajax.reload(resetPaging);
+      });
+    }
+  }
+
+  onVisitChange(val) {
+    if (val) {
+      const calculateInterval = Math.round(12 / val);
+      this.requirementForm.get('numberOfVisitsPerAnnum').patchValue(+val);
+      this.requirementForm.get('numberOfVisitIntervalInMonths').patchValue(calculateInterval);
+      this.requirementForm.get('numberOfVisitsPerAnnum').markAsDirty();
+      this.requirementForm.get('numberOfVisitIntervalInMonths').markAsDirty();
+      this.requirementForm.updateValueAndValidity();
+    }
+  }
+
+  updateDetails() {
+    this.requirementForm.valueChanges.pipe(
+      debounceTime(1000),
+      tap(() => {
+        this.formStatus = FormStatus.Saving;
+        this.commonService.showAutoSaveLoader(this.formStatus);
+        this.formChangedValue = this.commonService.getDirtyValues(this.requirementForm);
+        const controlKey = Object.keys(this.formChangedValue);
+        const controlValue = this.formChangedValue[controlKey[0]];
+        /* to convet date string in UK format */
+        if (isNaN(controlValue)) {
+          this.formChangedValue[controlKey[0]] = this.commonService.getFormatedDate(controlValue);
+        }
+      }),
+      switchMap((value) => {
+        if (Object.keys(this.formChangedValue).length > 0) {
+          return this.agentService.updatePropertyDetails(this.selectedEntityDetails.entityId, this.formChangedValue);
+        }
+      }),
+      takeUntil(this.unsubscribe)
+    ).subscribe(async (value) => {
+      this.requirementForm.markAsPristine();
+      this.requirementForm.markAsUntouched();
+      this.formStatus = FormStatus.Saved;
+      this.commonService.showAutoSaveLoader(this.formStatus);
+      await this.sleep(2000);
+      if (this.formStatus === FormStatus.Saved) {
+        this.formStatus = FormStatus.Idle;
+        this.commonService.showAutoSaveLoader(this.formStatus);
+      }
+    }, (error) => {
+      this.requirementForm.markAsPristine();
+      this.requirementForm.markAsUntouched();
+      this.formStatus = FormStatus.Idle;
+      this.commonService.showAutoSaveLoader(this.formStatus);
+      this.updateDetails();
+    }
+    );
+  }
+
+  sleep(ms: number): Promise<any> {
+    return new Promise((res) => setTimeout(res, ms));
+  }
+
   ngOnDestroy() {
     this.notesDtTrigger.unsubscribe();
   }
+}
+
+enum FormStatus {
+  Saving = 'Saving...',
+  Saved = 'Saved!',
+  Idle = '',
 }

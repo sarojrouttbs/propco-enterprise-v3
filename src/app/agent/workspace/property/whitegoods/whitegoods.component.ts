@@ -2,10 +2,12 @@ import { HttpParams } from '@angular/common/http';
 import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ModalController } from '@ionic/angular';
 import { DataTableDirective } from 'angular-datatables';
 import { AgentService } from 'src/app/agent/agent.service';
 import { AGENT_WORKSPACE_CONFIGS, DATE_FORMAT, DEFAULTS, DEFAULT_MESSAGES, PROPCO } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
+import { WhitegoodModalPage } from './whitegoods-modal/whitegood-modal/whitegood-modal.page';
 
 @Component({
   selector: 'app-whitegoods',
@@ -34,7 +36,8 @@ export class WhitegoodsComponent implements OnInit {
   constructor(
     private agentService: AgentService,
     private commonService: CommonService,
-    private router: Router
+    private router: Router,
+    private modalController: ModalController
   ) { }
 
   ngOnInit() {
@@ -155,5 +158,22 @@ export class WhitegoodsComponent implements OnInit {
         dtInstance.ajax.reload(resetPaging);
       });
     }
+  }
+
+  async openWhiteGoodModal() {
+    const modal = await this.modalController.create({
+      component: WhitegoodModalPage,
+      cssClass: 'modal-container property-modal-container',
+      componentProps: {
+        propertyId: this.selectedEntityDetails.entityId
+      },
+      backdropDismiss: false
+    });
+    modal.onDidDismiss().then(async res => {
+      if (res.data && res.data == 'success')
+        this.rerenderWhitegoods();
+    });
+
+    await modal.present();
   }
 }

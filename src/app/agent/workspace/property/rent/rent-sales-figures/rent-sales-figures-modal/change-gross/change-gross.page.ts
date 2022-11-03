@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 
 @Component({
@@ -25,8 +25,13 @@ export class ChangeGrossPage implements OnInit {
 
   initForm() {
     this.form = this.formBuilder.group({
-      gross: null,
+      gross: ['', Validators.required],
     });
+  }
+
+  closeModal() {
+    if (this.form.valid)
+      this.modalController.dismiss(this.form.value.gross);
   }
 
   dismiss() {
