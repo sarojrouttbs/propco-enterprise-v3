@@ -37,12 +37,12 @@ export class AppHttpInterceptor implements HttpInterceptor {
         this._commonService.showLoader();
       }
 
-      return next.handle(authReq).pipe(catchError((error: HttpErrorResponse) => {        
+      return next.handle(authReq).pipe(catchError((error: HttpErrorResponse) => {
         this._commonService.hideLoader();
-        if(error.url.includes('hmrc')) {
+        if (error.url.includes('hmrc')) {
           return throwError(error);
         }
-        
+
         if (error.status === 404 || error.status === 502 || error.status === 503 || error.status === 500) {
           this._commonService.showMessage('Something went wrong on server, please try again.', 'Service Unavailable', 'error');
           return throwError(error);
@@ -58,8 +58,12 @@ export class AppHttpInterceptor implements HttpInterceptor {
             this._commonService.removeItem(PROPCO.LOGIN_DETAILS);
             this._commonService.removeItem(PROPCO.USER_DETAILS);
             this._commonService.removeItem(PROPCO.LOOKUP_DATA);
-            this._router.navigate(['/login'], { replaceUrl: true });
-            return throwError(error);
+            if (!req.url.includes('sso/token')) {
+              /** Condition added to redirect to Login in case of Agent login failed*/
+              this._router.navigate(['/login'], { replaceUrl: true });
+            } else {
+              return throwError(error);
+            }
           }
         } else if (error.status === 422 || error.status === 451) {
           return throwError(error);
