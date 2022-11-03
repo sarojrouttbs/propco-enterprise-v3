@@ -22,6 +22,8 @@ var Login = function () {
     this.tobLogoutBtn = element(by.xpath("//ion-fab-list//img[contains(@src, 'logout')]"));
     this.dashboardIcon = element(by.xpath("//p[contains(text(), '" + browser.params.module + "')]/preceding-sibling::i"));
     this.marketAppraisalIcon = element(by.css("i.propcoicon-available-property-list"));
+    this.reportingLink = element(by.xpath("//span[text()='Reporting']"));
+    this.hmrcAssessmentFormLink = element(by.xpath("//button[text()='HMRC Self-Assessment Form']"));
    
     this.loginToPortal = function() { 
         commonFunction.waitForElementToBeVisible(this.userPwdInput, "User Password"); 
@@ -55,5 +57,19 @@ var Login = function () {
             commonFunction.waitForElementToBeVisible(this.userPwd, "User password");
         }
     }    
+
+    this.navigateToHMRC = function(){
+        if(browser.params.environment.includes("Portal")){
+            browser.get(browser.params.agent_url_qa,180000);
+            this.loginToPortal();
+            this.marketAppraisalIcon.isPresent().then(result => {
+                commonFunction.mouseHover(this.reportingLink);
+                browser.sleep(3000);
+                commonFunction.clickOnElement(this.hmrcAssessmentFormLink, "Navigation Link " + browser.params.module);
+            })
+        } else{
+            browser.get(browser.params.fixafault_url_qa,180000);
+        }
+    }
 }
 module.exports = Login;
