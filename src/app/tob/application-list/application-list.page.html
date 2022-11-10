@@ -65,7 +65,9 @@
             </ion-col>
 
             <ion-col class="ion-no-padding ion-text-end btn-top-space" size-xl="25">
-              <ion-button (click)="createApplication()" [disabled]="!propertyDetails?.isAvailable"> Create Application </ion-button>
+              <!-- applicationsDetails.propertyType: {{applicationsDetails.propertyType}} -->
+              <ion-button (click)="createApplication()" [disabled]="!propertyDetails?.isAvailable || propertyType == 'Student'">
+                 Create Application </ion-button>
               <ion-button (click)="hideRecords()"> {{ isHideRejected ? "Show Rejected" : "Hide Rejected"}} </ion-button>
             </ion-col>
           </ion-row>
@@ -220,11 +222,13 @@
         </ion-card-content>
       </ion-card>
       <div id="tob-application-overlay" class="overlay-class">
-        <ion-button color="success" *ngIf="selectedApplicationRow?.isSubmitted && (selectedApplicationRow?.status != 1 && selectedApplicationRow?.status != 2)" (click)="acceptApplication()">Accept</ion-button>
+        <ion-button color="success" *ngIf="propertyType != 'Student' && selectedApplicationRow?.isSubmitted && (selectedApplicationRow?.status != 1 && selectedApplicationRow?.status != 2)" (click)="acceptApplication()">Accept</ion-button>
         <ion-button color="danger" *ngIf="selectedApplicationRow?.isSubmitted && selectedApplicationRow?.status != 1 && selectedApplicationRow?.status != 3" (click)="rejectApplication()">Reject</ion-button>
-        <ion-button *ngIf="selectedApplicationRow?.isSubmitted && selectedApplicationRow?.status == 2" (click)="holdApplication()">Hold</ion-button>
-        <ion-button *ngIf="selectedApplicationRow?.isSubmitted && (selectedApplicationRow?.status == 2 && !selectedApplicationRow?.isHoldingDepositPaid)" (click)="markHoldingDepositPaid()">Holding Deposit Paid</ion-button>
-        <ion-button *ngIf="selectedApplicationRow?.isSubmitted && (selectedApplicationRow?.status == 2 && selectedApplicationRow?.isHoldingDepositPaid)" (click)="startReferencing()">Start Referencing</ion-button>
+        <ng-container *ngIf="propertyType != 'Student'">
+          <ion-button *ngIf="selectedApplicationRow?.isSubmitted && selectedApplicationRow?.status == 2" (click)="holdApplication()">Hold</ion-button>
+          <ion-button *ngIf="selectedApplicationRow?.isSubmitted && (selectedApplicationRow?.status == 2 && !selectedApplicationRow?.isHoldingDepositPaid)" (click)="markHoldingDepositPaid()">Holding Deposit Paid</ion-button>
+          <ion-button *ngIf="selectedApplicationRow?.isSubmitted && (selectedApplicationRow?.status == 2 && selectedApplicationRow?.isHoldingDepositPaid)" (click)="startReferencing()">Start Referencing</ion-button>
+        </ng-container>
         <ion-button (click)="viewDetails(selectedApplicationRow?.applicationId)">View Details</ion-button>
         <i (click)="hideMenu($event,'tob-application-overlay')" class="propcoicon propcoicon-actions-on"></i>
       </div>

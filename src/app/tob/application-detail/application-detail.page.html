@@ -1399,7 +1399,7 @@
         <input type="hidden" name="ORDERID" [value]="paymentDetails?.orderId">
         <input type="hidden" name="PSPID" [value]="paymentDetails?.PSPID">  
         <ion-button color="danger" [hidden]="showWorldpayIframe" (click)=onCancel()>Cancel</ion-button>&nbsp;
-        <ion-button type="submit" [disabled]="!applicationDetails?.depositAmount" [hidden]="showWorldpayIframe" (click)="showWorldpayIframe = true;">Pay</ion-button>
+        <ion-button type="submit" [disabled]="!applicationDetails?.depositAmount" [hidden]="showWorldpayIframe" (click)="showWorldpayIframeAction()">Pay</ion-button>
       </form>
     </div>
     <!--payment method 3 ends -->
