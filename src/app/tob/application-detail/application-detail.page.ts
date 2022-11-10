@@ -236,7 +236,7 @@ export class ApplicationDetailPage implements OnInit {
     if (this.PAYMENT_METHOD === PAYMENT_TYPES.WORLDPAY_OWNFORM) {
       await this.setWorldpayInternalData();
     }
-    if (this.applicationStatus === 'Accepted') {
+    if (this.applicationStatus === 'Accepted' && !application.isHoldingDepositPaid) {
       this.currentStepperIndex = 10;
       this.showPayment = true;
       this.initPaymentConfiguration();
