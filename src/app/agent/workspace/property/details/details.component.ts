@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -31,7 +32,8 @@ export class DetailsComponent implements OnInit, OnDestroy {
   constructor(private router: Router,
     private agentService: AgentService,
     private commonService: CommonService,
-    private _formBuilder: FormBuilder) { }
+    private _formBuilder: FormBuilder,
+    public datepipe: DatePipe) { }
 
   ngOnInit() {
     this.initApiCalls();
@@ -54,36 +56,50 @@ export class DetailsComponent implements OnInit, OnDestroy {
   updateDetails() {
     this.propertyDetailsForm.valueChanges.pipe(
       debounceTime(1000),
+
       tap(() => {
         this.formStatus = FormStatus.Saving;
         this.commonService.showAutoSaveLoader(this.formStatus);
-        const changedData = this.commonService.getDirtyValues(this.propertyDetailsForm)
+        const changedData = this.commonService.getDirtyValues(this.propertyDetailsForm);
         const controlName = Object.keys(changedData);
         this.formChangedValue = changedData[controlName[0]] ?? {};
       }),
-      switchMap((value) => {
-        if(Object.keys(this.formChangedValue).length > 0) {
+      switchMap((val) => {
+        if (Object.keys(this.formChangedValue).length > 0 && Object.keys(this.formChangedValue)[0] !== 'addressdetails') {
+          const controlKey = Object.keys(this.formChangedValue)[0];
+          const controlValue = this.formChangedValue[controlKey];
+          if (controlKey === 'managementType' || controlKey === 'numberOfCOAlarms' || controlKey === 'numberOfSmokeAlarms' 
+          || controlKey === 'numberOfFireBlankets' || controlKey === 'numberOfFireExtinguishers') {
+            this.formChangedValue[controlKey] = parseInt(controlValue);
+          }
+          else if (controlKey === 'smokeDetectors') {
+            this.formChangedValue[controlKey] = controlValue.toString();
+          }
+          else if (controlKey === 'instructedDate' || controlKey === 'appraisedDate' || controlKey === 'boardOrderedDate' 
+          || controlKey === 'boardRemovedDate' || controlKey === 'slipOrderedDate') {
+            this.formChangedValue[controlKey] = this.datepipe.transform(controlValue, this.DATE_FORMAT.YEAR_DATE);
+          }
           return this.agentService.updatePropertyDetails(this.selectedEntityDetails.entityId, this.formChangedValue);
         }
       }),
       takeUntil(this.unsubscribe)
-      ).subscribe(async (value) => {
-        this.propertyDetailsForm.markAsPristine();
-        this.propertyDetailsForm.markAsUntouched();
-        this.formStatus = FormStatus.Saved;
-        this.commonService.showAutoSaveLoader(this.formStatus);
-        await this.sleep(2000);
-        if (this.formStatus === FormStatus.Saved) {
-          this.formStatus = FormStatus.Idle;
-          this.commonService.showAutoSaveLoader(this.formStatus);
-        }
-      }, (error) => {
-        this.propertyDetailsForm.markAsPristine();
-        this.propertyDetailsForm.markAsUntouched();
+    ).subscribe(async (value) => {
+      this.propertyDetailsForm.markAsPristine();
+      this.propertyDetailsForm.markAsUntouched();
+      this.formStatus = FormStatus.Saved;
+      this.commonService.showAutoSaveLoader(this.formStatus);
+      await this.sleep(2000);
+      if (this.formStatus === FormStatus.Saved) {
         this.formStatus = FormStatus.Idle;
         this.commonService.showAutoSaveLoader(this.formStatus);
-        this.updateDetails();
       }
+    }, (error) => {
+      this.propertyDetailsForm.markAsPristine();
+      this.propertyDetailsForm.markAsUntouched();
+      this.formStatus = FormStatus.Idle;
+      this.commonService.showAutoSaveLoader(this.formStatus);
+      this.updateDetails();
+    }
     );
   }
 
@@ -144,9 +160,9 @@ export class DetailsComponent implements OnInit, OnDestroy {
       }),
       letBoardForm: this._formBuilder.group({
         isBoardAllowed: [false],
-        boardOrderedOn: [''],
-        boardRemovedOn: [''],
-        slipOrderedOn: [''],
+        boardOrderedDate: [''],
+        boardRemovedDate: [''],
+        slipOrderedDate: [''],
         boardRef: ['']
       }),
       history: this._formBuilder.group({
@@ -165,10 +181,10 @@ export class DetailsComponent implements OnInit, OnDestroy {
         hasOil: [''],
         hasSolidFuel: [''],
         smokeDetectors: [''],
-        smokeAlarmNo: [''],
+        numberOfSmokeAlarms: [''],
         hasElectricalIndemnitySigned: [''],
         carbonMonoxideDetectors: [''],
-        coDetectorNo: null,
+        numberOfCOAlarms: null,
         numberOfFireBlankets: [''],
         numberOfFireExtinguishers: ['']
       }),
@@ -187,7 +203,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
         country: [''],
         latitude: [''],
         longitude: [''],
-        pafref: [''],
+        pafReference: [''],
         organisationName: [''],
         floor: [''],
         block: [''],
@@ -253,11 +269,11 @@ export class DetailsComponent implements OnInit, OnDestroy {
       hasPortableAppliances: this.propertyDetails?.propertyDetails?.hasPortableAppliances ? this.propertyDetails?.propertyDetails?.hasPortableAppliances : false,
       hasOil: this.propertyDetails?.propertyDetails?.hasOil ? this.propertyDetails?.propertyDetails?.hasOil : false,
       hasSolidFuel: this.propertyDetails?.propertyDetails?.hasSolidFuel ? this.propertyDetails?.propertyDetails?.hasSolidFuel : false,
-      smokeDetectors: this.propertyDetails?.smokeDetectors ? this.propertyDetails?.smokeDetectors : '',
-      smokeAlarmNo: this.propertyDetails?.smokeAlarmNo ? this.propertyDetails?.smokeAlarmNo : '',
+      smokeDetectors: this.propertyDetails?.smokeDetectors ? + this.propertyDetails?.smokeDetectors : '',
+      numberOfSmokeAlarms: this.propertyDetails?.numberOfSmokeAlarms ? this.propertyDetails?.numberOfSmokeAlarms : '',
       hasElectricalIndemnitySigned: this.propertyDetails?.propertyDetails?.hasElectricalIndemnitySigned ? this.propertyDetails?.propertyDetails?.hasElectricalIndemnitySigned : false,
       carbonMonoxideDetectors: this.propertyDetails?.carbonMonoxideDetectors ? this.propertyDetails?.carbonMonoxideDetectors : '',
-      coDetectorNo: this.propertyDetails?.coDetectorNo ? this.propertyDetails?.coDetectorNo : '',
+      numberOfCOAlarms: this.propertyDetails?.numberOfCOAlarms ? this.propertyDetails?.numberOfCOAlarms : '',
       numberOfFireBlankets: this.propertyDetails?.numberOfFireBlankets ? this.propertyDetails?.numberOfFireBlankets : '',
       numberOfFireExtinguishers: this.propertyDetails?.numberOfFireExtinguishers ? this.propertyDetails?.numberOfFireExtinguishers : ''
     });
@@ -280,7 +296,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
       country: this.propertyDetails?.propertyInfo?.address.country,
       latitude: this.propertyDetails?.propertyInfo?.address.latitude,
       longitude: this.propertyDetails?.propertyInfo?.address.longitude,
-      pafref: this.propertyDetails?.propertyInfo?.address.pafReference,
+      pafReference: this.propertyDetails?.propertyInfo?.address.pafReference,
       organisationName: this.propertyDetails?.propertyInfo?.address.organisationName,
       floor: this.propertyDetails?.propertyDetails?.floor,
       block: this.propertyDetails?.propertyInfo?.block,
@@ -290,7 +306,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
   }
 
   private getPropertyLocationsByPropertyId(propertyId: string) {
-    let params = new HttpParams().set('hideLoader', 'true');
+    const params = new HttpParams().set('hideLoader', 'true');
     this.agentService.getPropertyLocationsByPropertyId(propertyId, params).subscribe(
       res => {
         if (res && res.data) {
@@ -299,7 +315,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
             propertylocationIds.push(element.locationId)
           });
           const control = this.propertyDetailsForm.controls['lettingsDetailsForm'];
-          control.patchValue({ propertyLocations: propertylocationIds })
+          control.patchValue({ propertyLocations: propertylocationIds });
         }
       });
   }
@@ -320,7 +336,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
           }
           resolve(true);
         },
-        (_error) => {
+        (error) => {
           resolve(false);
         }
       );

@@ -4,54 +4,65 @@
 
 <ion-content id="tob-application-list">
   <ng-container>
-    <div class="property-details">
-      <ion-grid class="ion-padding">
-        <ion-row class="address">
-          <ion-col class="ion-no-padding" *ngIf="isPropertyDetailsAvailable">
-            <h1 *ngIf="propertyDetails?.publishedAddress" class="ion-no-margin">{{ propertyDetails?.publishedAddress }}
-            </h1>
-            <h1 *ngIf="!propertyDetails?.publishedAddress" class="ion-no-margin">
-              {{ propertyDetails?.address | address }}
-            </h1>
-          </ion-col>
-          <ion-col class="ion-no-padding" *ngIf="!isPropertyDetailsAvailable">
-            <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
-          </ion-col>
-        </ion-row>
-        <ion-row class="filters">
-          <ion-col size-xl="10" class="ion-no-padding">
-            <ion-button color="danger" (click)="rejectAllApplications()"> Reject All </ion-button>
-          </ion-col>
+    <form [formGroup]="filterForm">
+      <div class="property-details">
+        <ion-grid class="ion-padding">
+          <ion-row class="address">
+            <ion-col class="ion-no-padding" *ngIf="isPropertyDetailsAvailable">
+              <h1 *ngIf="propertyDetails?.publishedAddress" class="ion-no-margin">{{ propertyDetails?.publishedAddress }}
+              </h1>
+              <h1 *ngIf="!propertyDetails?.publishedAddress" class="ion-no-margin">
+                {{ propertyDetails?.address | address }}
+              </h1>
+            </ion-col>
+            <ion-col class="ion-no-padding" *ngIf="!isPropertyDetailsAvailable">
+              <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+            </ion-col>
+          </ion-row>
+          <ion-row class="filters">
+            <ion-col size-xl="10" class="ion-no-padding">
+              <ion-button color="danger" (click)="rejectAllApplications()"> Reject All </ion-button>
+            </ion-col>
 
-          <ion-col class="ion-no-padding" size-xl="19" size-sm="25">
-            <ion-item lines="none">
-              <ion-label class="ion-text-end">Applications made between</ion-label>
-            </ion-item>
-          </ion-col>
+            <ion-col class="ion-no-padding" size-xl="19" size-sm="25">
+              <ion-item lines="none">
+                <ion-label class="ion-text-end">Applications made between</ion-label>
+              </ion-item>
+            </ion-col>
 
-          <ion-col class="ion-text-end" size-xl="13" size-sm="15">
-            <mat-form-field appearance="fill">
-              <mat-label>Date From</mat-label>
-              <input matInput [matDatepicker]="picker1" [formControl]="fromDate" [max]="maxDate">
-              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-              <mat-datepicker #picker1></mat-datepicker>
-            </mat-form-field>
-          </ion-col>
+            <ion-col class="ion-text-end" size-xl="13" size-sm="15">
+              <ion-item id="fromDate">
+                <ion-label position="floating">Date From</ion-label>
+                <ion-input value="{{ filterForm.controls.fromDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
+                <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+                <ion-popover class="ion-datepicker-popover" trigger="fromDate" show-backdrop="false">
+                  <ng-template>
+                    <ion-datetime [showDefaultButtons]="true" presentation="date" formControlName="fromDate" [max]="maxDate">
+                    </ion-datetime>
+                  </ng-template>
+                </ion-popover>
+              </ion-item>
+            </ion-col>
 
-          <ion-col class="ion-text-end" size-xl="13" size-sm="15">
-            <mat-form-field appearance="fill">
-              <mat-label>Date To</mat-label>
-              <input matInput [matDatepicker]="picker2" [formControl]="toDate" [min]="fromDate" [max]="maxDate">
-              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-              <mat-datepicker #picker2></mat-datepicker>
-            </mat-form-field>
-          </ion-col>
+            <ion-col class="ion-text-end" size-xl="13" size-sm="15">
+              <ion-item id="toDate">
+                <ion-label position="floating">Date To</ion-label>
+                <ion-input value="{{ filterForm.controls.toDate.value | date: DATE_FORMAT.DATE }}"></ion-input>
+                <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+                <ion-popover class="ion-datepicker-popover" trigger="toDate" show-backdrop="false">
+                  <ng-template>
+                    <ion-datetime [showDefaultButtons]="true" presentation="date" formControlName="toDate">
+                    </ion-datetime>
+                  </ng-template>
+                </ion-popover>
+              </ion-item>
+            </ion-col>
 
-          <ion-col class="ion-text-end no-padding-right" size-xl="20" size-sm="25">
-            <ion-button class="btn-filter" color="success" [disabled]="fromDate.value && toDate.value ? false : true"
-              (click)="filterByDate()" expand="block">Filter</ion-button>
-            <ion-button class="btn-filter" color="danger" (click)="resetFilters()" expand="block">Reset</ion-button>
-          </ion-col>
+            <ion-col class="ion-text-end no-padding-right" size-xl="20" size-sm="25">
+              <ion-button class="btn-filter" color="success" [disabled]="filterForm.controls.fromDate.value && filterForm.controls.toDate.value ? false : true"
+                (click)="filterByDate()" expand="block">Filter</ion-button>
+              <ion-button class="btn-filter" color="danger" (click)="resetFilters()" expand="block">Reset</ion-button>
+            </ion-col>
 
           <ion-col class="ion-no-padding ion-text-end btn-top-space" size-xl="25">
             <!-- <ion-button (click)="createApplication()" [disabled]="!propertyDetails?.isAvailable"> Create Application </ion-button> -->
@@ -60,6 +71,7 @@
         </ion-row>
       </ion-grid>
     </div>
+    </form>
   </ng-container>
 
   <ng-container>

@@ -1,8 +1,9 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { Observable, BehaviorSubject, throwError, Subject } from 'rxjs';
+import { catchError, debounceTime, switchMap, takeUntil, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { CommonService } from '../shared/services/common.service';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +16,10 @@ export class AgentService {
   private resetViewingFilter = new BehaviorSubject<any>('');
   updateResetFilter = this.resetViewingFilter.asObservable();
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(
+    private httpClient: HttpClient,
+    private commonService: CommonService
+  ) { }
 
   updateCount(message: number) {
     this.getViewingCount.next(message);
@@ -227,11 +231,39 @@ export class AgentService {
     return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/shortlet/node`, { params })
   }
 
-  updatePropertyDetails(propertyId: number, requestObj: any): Observable<any> {
+  updatePropertyDetails(propertyId: string, requestObj: any): Observable<any> {
     const params = new HttpParams().set('hideLoader', 'true');
-    return this.httpClient.patch(environment.API_BASE_URL + `properties/${propertyId}/update/node`, requestObj,  { params }).pipe(
+    return this.httpClient.patch(environment.API_BASE_URL + `properties/${propertyId}/update/node`, requestObj, { params }).pipe(
       catchError(this.handleError<any>(''))
     );
+  }
+
+  createWhiteGoods(propertyId: number, requestObj: any) {
+    return this.httpClient.post(environment.API_BASE_URL + `properties/${propertyId}/management-services`, requestObj);
+  }
+
+  createClause(requestObj: any) {
+    return this.httpClient.post(environment.API_BASE_URL + `clauses/node`, requestObj);
+  }
+
+  addEntityClause(entityId: string, clauseId: number, requestObj: any) {
+    return this.httpClient.post(environment.API_BASE_URL + `properties/${entityId}/clauses/${clauseId}/node`, requestObj);
+  }
+
+  deleteClause(entityId: string, clauseId: number, requestObj: any) {
+    return this.httpClient.delete(environment.API_BASE_URL + `properties/${entityId}/clauses/${clauseId}/node`, requestObj);
+  }
+
+  createPeriodicVisit(propertyId: number, requestObj: any) {
+    return this.httpClient.post(environment.API_BASE_URL + `properties/${propertyId}/visits/node`, requestObj);
+  }
+
+  updatePeriodicVisit(visitId: string, requestObj: any): Observable<any> {
+    return this.httpClient.put(environment.API_BASE_URL + `visits/${visitId}/node`, requestObj);
+  }
+
+  updateAgreementDetails(agreementId: string, requestObj: any): Observable<any> {
+    return this.httpClient.put(environment.API_BASE_URL + `agreements/${agreementId}`, requestObj);
   }
 
   private handleError<T>(operation = 'operation', result?: T) {
@@ -241,3 +273,4 @@ export class AgentService {
     };
   }
 }
+

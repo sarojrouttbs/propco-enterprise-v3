@@ -1,9 +1,12 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { Subject } from 'rxjs';
+import { debounceTime, switchMap, takeUntil, tap } from 'rxjs/operators';
 import { AgentService } from 'src/app/agent/agent.service';
 import { AGENT_WORKSPACE_CONFIGS } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
+import { ParticularsService } from '../particulars.service';
 
 @Component({
   selector: 'app-preferences',
@@ -15,12 +18,13 @@ export class PreferencesComponent implements OnInit {
   localStorageItems: any;
   selectedEntityDetails: any;
   propertyDetails: any;
-  isPropertyPreferencesAvailable = false;
-
+  isPropertyPreferencesAvailable = false; 
+  
   constructor(
     private formBuilder: FormBuilder,
     private commonService: CommonService,
-    private agentService: AgentService
+    private agentService: AgentService,
+    private particularService: ParticularsService
   ) { }
 
   ngOnInit() {
@@ -54,6 +58,7 @@ export class PreferencesComponent implements OnInit {
     this.propertyDetails = await this.getPropertyDetails(this.selectedEntityDetails.entityId);
     await this.getPropertyById(this.selectedEntityDetails.entityId);
     this.isPropertyPreferencesAvailable = true;
+    this.particularService.updateDetails(this.preferencesForm, this.selectedEntityDetails.entityId);
   }
 
   private fetchItems() {
@@ -103,5 +108,7 @@ export class PreferencesComponent implements OnInit {
         }
       );
     });
-  }
+  }  
+
+  
 }

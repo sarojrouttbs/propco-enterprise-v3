@@ -13,16 +13,18 @@
           <h6>You can search the snoozed repairs via the search filters available on the dashboard.</h6>
         </ion-col>
         <ion-col size="100">
-          <mat-form-field appearance="fill">
-            <mat-label>Select Date</mat-label>
-            <input matInput [matDatepicker]="picker" [min]="minDate" [max]="futureDate"
-              readonly formControlName="snoozeUntil">
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-          </mat-form-field>
-          <div style="margin-top: -20px !important;">
-            <app-validation-message [control]="snoozeFaultForm.controls.snoozeUntil"></app-validation-message>
-          </div>
+          <ion-item id="snoozeUntil">
+            <ion-label position="floating">Select Date<ion-text class="mandatory"> * </ion-text></ion-label>
+            <ion-input value="{{ snoozeFaultForm.controls.snoozeUntil.value | date: DATE_FORMAT.DATE }}"></ion-input>
+            <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
+            <ion-popover class="ion-datepicker-popover" trigger="snoozeUntil" show-backdrop="false">
+              <ng-template>
+                <ion-datetime [showDefaultButtons]="true" presentation="date" formControlName="snoozeUntil" [min]="minDate" [max]="futureDate">
+                </ion-datetime>
+              </ng-template>
+            </ion-popover>
+          </ion-item>
+          <app-validation-message [control]="snoozeFaultForm.controls.snoozeUntil"></app-validation-message>
         </ion-col>
         <ion-col size="100">
           <ion-item>

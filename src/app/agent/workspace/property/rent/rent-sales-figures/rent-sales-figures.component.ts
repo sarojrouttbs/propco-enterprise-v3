@@ -3,7 +3,7 @@ import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { AgentService } from 'src/app/agent/agent.service';
-import { DATE_FORMAT, PROPCO } from 'src/app/shared/constants';
+import { DATE_FORMAT, PROPCO, SYSTEM_OPTIONS } from 'src/app/shared/constants';
 import { ChangeGrossPage } from './rent-sales-figures-modal/change-gross/change-gross.page';
 import { ChangeNettPage } from './rent-sales-figures-modal/change-nett/change-nett.page';
 import { CommonService } from 'src/app/shared/services/common.service';
@@ -32,7 +32,8 @@ export class RentSalesFiguresComponent implements OnInit {
   property: any;
   isRentForm = false;
   DATE_FORMAT = DATE_FORMAT;
-  dateChanged = new FormControl('');
+  systemOptions: any;
+  maxDate: any;
 
   constructor(private commonService: CommonService, private agentService: AgentService, private modalController: ModalController) { }
 
@@ -46,9 +47,11 @@ export class RentSalesFiguresComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.maxDate = this.commonService.getFormatedDate(DATE_FORMAT.MAX_DATE);
     this.getLookupData();
     this.getPropertyLookupData();
     this.getRentIndemnityProducts();
+    this.getOptions();
   }
 
   private patchFormData(): void {
@@ -57,7 +60,7 @@ export class RentSalesFiguresComponent implements OnInit {
       rentFrequency: this.property?.propertyRentInfo?.rentFrequency,
       frequencyType: this.property?.propertyRentInfo?.frequencyType,
       depositAmount: this.property?.propertyRentInfo?.depositAmount || 0,
-      depositSchemeNo: this.property?.propertyRentInfo?.depositSchemeNo,
+      depositSchemeNumber: this.property?.propertyRentInfo?.depositSchemeNumber,
       depositScheme: parseInt(this.property?.propertyRentInfo?.depositScheme),
       salePriceType: this.property?.propertyRentInfo?.salePriceType,
       salePrice: this.property?.propertyRentInfo?.salePrice || 0,
@@ -76,13 +79,13 @@ export class RentSalesFiguresComponent implements OnInit {
       emergencyResponseService:
       {
         isERSEnabled: this.property?.propertyRentInfo?.emergencyResponseService?.isERSEnabled,
-        eriProduct: parseInt(this.property?.propertyRentInfo?.emergencyResponseService?.eriProduct),
+        eriProduct: this.property?.propertyRentInfo?.emergencyResponseService?.eriProduct ? parseInt(this.property?.propertyRentInfo?.emergencyResponseService?.eriProduct) : null,
         inceptionDate: this.property?.propertyRentInfo?.emergencyResponseService?.inceptionDate,
         renewalDate: this.property?.propertyRentInfo?.emergencyResponseService?.renewalDate,
         cancelledDate: this.property?.propertyRentInfo?.emergencyResponseService?.cancelledDate
       },
       managementCommission: this.property?.propertyRentInfo?.managementCommission,
-      vatInclusive: this.property?.propertyRentInfo?.vatInclusive,
+      vatInclusiveCommission: this.property?.propertyRentInfo?.vatInclusiveCommission,
       secondLevelCommission: this.property?.propertyRentInfo?.secondLevelCommission,
       narrativeForFees: this.property?.propertyRentInfo?.narrativeForFees,
       narrativeForFeesVat: this.property?.propertyRentInfo?.narrativeForFeesVat,
@@ -91,6 +94,10 @@ export class RentSalesFiguresComponent implements OnInit {
       isLandlordArrearsExcluded: this.property?.propertyRentInfo?.isLandlordArrearsExcluded
     });
     this.isRentForm = true;
+    if (this.property?.propertyRentInfo?.isUseRentPercentage)
+      this.group.get('premiumPercentage').enable();
+    else
+      this.group.get('premiumPercentage').disable();
   }
 
   private getLookupData() {
@@ -159,7 +166,17 @@ export class RentSalesFiguresComponent implements OnInit {
       backdropDismiss: false
     });
 
-    modal.onDidDismiss();
+    modal.onDidDismiss().then(res => {
+      if (res && res.data) {
+        const commission = parseFloat(res.data);
+        const vat = (commission * ((this.systemOptions / 100) + 1)).toFixed(2);
+        this.group.get('managementCommission').patchValue(commission);
+        this.group.get('vatInclusiveCommission').patchValue(vat);
+        this.group.get('managementCommission').markAsDirty();
+        this.group.get('vatInclusiveCommission').markAsDirty();
+        this.group.updateValueAndValidity();
+      }
+    });
     await modal.present();
   }
 
@@ -171,7 +188,17 @@ export class RentSalesFiguresComponent implements OnInit {
       backdropDismiss: false
     });
 
-    modal.onDidDismiss();
+    modal.onDidDismiss().then(res => {
+      if (res && res.data) {
+        const vat = parseFloat(res.data);
+        const commission = (vat / ((this.systemOptions / 100) + 1)).toFixed(2);
+        this.group.get('vatInclusiveCommission').patchValue(vat);
+        this.group.get('managementCommission').patchValue(commission);
+        this.group.get('managementCommission').markAsDirty();
+        this.group.get('vatInclusiveCommission').markAsDirty();
+        this.group.updateValueAndValidity();
+      }
+    });
     await modal.present();
   }
 
@@ -190,6 +217,7 @@ export class RentSalesFiguresComponent implements OnInit {
   removeDate(control: string) {
     if (control) {
       this.group.controls.emergencyResponseService.get(control).setValue(null);
+      this.group.controls.emergencyResponseService.get(control).markAsDirty();
     }
   }
 
@@ -206,6 +234,39 @@ export class RentSalesFiguresComponent implements OnInit {
         });
       }
     }
+  }
+
+  onUseRentPercentageChange(e: any) {
+    const val = e.detail.checked;
+    if (val)
+      this.group.get('premiumPercentage').enable();
+    else
+      this.group.get('premiumPercentage').disable();
+  }
+
+  private getOptions() {
+    const params = new HttpParams()
+      .set('hideLoader', 'true')
+      .set('option', SYSTEM_OPTIONS.STDVATRATE);
+    return new Promise((resolve) => {
+      this.agentService.getSyatemOptions(params).subscribe(
+        (res) => {
+          this.systemOptions = res ? res.STDVATRATE : '';
+          resolve(true);
+        },
+        (error) => {
+          resolve(false);
+        }
+      );
+    });
+  }
+
+  onInceptionDateChange() {
+    const inceptionDate = this.group.get('emergencyResponseService')['controls'].inceptionDate.value;
+    const renewalDate = this.commonService.getFormatedDate(new Date(inceptionDate).setFullYear(new Date().getFullYear() + 1));
+    this.group.get('emergencyResponseService.renewalDate').patchValue(renewalDate);
+    this.group.get('emergencyResponseService.renewalDate').markAsDirty();
+    this.group.get('emergencyResponseService.renewalDate').updateValueAndValidity();
   }
 }
 

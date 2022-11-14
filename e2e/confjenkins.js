@@ -28,28 +28,30 @@ exports.config = {
     params: require('./configuration.json'),
     suites: {
         fixafault: [
-            './features/igf-logfault/add.fault.spec.js', 
-           // './features/igf-logfault/fault.summary.spec.js',
-           //'./features/igf-logfault/merge.fault.spec.js',
-           // './features/igf-logfault/fault.note.spec.js', 
-           // './features/igf-logfault/fault.escalate.spec.js', 
-           //'./features/cli-landlordownrepair/landlord.own.repair.spec.js', 
-           //'./features/iac-arrangingcontractor/obtain.quote.spec.js',
-           //'./features/iac-arrangingcontractor/proceed.with.worksorder.spec.js',
-           //'./features/iac-arrangingcontractor/proceed.agent.necessity.spec.js',
-           //'./features/iac-arrangingcontractor/obtain.ll.authorisation.spec.js',
-           //'./features/iac-arrangingcontractor/payment.requirement.spec.js',  
-           // './features/ipd-jobpayment/check.invoice.spec.js',
-           //'./features/iqf-faultqualification/request.more.information.spec.js',
-           // './features/iqf-faultqualification/close.fault.spec.js',
-           //'./features/iqf-faultqualification/fault.urgency.spec.js',
-           //'./features/iqf-faultqualification/block.management.spec.js',
-           //'./features/iqf-faultqualification/guarantee.warranty.spec.js',
-           //'./features/iqf-faultqualification/service.contract.spec.js',
-          // './features/iqf-faultqualification/appliance.cover.spec.js',
-          //'./features/idb-dashboard/fault.dashboard.spec.js',
-          //'./features/ch-chronologicalhistory/chronological.history.spec.js',          
-       ]
+            './features/maintenance/igf-logfault/add.fault.spec.js', 
+            './features/maintenance/igf-logfault/fault.summary.spec.js',
+            './features/maintenance/igf-logfault/merge.fault.spec.js',
+            './features/maintenance/igf-logfault/fault.note.spec.js', 
+            './features/maintenance/igf-logfault/fault.escalate.spec.js', 
+            './features/maintenance/cli-landlordownrepair/landlord.own.repair.spec.js', 
+            './features/maintenance/iac-arrangingcontractor/obtain.quote.spec.js',
+            './features/maintenance/iac-arrangingcontractor/proceed.with.worksorder.spec.js',
+            './features/maintenance/iac-arrangingcontractor/proceed.agent.necessity.spec.js',
+            './features/maintenance/iac-arrangingcontractor/obtain.ll.authorisation.spec.js',
+            './features/maintenance/iac-arrangingcontractor/payment.requirement.spec.js',  
+            './features/maintenance/ipd-jobpayment/check.invoice.spec.js',
+            './features/maintenance/iqf-faultqualification/request.more.information.spec.js',
+            './features/maintenance/iqf-faultqualification/close.fault.spec.js',
+            './features/maintenance/iqf-faultqualification/fault.urgency.spec.js',
+            './features/maintenance/iqf-faultqualification/block.management.spec.js',
+            './features/maintenance/iqf-faultqualification/guarantee.warranty.spec.js',
+            './features/maintenance/iqf-faultqualification/service.contract.spec.js',
+            './features/maintenance/iqf-faultqualification/appliance.cover.spec.js',
+            './features/maintenance/idb-dashboard/fault.dashboard.spec.js'                      
+        ],
+        hmrc: [
+            './features/hmrc/hmrc-selfassessment-form.spec.js',
+        ]
     },
     onPrepare: () => {
         require('./util/custom.matcher');
@@ -74,7 +76,7 @@ exports.config = {
         });
         beforeEach(function(){
             browser.driver.manage().window().setPosition(0,0);         
-            browser.get(browser.params.fixafault_url_qa,180000);
+            //browser.get(browser.params.fixafault_url_qa,180000);
         });
        /* afterEach(function(){
             browser.manage().deleteAllCookies();

@@ -66,7 +66,7 @@
                   <ion-item >
                     <ion-label position="floating">Deposit Scheme No
                     </ion-label>
-                    <ion-input formControlName="depositSchemeNo"></ion-input>
+                    <ion-input formControlName="depositSchemeNumber"></ion-input>
                   </ion-item>
                 </ion-col>
                 <ion-col size="100">
@@ -139,7 +139,7 @@
               </ion-col>
               <ion-col size="16.65" class="ion-align-self-center">
                 <ion-item lines="none">
-                  <ion-toggle color="primary" formControlName="isUseRentPercentage" class="toggle-btn"></ion-toggle>
+                  <ion-toggle color="primary" formControlName="isUseRentPercentage" class="toggle-btn" (ionChange)="onUseRentPercentageChange($event)"></ion-toggle>
                   <ion-text class="toggle-btn-text">Use Rent % @</ion-text>
                 </ion-item>
               </ion-col>
@@ -214,7 +214,7 @@
                   <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
                   <ion-popover class="ion-datepicker-popover" trigger="rentStartDate" show-backdrop="false">
                     <ng-template>
-                      <ion-datetime [showDefaultButtons]="true" presentation="date" formControlName="rentStartDate">
+                      <ion-datetime [showDefaultButtons]="true" presentation="date" formControlName="rentStartDate" [max]="maxDate">
                       </ion-datetime>
                     </ng-template>
                   </ion-popover>
@@ -227,7 +227,7 @@
                   <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
                   <ion-popover class="ion-datepicker-popover" trigger="rentStopDate" show-backdrop="false">
                     <ng-template>
-                      <ion-datetime [showDefaultButtons]="true" presentation="date" formControlName="rentStopDate">
+                      <ion-datetime [showDefaultButtons]="true" presentation="date" formControlName="rentStopDate" [max]="maxDate">
                       </ion-datetime>
                     </ng-template>
                   </ion-popover>
@@ -285,7 +285,7 @@
                   <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
                   <ion-popover class="ion-datepicker-popover" trigger="inceptionDate" show-backdrop="false">
                     <ng-template>
-                      <ion-datetime [showDefaultButtons]="true" presentation="date" formControlName="inceptionDate">
+                      <ion-datetime [showDefaultButtons]="true" presentation="date" formControlName="inceptionDate" (ionChange)="onInceptionDateChange()" [max]="maxDate">
                       </ion-datetime>
                     </ng-template>
                   </ion-popover>
@@ -303,7 +303,7 @@
                   <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
                   <ion-popover class="ion-datepicker-popover" trigger="renewalDate" show-backdrop="false">
                     <ng-template>
-                      <ion-datetime [showDefaultButtons]="true" presentation="date" formControlName="renewalDate">
+                      <ion-datetime [showDefaultButtons]="true" presentation="date" formControlName="renewalDate" [max]="maxDate">
                       </ion-datetime>
                     </ng-template>
                   </ion-popover>
@@ -321,7 +321,7 @@
                   <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
                   <ion-popover class="ion-datepicker-popover" trigger="cancelledDate" show-backdrop="false">
                     <ng-template>
-                      <ion-datetime [showDefaultButtons]="true" presentation="date" formControlName="cancelledDate">
+                      <ion-datetime [showDefaultButtons]="true" presentation="date" formControlName="cancelledDate" [max]="maxDate">
                       </ion-datetime>
                     </ng-template>
                   </ion-popover>
@@ -335,11 +335,11 @@
               <ion-col size="33.3">
                 <ion-item id="dateChanged">
                   <ion-label position="floating">Date Changed</ion-label>
-                  <ion-input value="{{ dateChanged.value | date: DATE_FORMAT.DATE }}"></ion-input>
+                  <ion-input value="{{ group.get('emergencyResponseService')['controls'].dateChanged.value | date: DATE_FORMAT.DATE }}"></ion-input>
                   <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
                   <ion-popover class="ion-datepicker-popover" trigger="dateChanged" show-backdrop="false">
                     <ng-template>
-                      <ion-datetime [showDefaultButtons]="true" presentation="date" [formControl]="dateChanged">
+                      <ion-datetime [showDefaultButtons]="true" presentation="date" formControlName="dateChanged" [max]="maxDate">
                       </ion-datetime>
                     </ng-template>
                   </ion-popover>
@@ -376,8 +376,7 @@
                       <ion-label position="floating">
                         Standard Commission (%)
                       </ion-label>
-                      <ion-input formControlName="managementCommission" percentage-validator></ion-input>
-                     
+                      <ion-input formControlName="managementCommission" percentage-validator readonly></ion-input>
                     </ion-item>
                     <div *ngIf="group.get('managementCommission').hasError('invalidPattern')" class="error-message">
                       Invalid Standard Commission (%)
@@ -390,7 +389,7 @@
                     <ion-item>
                       <ion-label position="floating">VAT Inclusive (%)
                       </ion-label>
-                      <ion-input formControlName="vatInclusive"></ion-input>
+                      <ion-input formControlName="vatInclusiveCommission" percentage-validator readonly></ion-input>
                     </ion-item>
                   </ion-col>
                   <ion-col size="35">
@@ -465,7 +464,7 @@
                       <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
                       <ion-popover class="ion-datepicker-popover" trigger="lastRentReview" show-backdrop="false">
                         <ng-template>
-                          <ion-datetime [showDefaultButtons]="true" presentation="date" formControlName="lastRentReview">
+                          <ion-datetime [showDefaultButtons]="true" presentation="date" formControlName="lastRentReview" [max]="maxDate">
                           </ion-datetime>
                         </ng-template>
                       </ion-popover>
@@ -478,7 +477,7 @@
                       <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
                       <ion-popover class="ion-datepicker-popover" trigger="nextRentReview" show-backdrop="false">
                         <ng-template>
-                          <ion-datetime [showDefaultButtons]="true" presentation="date" formControlName="nextRentReview">
+                          <ion-datetime [showDefaultButtons]="true" presentation="date" formControlName="nextRentReview" [max]="maxDate">
                           </ion-datetime>
                         </ng-template>
                       </ion-popover>

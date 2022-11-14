@@ -24,7 +24,7 @@ export class PropertyPage implements OnInit {
   showMenu = false;
   label = AGENT_WORKSPACE_CONFIGS.property.pageTitleMap.dashboard;
   mode: string = 'side';
-  agentMenu: any[] = menuList.agents;
+  agentMenu: any[] = menuList.property;
   constructor(
     private route: ActivatedRoute,
     private workspaceService: WorkspaceService,
@@ -40,7 +40,7 @@ export class PropertyPage implements OnInit {
   }
 
   ngOnInit() {
-    this.menuItems = menuList.agents;
+    this.menuItems = menuList.property;
     this.proptertyId = this.route.snapshot.params['propertyId'];
     if (this.screenWidth > 1024) {
       setTimeout(() => {
