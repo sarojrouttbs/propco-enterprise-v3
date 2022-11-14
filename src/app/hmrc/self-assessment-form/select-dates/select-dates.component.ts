@@ -37,7 +37,7 @@ export class SelectDatesComponent implements OnInit {
 
   private getDateFilterList() {
     let fromDate = new Date(HMRC.START_DATE);
-    const currentYear = new Date().getFullYear();
+    const currentYear = new Date().getFullYear() + 1;
     const yearDiff = currentYear - fromDate.getFullYear();
     const list = [];
     for (let i = 1; i <= yearDiff; i++) {

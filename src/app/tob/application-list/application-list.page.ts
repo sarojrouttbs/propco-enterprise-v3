@@ -48,6 +48,7 @@ export class ApplicationListPage implements OnInit {
   DEFAULTS = DEFAULTS;
   DATE_FORMAT = DATE_FORMAT;
   filterForm: FormGroup;
+  propertyType;
 
   constructor(
     private modalController: ModalController,
@@ -87,6 +88,7 @@ export class ApplicationListPage implements OnInit {
     this.hideMenu('', 'tob-application-overlay');
     this.propertyDetails = await this.getPropertyById();
     this.applicationsDetails = await this.getApplicationList();
+    this.propertyType = this.commonService.getLookupValue(this.applicationsDetails.rentCategory, this.lookupdata.rentCategories);
     this.applicationList = (this.applicationsDetails.applications && this.applicationsDetails.applications.length > 0) ? this.applicationsDetails.applications as ApplicationData[] : [];
     this.initApplicationList();
   }
