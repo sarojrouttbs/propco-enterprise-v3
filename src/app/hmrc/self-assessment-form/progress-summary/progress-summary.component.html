@@ -28,21 +28,6 @@
           matTooltip="Please click to download the collated reports."  matTooltipPosition="above">
           <ion-spinner name="crescent" class="pdf-spinner" *ngIf="showPdfBtnLoader" color="success"></ion-spinner> Download PDF
         </ion-button>
-        <ion-button color="success" fill="outline" (click)="previewPdf(1)"
-          [disabled]="!isProcessCompleted" #tooltip="matTooltip"
-          matTooltip="Please click to download the collated reports."  matTooltipPosition="above">
-          <ion-spinner name="crescent" class="pdf-spinner" *ngIf="showPdfBtnLoader" color="success"></ion-spinner> Direct
-        </ion-button>
-        <ion-button color="success" fill="outline" (click)="downloadPdf(2)"
-          [disabled]="!isProcessCompleted" #tooltip="matTooltip"
-          matTooltip="Please click to download the collated reports."  matTooltipPosition="above">
-          <ion-spinner name="crescent" class="pdf-spinner" *ngIf="showPdfBtnLoader" color="success"></ion-spinner> Server Side
-        </ion-button>
-        <ion-button color="success" fill="outline" (click)="downloadPdf(1)"
-          [disabled]="!isProcessCompleted" #tooltip="matTooltip"
-          matTooltip="Please click to download the collated reports."  matTooltipPosition="above">
-          <ion-spinner name="crescent" class="pdf-spinner" *ngIf="showPdfBtnLoader" color="success"></ion-spinner> XML Req
-        </ion-button>
         <ion-button color="success" fill="outline" (click)="getCsv()" [disabled]="!isProcessCompleted" #tooltip="matTooltip"
         matTooltip="Please click to download the CSV file for billing."  matTooltipPosition="above">
           <ion-spinner name="crescent" class="pdf-spinner" *ngIf="showCsvBtnLoader" color="success"></ion-spinner>Download CSV
