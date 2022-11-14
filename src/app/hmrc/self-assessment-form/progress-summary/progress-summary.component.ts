@@ -43,6 +43,8 @@ export class ProgressSummaryComponent implements OnInit {
   showCsvBtnLoader = false;
   showSummaryReportBtnLoader = false;
   DEFAULT_MESSAGES = DEFAULT_MESSAGES;
+  pdfUrlByFile: any;
+  pdfUrlByServer: any;
 
   constructor(
     private hmrcService: HmrcService,
@@ -200,7 +202,7 @@ export class ProgressSummaryComponent implements OnInit {
     }
   }
 
-  async previewPdf() {
+  async previewPdf(caseId?) {
     if (this.batchDetails && this.batchDetails.printFilePath === null) {
       /* show message to user if there is no success record */
       this.commonService.showAlert('HMRC Progress Summary', 'No success records found');
@@ -211,7 +213,7 @@ export class ProgressSummaryComponent implements OnInit {
       cssClass: 'modal-container preview-pdf-modal-container',
       componentProps: {
         modalHeader: `HMRC Tax Return Print_${this.commonService.getFormatedDate(this.currentDate, this.DATE_FORMAT.DATE)}`,
-        pdfUrl: this.PDF_CONFIG.blobUrl
+        pdfUrl: caseId === 1 ? this.PDF_CONFIG.finalUrl : this.PDF_CONFIG.blobUrl
       },
       backdropDismiss: false
     });
@@ -238,7 +240,9 @@ export class ProgressSummaryComponent implements OnInit {
   private async createPdfUrl() {
     if (this.PDF_CONFIG.baseUrl && this.PDF_CONFIG.folderName && this.batchDetails) {
       this.PDF_CONFIG.finalUrl = this.PDF_CONFIG.baseUrl + this.PDF_CONFIG.folderName + '/' + this.batchDetails.printFilePath;
-      const pdfBlob = await this.getPdfBlob() as Blob;
+      this.pdfUrlByFile = await this.createFile() as Blob;
+      this.pdfUrlByServer = await this.getPdfBlob() as Blob;
+      const pdfBlob = await this.getBlobFromUrl() as Blob;
       if (pdfBlob) {
         const newBlob = new Blob([pdfBlob], { type: 'application/pdf' });
         const blobUrl = window.URL.createObjectURL(newBlob);
@@ -252,13 +256,43 @@ export class ProgressSummaryComponent implements OnInit {
 
   private getPdfBlob() {
     return new Promise((resolve) => {
-      this.hmrcService.downloadPdf(this.PDF_CONFIG.finalUrl).subscribe((res) => {
+      this.hmrcService.downloadPdf({ url: this.PDF_CONFIG.finalUrl }).subscribe((res) => {
         resolve(res ? res : null)
       }, (_error) => {
         this.commonService.showMessage(HMRC_ERROR_MESSAGES.DOWNLOAD_FORM_ERROR, DEFAULT_MESSAGES.errors.SOMETHING_WENT_WRONG, 'error');
         resolve(null);
       })
     });
+  }
+
+  async createFile() {
+    let response = await fetch(this.PDF_CONFIG.finalUrl);
+    let data = await response.blob();
+    let metadata = {
+      type: 'application/pdf'
+    };
+    return data;
+  }
+
+  getBlobFromUrl() {
+    return new Promise((resolve, reject) => {
+      let request = new XMLHttpRequest();
+      request.open('GET', this.PDF_CONFIG.finalUrl, true);
+      request.responseType = 'blob';
+      request.onload = () => {
+        resolve(request.response);
+      };
+      request.onerror = reject;
+      request.send();
+    })
+  }
+
+  downloadPdf(caseId) {
+    if (caseId === 1) {
+      this.commonService.downloadDocument(this.pdfUrlByFile, 'FileName', 'application/pdf');
+    } else if (caseId === 2) {
+      this.commonService.downloadDocument(this.pdfUrlByServer, 'FileName', 'application/pdf');
+    }
   }
 
   private getSystemConfig(config: string) {

@@ -64,13 +64,13 @@
               <ion-button class="btn-filter" color="danger" (click)="resetFilters()" expand="block">Reset</ion-button>
             </ion-col>
 
-            <ion-col class="ion-no-padding ion-text-end btn-top-space" size-xl="25">
-              <ion-button (click)="createApplication()" [disabled]="!propertyDetails?.isAvailable"> Create Application </ion-button>
-              <ion-button (click)="hideRecords()"> {{ isHideRejected ? "Show Rejected" : "Hide Rejected"}} </ion-button>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-      </div>
+          <ion-col class="ion-no-padding ion-text-end btn-top-space" size-xl="25">
+            <!-- <ion-button (click)="createApplication()" [disabled]="!propertyDetails?.isAvailable"> Create Application </ion-button> -->
+            <ion-button (click)="hideRecords()"> {{ isHideRejected ? "Show Rejected" : "Hide Rejected"}} </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
     </form>
   </ng-container>
 
