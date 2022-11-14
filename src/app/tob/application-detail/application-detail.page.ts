@@ -1436,10 +1436,6 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   showWorldpayIframeAction() {
-    if(this.applicationDetails.isHoldingDepositPaid){
-      this.commonService.showAlert('Payment', 'Holding deposit for this application has already been paid');
-      return;
-    }
     if (this.PAYMENT_METHOD === PAYMENT_TYPES.WORLDPAY_REDIRECT && !this.PAYMENT_PROD && this.applicationDetails.depositAmount > 500) {
       this.commonService.showMessage('Deposit amount should be less than 500. Above 500 not allowed in TEST Mode', 'Invalid Amount', 'error');
       return;
