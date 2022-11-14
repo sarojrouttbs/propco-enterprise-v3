@@ -202,7 +202,7 @@ export class ProgressSummaryComponent implements OnInit {
     }
   }
 
-  async previewPdf(caseId?) {
+  async previewPdf() {
     if (this.batchDetails && this.batchDetails.printFilePath === null) {
       /* show message to user if there is no success record */
       this.commonService.showAlert('HMRC Progress Summary', 'No success records found');
@@ -213,7 +213,7 @@ export class ProgressSummaryComponent implements OnInit {
       cssClass: 'modal-container preview-pdf-modal-container',
       componentProps: {
         modalHeader: `HMRC Tax Return Print_${this.commonService.getFormatedDate(this.currentDate, this.DATE_FORMAT.DATE)}`,
-        pdfUrl: caseId === 1 ? this.PDF_CONFIG.finalUrl : this.PDF_CONFIG.blobUrl
+        pdfUrl: this.PDF_CONFIG.finalUrl
       },
       backdropDismiss: false
     });
@@ -240,15 +240,14 @@ export class ProgressSummaryComponent implements OnInit {
   private async createPdfUrl() {
     if (this.PDF_CONFIG.baseUrl && this.PDF_CONFIG.folderName && this.batchDetails) {
       this.PDF_CONFIG.finalUrl = this.PDF_CONFIG.baseUrl + this.PDF_CONFIG.folderName + '/' + this.batchDetails.printFilePath;
-      this.pdfUrlByFile = await this.createFile() as Blob;
-      this.pdfUrlByServer = await this.getPdfBlob() as Blob;
-      const pdfBlob = await this.getBlobFromUrl() as Blob;
-      if (pdfBlob) {
-        const newBlob = new Blob([pdfBlob], { type: 'application/pdf' });
-        const blobUrl = window.URL.createObjectURL(newBlob);
-        this.PDF_CONFIG.blobUrl = blobUrl;
-        this.showPdfBtnLoader = false;
-      }
+      this.showPdfBtnLoader = false;
+      // const pdfBlob = await this.getPdfBlob() as Blob;
+      // if (pdfBlob) {
+      //   const newBlob = new Blob([pdfBlob], { type: 'application/pdf' });
+      //   const blobUrl = window.URL.createObjectURL(newBlob);
+      //   this.PDF_CONFIG.blobUrl = blobUrl;
+      //   this.showPdfBtnLoader = false;
+      // }
     } else {
       this.showPdfBtnLoader = false;
     }
@@ -263,36 +262,6 @@ export class ProgressSummaryComponent implements OnInit {
         resolve(null);
       })
     });
-  }
-
-  async createFile() {
-    let response = await fetch(this.PDF_CONFIG.finalUrl);
-    let data = await response.blob();
-    let metadata = {
-      type: 'application/pdf'
-    };
-    return data;
-  }
-
-  getBlobFromUrl() {
-    return new Promise((resolve, reject) => {
-      let request = new XMLHttpRequest();
-      request.open('GET', this.PDF_CONFIG.finalUrl, true);
-      request.responseType = 'blob';
-      request.onload = () => {
-        resolve(request.response);
-      };
-      request.onerror = reject;
-      request.send();
-    })
-  }
-
-  downloadPdf(caseId) {
-    if (caseId === 1) {
-      this.commonService.downloadDocument(this.pdfUrlByFile, 'FileName', 'application/pdf');
-    } else if (caseId === 2) {
-      this.commonService.downloadDocument(this.pdfUrlByServer, 'FileName', 'application/pdf');
-    }
   }
 
   private getSystemConfig(config: string) {
