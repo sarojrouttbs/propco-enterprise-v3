@@ -1302,7 +1302,8 @@
     <ion-grid class="ion-padding" [hidden]="showWorldpayIframe" id="payment-detail">
       <ion-row [hidden]="hidePaymentForm" class="ion-justify-content-between">
         <ion-col size="100" [hidden]="showWorldpayIframe" class="ion-text-center">
-          <h2 class="payment-heading">Holding Deposit: {{ applicationDetails?.depositAmount | currency:'GBP'}}</h2>
+          <h2 class="payment-heading" *ngIf="!applicationDetails?.isHoldingDepositPaid">Holding Deposit: {{ applicationDetails?.depositAmount | currency:'GBP'}}</h2>
+          <h2 class="payment-heading" *ngIf="applicationDetails?.isHoldingDepositPaid">Holding deposit for this application has already been paid</h2>
         </ion-col>
       </ion-row>
       <ion-row [hidden]="!hidePaymentForm" class="ion-text-center">
@@ -1337,7 +1338,7 @@
         <input id="region" name="region" [value]="paymentDetails?.county" type="hidden" />
         <input id="country" name="country" [value]="paymentDetails?.country" type="hidden" />
         <ion-button color="danger" [hidden]="showWorldpayIframe" (click)=onCancel()>Cancel</ion-button>&nbsp;
-        <ion-button type="submit" [disabled]="!applicationDetails?.depositAmount" [hidden]="showWorldpayIframe" (click)="showWorldpayIframeAction()">
+        <ion-button type="submit" [disabled]="!applicationDetails?.depositAmount" [hidden]="showWorldpayIframe" (click)="showWorldpayIframeAction()" *ngIf="!applicationDetails?.isHoldingDepositPaid">
           Pay</ion-button>
       </form>
     </div>
@@ -1349,7 +1350,8 @@
     <ion-grid class="ion-no-padding" *ngIf="!showWorldpayInternalForm" id="payment-detail">
       <ion-row [hidden]="hidePaymentForm" class="ion-justify-content-between">
         <ion-col size="100" [hidden]="showWorldpayIframe" class="ion-text-center">
-          <h2 class="payment-heading">Holding Deposit: {{ applicationDetails?.depositAmount | currency:'GBP'}}</h2>
+          <h2 class="payment-heading" *ngIf="!applicationDetails?.isHoldingDepositPaid">Holding Deposit: {{ applicationDetails?.depositAmount | currency:'GBP'}}</h2>
+          <h2 class="payment-heading" *ngIf="applicationDetails?.isHoldingDepositPaid">Holding deposit for this application has already been paid</h2>
         </ion-col>
       </ion-row>
     </ion-grid>
@@ -1370,7 +1372,8 @@
     <ion-grid class="ion-padding" [hidden]="showWorldpayIframe" id="payment-detail">
       <ion-row [hidden]="hidePaymentForm" class="ion-justify-content-between">
         <ion-col size="100" [hidden]="showWorldpayIframe" class="ion-text-center">
-          <h2 class="payment-heading">Holding Deposit: {{ applicationDetails?.depositAmount | currency:'GBP'}}</h2>
+          <h2 class="payment-heading" *ngIf="!applicationDetails?.isHoldingDepositPaid">Holding Deposit: {{ applicationDetails?.depositAmount | currency:'GBP'}}</h2>
+          <h2 class="payment-heading" *ngIf="applicationDetails?.isHoldingDepositPaid">Holding deposit for this application has already been paid</h2>
         </ion-col>
       </ion-row>
       <ion-row [hidden]="!hidePaymentForm" class="ion-text-center">
@@ -1399,7 +1402,7 @@
         <input type="hidden" name="ORDERID" [value]="paymentDetails?.orderId">
         <input type="hidden" name="PSPID" [value]="paymentDetails?.PSPID">  
         <ion-button color="danger" [hidden]="showWorldpayIframe" (click)=onCancel()>Cancel</ion-button>&nbsp;
-        <ion-button type="submit" [disabled]="!applicationDetails?.depositAmount" [hidden]="showWorldpayIframe" (click)="showWorldpayIframe = true;">Pay</ion-button>
+        <ion-button type="submit" [disabled]="!applicationDetails?.depositAmount" [hidden]="showWorldpayIframe" (click)="showWorldpayIframeAction()" *ngIf="!applicationDetails?.isHoldingDepositPaid">Pay</ion-button>
       </form>
     </div>
     <!--payment method 3 ends -->
