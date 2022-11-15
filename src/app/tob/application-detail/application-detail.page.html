@@ -9,7 +9,7 @@
             class="stepper-section" #stepper labelPosition="bottom">
             <mat-step [completed]="applicationDetails?.isSubmitted">
               <ng-container *ngTemplateOutlet="occupants"></ng-container>
-              <ng-template matStepLabel>Occupants</ng-template>
+              <ng-template matStepLabel>Occupants </ng-template>
               <div class="action-btn-section">
                 <!-- Stepper event not working with ion-button -->
                 <ng-container *ngTemplateOutlet="saveAndCancel"></ng-container>
