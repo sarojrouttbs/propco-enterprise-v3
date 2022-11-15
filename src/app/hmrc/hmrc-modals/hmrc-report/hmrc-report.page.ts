@@ -15,7 +15,7 @@ export class HmrcReportPage {
 
   batchId: string;
   batchDetails: any;
-  blobUrl: string;
+  finalUrl: string;
   billingReport: any;
   summaryReport: any;
   showBillingBtnLoader = false;
@@ -39,7 +39,7 @@ export class HmrcReportPage {
       cssClass: 'modal-container preview-pdf-modal-container',
       componentProps: {
         modalHeader: `HMRC Tax Return Print_${this.commonService.getFormatedDate(this.currentDate, DATE_FORMAT.DATE)}`,
-        pdfUrl: this.blobUrl
+        pdfUrl: this.finalUrl
       },
       backdropDismiss: false
     });
