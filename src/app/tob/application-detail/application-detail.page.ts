@@ -1443,6 +1443,7 @@ export class ApplicationDetailPage implements OnInit {
     this.showWorldpayIframe = true;
   }
 
+
   private initBarclayCardPaymentDetails() {
     var barclayResponseUrl = window.location.origin + window.location.pathname + '#/barclaycard';
     var paymentConfigUrl = this.PAYMENT_PROD ? PAYMENT_CONFIG.BARCLAYCARD_REDIRECT.PROD_URL : PAYMENT_CONFIG.BARCLAYCARD_REDIRECT.TEST_URL;
