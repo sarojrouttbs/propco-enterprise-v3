@@ -19,7 +19,7 @@ import { OfferData, OfferNotesData } from './offer-list.model';
 })
 
 export class OfferListPage implements OnInit {
-  maxDate = this.commonService.getFormatedDate(new Date());
+  maxDate = this.commonService.getFormatedDate(new Date().toUTCString());
   @ViewChild('paginator') paginator: MatPaginator;
   @ViewChild('notesPaginator') notesPaginator: MatPaginator;
   obsOfferList: Observable<any>;
