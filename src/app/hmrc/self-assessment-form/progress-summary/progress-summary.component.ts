@@ -331,7 +331,7 @@ export class ProgressSummaryComponent implements OnInit {
         baseUrl: this.PDF_CONFIG.baseUrl,
         folderName: this.PDF_CONFIG.folderName,
         batchDetails: this.batchDetails,
-        blobUrl: this.PDF_CONFIG.blobUrl
+        finalUrl: this.PDF_CONFIG.finalUrl
       },
       backdropDismiss: false
     });
