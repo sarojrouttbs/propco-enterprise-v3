@@ -24,7 +24,7 @@ export class ApplicationListPage implements OnInit {
     pageSizeOptions: [5, 10, 25, 100],
     showFirstLastButtons: true
   };
-  maxDate = this.commonService.getFormatedDate(new Date());
+  maxDate = this.commonService.getFormatedDate(new Date().toUTCString());
   @ViewChild('paginator') paginator: MatPaginator;
   obsApplicationList: Observable<any>;
   filteredApplicationList: MatTableDataSource<ApplicationData> = new MatTableDataSource<ApplicationData>([]);
@@ -56,19 +56,19 @@ export class ApplicationListPage implements OnInit {
     private tobService: TobService,
     private commonService: CommonService,
     private formBuilder: FormBuilder
-    ) {
+  ) {
     this.getTobLookupData();
     this.getLookUpData();
     this.getReferancingInfo();
   }
 
   ngOnInit() {
+    this.initFilterForm();
   }
 
-  ionViewDidEnter() { 
+  ionViewDidEnter() {
     this.obsApplicationList = this.filteredApplicationList.connect();
     this.initData();
-    this.initFilterForm();
   }
 
   private initData() {
@@ -121,7 +121,7 @@ export class ApplicationListPage implements OnInit {
   private getPropertyById() {
     const params = new HttpParams().set('hideLoader', 'true');
     return new Promise((resolve) => {
-      this.tobService.getPropertyDetails(this.propertyId,params).subscribe(
+      this.tobService.getPropertyDetails(this.propertyId, params).subscribe(
         res => {
           if (res && res.data) {
             this.isPropertyDetailsAvailable = true;
@@ -258,7 +258,9 @@ export class ApplicationListPage implements OnInit {
 
   filterByDate() {
     this.filteredApplicationList.data = this.applicationList;
-    this.filteredApplicationList.data = this.filteredApplicationList.data.filter(e => new Date(this.commonService.getFormatedDate(e.createdAt, this.DATE_FORMAT.YEAR_DATE)) >= new Date(this.commonService.getFormatedDate(this.filterForm.controls.fromDate.value, this.DATE_FORMAT.YEAR_DATE)) && new Date(this.commonService.getFormatedDate(e.createdAt, this.DATE_FORMAT.YEAR_DATE)) <= new Date(this.commonService.getFormatedDate(this.filterForm.controls.toDate.value, this.DATE_FORMAT.YEAR_DATE)));
+    this.filteredApplicationList.data = this.filteredApplicationList.data.filter(e =>
+      new Date(this.commonService.getFormatedDate(e.createdAt, this.DATE_FORMAT.YEAR_DATE)) >= new Date(this.commonService.getFormatedDate(this.filterForm.controls.fromDate.value, this.DATE_FORMAT.YEAR_DATE))
+      && new Date(this.commonService.getFormatedDate(e.createdAt, this.DATE_FORMAT.YEAR_DATE)) <= new Date(this.commonService.getFormatedDate(this.filterForm.controls.toDate.value, this.DATE_FORMAT.YEAR_DATE)));
     this.checkApplicationsAvailable();
   }
 
@@ -276,12 +278,12 @@ export class ApplicationListPage implements OnInit {
   rejectAllApplications() {
     this.commonService.showConfirm('Reject All Application', 'Are you sure, you want to reject all application?', '', 'YES', 'NO').then(response => {
       if (response) {
-        const applicationIds = this.applicationList.map(function(application) {
+        const applicationIds = this.applicationList.map(function (application) {
           return application.applicationId;
         });
         if (applicationIds.length > 0) {
           const params = new HttpParams()
-          .set('applicationId', applicationIds.join());
+            .set('applicationId', applicationIds.join());
           this.tobService.rejectAllApplication(params).subscribe((res) => {
             this.commonService.showAlert('Reject All Application', 'All applications have been rejected successfully.').then(resp => {
               if (resp) {
@@ -385,8 +387,10 @@ export class ApplicationListPage implements OnInit {
       this.setReferancingInfoData();
     } else {
       this.commonService.getReferencingInfo().subscribe(data => {
-        this.commonService.setItem(PROPCO.REFERENCING_INFO, data);
-        this.setReferancingInfoData();
+        if (data) {
+          this.commonService.setItem(PROPCO.REFERENCING_INFO, data);
+          this.setReferancingInfoData();
+        }
       });
     }
   }
