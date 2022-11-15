@@ -211,7 +211,7 @@ export class ProgressSummaryComponent implements OnInit {
       cssClass: 'modal-container preview-pdf-modal-container',
       componentProps: {
         modalHeader: `HMRC Tax Return Print_${this.commonService.getFormatedDate(this.currentDate, this.DATE_FORMAT.DATE)}`,
-        pdfUrl: this.PDF_CONFIG.blobUrl
+        pdfUrl: this.PDF_CONFIG.finalUrl
       },
       backdropDismiss: false
     });
@@ -238,13 +238,14 @@ export class ProgressSummaryComponent implements OnInit {
   private async createPdfUrl() {
     if (this.PDF_CONFIG.baseUrl && this.PDF_CONFIG.folderName && this.batchDetails) {
       this.PDF_CONFIG.finalUrl = this.PDF_CONFIG.baseUrl + this.PDF_CONFIG.folderName + '/' + this.batchDetails.printFilePath;
-      const pdfBlob = await this.getPdfBlob() as Blob;
-      if (pdfBlob) {
-        const newBlob = new Blob([pdfBlob], { type: 'application/pdf' });
-        const blobUrl = window.URL.createObjectURL(newBlob);
-        this.PDF_CONFIG.blobUrl = blobUrl;
-        this.showPdfBtnLoader = false;
-      }
+      this.showPdfBtnLoader = false;
+      // const pdfBlob = await this.getPdfBlob() as Blob;
+      // if (pdfBlob) {
+      //   const newBlob = new Blob([pdfBlob], { type: 'application/pdf' });
+      //   const blobUrl = window.URL.createObjectURL(newBlob);
+      //   this.PDF_CONFIG.blobUrl = blobUrl;
+      //   this.showPdfBtnLoader = false;
+      // }
     } else {
       this.showPdfBtnLoader = false;
     }
@@ -328,7 +329,7 @@ export class ProgressSummaryComponent implements OnInit {
         baseUrl: this.PDF_CONFIG.baseUrl,
         folderName: this.PDF_CONFIG.folderName,
         batchDetails: this.batchDetails,
-        blobUrl: this.PDF_CONFIG.blobUrl
+        finalUrl: this.PDF_CONFIG.finalUrl
       },
       backdropDismiss: false
     });
