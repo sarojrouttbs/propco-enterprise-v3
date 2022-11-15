@@ -65,7 +65,7 @@
                 <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
                 <ion-popover class="ion-datepicker-popover" trigger="toDate" show-backdrop="false">
                   <ng-template>
-                    <ion-datetime showDefaultButtons="true" presentation="date" formControlName="toDate" [min]="filterForm.controls.fromDate.value" [max]="maxDate">
+                    <ion-datetime showDefaultButtons="true" presentation="date" formControlName="toDate" [min]="filterForm.controls.fromDate.value ? filterForm.controls.fromDate.value : 2000" [max]="maxDate">
                     </ion-datetime>
                   </ng-template>
                 </ion-popover>

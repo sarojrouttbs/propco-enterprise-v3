@@ -24,7 +24,7 @@ export class ApplicationListPage implements OnInit {
     pageSizeOptions: [5, 10, 25, 100],
     showFirstLastButtons: true
   };
-  maxDate = this.commonService.getFormatedDate(new Date());
+  maxDate = this.commonService.getFormatedDate(new Date().toUTCString());
   @ViewChild('paginator') paginator: MatPaginator;
   obsApplicationList: Observable<any>;
   filteredApplicationList: MatTableDataSource<ApplicationData> = new MatTableDataSource<ApplicationData>([]);
