@@ -981,6 +981,13 @@ ion-popover.ion-datepicker-popover {
   }
 }
 
+ion-popover.ion-datepicker-popover-date-time {
+  &::part(content){
+    --width: 270px;
+    --height: 430px;;
+  }
+}
+
 .key-activity-modal {
   &::part(content){ 
     height: 435px;
