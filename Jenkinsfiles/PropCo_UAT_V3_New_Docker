@@ -1,11 +1,6 @@
 pipeline {
   agent any
 
-tools {
-    jdk 'JDK 1.8_202'
-    nodejs 'Node 14.15'
-  }
-
    options {
     buildDiscarder(logRotator(numToKeepStr: '5', artifactNumToKeepStr: '5'))
     disableConcurrentBuilds(abortPrevious: true)    
@@ -25,9 +20,8 @@ tools {
       }
     }
 
-    stage('Npm build') {
-      steps {
-        nodejs('Node 14.15') {
+    stage('Update Variables') {
+      steps {        
           withCredentials([string(credentialsId: 'httpd_pass', variable: 'httpd_password')]) {
               sh '''VAL_API_BASE_URL="API_BASE_URL: 'https://saas-uat-api.propco.co.uk/v3-dev/api/'",
                 VAL_MEDIA_HOST_URL="MEDIA_HOST_URL: 'https://saas-uat.propco.co.uk/uat/',"
@@ -41,10 +35,9 @@ tools {
                 #sed -i "/  HOST_WEBURL/c\\  $VAL_HOST_WEBURL" src/environments/*
                 sed -i "/  PAYMENT_METHOD/c\\  $VAL_PAYMENT_METHOD" src/environments/*
              '''
-             }
-           }
-         }
-         }
+            }
+        }
+    }
 
     stage('SonarQube analysis') {
           steps {
@@ -58,12 +51,14 @@ tools {
           }
 
     stage('Execute Shell') {
-         steps {
-        sh '''npm i
-        #ionic build -- --base-href /propco-v3/
-        ionic build --prod -- --base-href /propco-v3/
-        '''
-      }
+        steps {
+           nodejs('Node 14.15') {
+            sh '''npm i
+            #ionic build -- --base-href /propco-v3/
+            ionic build --prod -- --base-href /propco-v3/
+            '''
+          }
+        }
     }
 
    stage("Run Test Cases") {
