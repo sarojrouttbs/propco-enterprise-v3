@@ -723,14 +723,14 @@
               </ion-item>
             </ion-col>
             <ion-col size-xs="100" size-sm="33.3">
-              <ion-item id="answer" *ngIf="question.controls['type'].value === 'DATE'">
+              <ion-item id="answer" *ngIf="question.controls['type'].value === 'DATE' && question.controls['toggle'].value">
                 <ion-label position="floating">Date and time</ion-label>
-                <ion-input value="{{ question.controls.answer.value | date: DATE_FORMAT.DATE }}" [disabled]="!question.controls['toggle'].value">
+                <ion-input value="{{ question.controls.answer.value | date: DATE_FORMAT.DATE_TIME }}">
                 </ion-input>
                 <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
-                <ion-popover class="ion-datepicker-popover" trigger="answer" show-backdrop="false">
+                <ion-popover class="ion-datepicker-popover-date-time" trigger="answer" show-backdrop="false">
                   <ng-template>
-                    <ion-datetime showDefaultButtons="true" presentation="date" formControlName="answer">
+                    <ion-datetime showDefaultButtons="true" presentation="date-time" [max]="currentDate" formControlName="answer">
                     </ion-datetime>
                   </ng-template>
                 </ion-popover>
