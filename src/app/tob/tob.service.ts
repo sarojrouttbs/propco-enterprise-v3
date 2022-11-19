@@ -43,9 +43,8 @@ export class TobService {
     return this.httpClient.get(environment.API_BASE_URL + `applications/${applicationId}`);
   }
 
-  addApplicantToApplication(applicationId: string, body: any, isLeadApplicant: any) {
-    const params = new HttpParams().set('isLeadApplicant', isLeadApplicant);
-    return this.httpClient.post(environment.API_BASE_URL + `applications/${applicationId}/applicants`, body,  {params}).pipe(
+  addApplicantToApplication(body: any, applicationId: string) {
+    return this.httpClient.post(environment.API_BASE_URL + `applications/${applicationId}/applicants`, body).pipe(
       catchError(this.handleError<any>(''))
     );
   }
@@ -57,12 +56,17 @@ export class TobService {
   }
 
   deleteApplicationApplicant(applicationId: string, applicantId: string, body) {
-    return this.httpClient.delete(environment.API_BASE_URL + `applications/${applicationId}/applicants/${applicantId}`, body);
+    return this.httpClient.post(environment.API_BASE_URL + `applications/${applicationId}/applicants/${applicantId}`, body);
   }
 
-  linkApplicantToApplication(applicationId: string, body: any, applicantId, isLeadApplicant: any) {
-    const params = new HttpParams().set('isLeadApplicant', isLeadApplicant);
-    return this.httpClient.post(environment.API_BASE_URL + `applications/${applicationId}/applicants/${applicantId}`, body , {params}).pipe(
+  linkApplicantToApplication(applicationId: string, body: any, applicantId) {
+    return this.httpClient.post(environment.API_BASE_URL + `applications/${applicationId}/applicants/${applicantId}`, body).pipe(
+      catchError(this.handleError<any>(''))
+    );
+  }
+
+  removeApplicant(body: any, applicationId: string) {
+    return this.httpClient.post(environment.API_BASE_URL + `applications/${applicationId}/applicants/remove`, body).pipe(
       catchError(this.handleError<any>(''))
     );
   }
