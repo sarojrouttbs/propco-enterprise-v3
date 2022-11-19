@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PROPCO, APPLICATION_STATUSES, APPLICATION_ACTION_TYPE, ENTITY_TYPE, PAYMENT_TYPES, PAYMENT_CONFIG, APPLICATION_ENTITIES, DEFAULTS, DATE_FORMAT } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { TobService } from '../tob.service';
-import { switchMap, debounceTime } from 'rxjs/operators';
+import { switchMap, debounceTime, delay } from 'rxjs/operators';
 import { forkJoin, Observable } from 'rxjs';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { ValidationService } from 'src/app/shared/services/validation.service';
@@ -443,7 +443,7 @@ export class ApplicationDetailPage implements OnInit {
             }
             if (occupant.applicantId) {
               /**Link the existing occupants with the application : via search*/
-              apiObservableArray.push(this._tobService.linkApplicantToApplication(this.applicationId, occupant, occupant.applicantId));
+              apiObservableArray.push(this._tobService.linkApplicantToApplication(this.applicationId, occupant, occupant.applicantId).pipe(delay(500)));
             }
           }
           /**Check for deleted occupant*/
