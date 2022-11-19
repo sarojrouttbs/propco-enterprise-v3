@@ -351,10 +351,10 @@ export class CommonService {
     }, 500);
   }
 
-  getResizedImageUrl(imageName, size?) {
+  getResizedImageUrl(imageName, size?, mediaHostUrl?) {
     let srcUrl = '';
     if (imageName) {
-      let mediaHost = environment.MEDIA_HOST_URL;
+      let mediaHost = mediaHostUrl ? mediaHostUrl : environment.MEDIA_HOST_URL;
       let fileName = imageName ? imageName : '';
       size = size ? size : 400;
       srcUrl = mediaHost + 'images/resize.php/' + fileName + '?resize(' + size + ')';

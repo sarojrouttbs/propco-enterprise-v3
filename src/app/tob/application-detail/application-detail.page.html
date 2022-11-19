@@ -301,12 +301,13 @@
                           <ion-checkbox class="ml-15" style="opacity: unset;" formControlName="isLead"
                             (click)="onLeadSelection(item); $event.stopPropagation();"
                             [checked]="item.controls['isLead'].value"
-                            [disabled]="item.controls['isLead'].value  || !item.controls['applicationApplicantId'].value && !applicationDetails?.isSubmitted"
+                            [disabled]="isStudentProperty || updateOccupantsInProcess || item.controls['isLead'].value  || !item.controls['applicationApplicantId'].value && !applicationDetails?.isSubmitted"
                             color="primary"></ion-checkbox>
                         </ion-col>
                         <ion-col size="10">
-                          <ion-icon (click)="removeCoApplicant(item, i); $event.stopPropagation();" color="danger"
-                            class="remove-btn pointer" *ngIf="!item.controls['isLead'].value && !applicationDetails?.isSubmitted" name="close-circle">
+                          <ion-spinner name="dots" *ngIf="updateOccupantsInProcess"></ion-spinner>
+                          <ion-icon (click)="removeCoApplicant(item); $event.stopPropagation();" color="danger"
+                            class="remove-btn pointer" *ngIf="!updateOccupantsInProcess && !item.controls['isLead'].value && !applicationDetails?.isSubmitted" name="close-circle">
                           </ion-icon>
                         </ion-col>
                       </ion-row>
@@ -358,8 +359,11 @@
                     </ion-col>
 
                     <ion-col style="padding-top: 5px" size="15">
-                      <ion-button color="success" [disabled]="!occupantForm.valid" (click)="addApplicant(item,i)">Add
+                      <ion-button color="success" [disabled]="!occupantForm.valid" (click)="addApplicant(item,i)" *ngIf="!updateOccupantsInProcess">Add
                         New</ion-button>
+                        <ion-button color="theme-secondary" class="ion-flot-left" *ngIf="updateOccupantsInProcess">
+                          <ion-spinner name="dots"></ion-spinner>
+                        </ion-button>
                     </ion-col>
                   </ng-container>
                   <ng-container *ngIf="!item.controls['isAdded'].value && !applicationDetails?.isSubmitted">
@@ -723,14 +727,14 @@
               </ion-item>
             </ion-col>
             <ion-col size-xs="100" size-sm="33.3">
-              <ion-item id="answer" *ngIf="question.controls['type'].value === 'DATE'">
+              <ion-item id="answer" *ngIf="question.controls['type'].value === 'DATE' && question.controls['toggle'].value">
                 <ion-label position="floating">Date and time</ion-label>
-                <ion-input value="{{ question.controls.answer.value | date: DATE_FORMAT.DATE }}" [disabled]="!question.controls['toggle'].value">
+                <ion-input value="{{ question.controls.answer.value | date: DATE_FORMAT.DATE_TIME }}">
                 </ion-input>
                 <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
-                <ion-popover class="ion-datepicker-popover" trigger="answer" show-backdrop="false">
+                <ion-popover class="ion-datepicker-popover-date-time" trigger="answer" show-backdrop="false">
                   <ng-template>
-                    <ion-datetime showDefaultButtons="true" presentation="date" formControlName="answer">
+                    <ion-datetime showDefaultButtons="true" presentation="date-time" [max]="currentDate" formControlName="answer">
                     </ion-datetime>
                   </ng-template>
                 </ion-popover>
@@ -1338,7 +1342,7 @@
         <input id="region" name="region" [value]="paymentDetails?.county" type="hidden" />
         <input id="country" name="country" [value]="paymentDetails?.country" type="hidden" />
         <ion-button color="danger" [hidden]="showWorldpayIframe" (click)=onCancel()>Cancel</ion-button>&nbsp;
-        <ion-button type="submit" [disabled]="!applicationDetails?.depositAmount" [hidden]="showWorldpayIframe" (click)="showWorldpayIframeAction()" *ngIf="!applicationDetails?.isHoldingDepositPaid">
+        <ion-button type="submit" [disabled]="!applicationDetails?.depositAmount" [hidden]="showWorldpayIframe" (click)="showWorldpayIframeAction()" *ngIf="!isStudentProperty && !applicationDetails?.isHoldingDepositPaid">
           Pay</ion-button>
       </form>
     </div>
@@ -1360,7 +1364,7 @@
       <iframe name="worldpay-iframe" id="worldpay-iframe" [hidden]="!showWorldpayIframe" title="worldpay-iframe"></iframe>
       <form target="worldpay-iframe" class="payment-form">
         <ion-button color="danger" [hidden]="showWorldpayInternalForm" (click)=onCancel()>Cancel</ion-button>&nbsp;
-        <ion-button type="submit" color="success" [disabled]="!applicationDetails?.depositAmount" [hidden]="showWorldpayInternalForm" (click)="showWorldpayInternalForm = true;">Pay</ion-button>
+        <ion-button type="submit" color="success" [disabled]="!applicationDetails?.depositAmount" [hidden]="showWorldpayInternalForm" (click)="showWorldpayInternalForm = true;" *ngIf="!isStudentProperty ">Pay</ion-button>
       </form>
     </div>
     <app-template-form *ngIf="showWorldpayInternalForm" [worldPayInternalData]="worldPayInternalData" (successPayment)='onInternalWorldpaySuccess($event)'></app-template-form>
@@ -1402,7 +1406,7 @@
         <input type="hidden" name="ORDERID" [value]="paymentDetails?.orderId">
         <input type="hidden" name="PSPID" [value]="paymentDetails?.PSPID">  
         <ion-button color="danger" [hidden]="showWorldpayIframe" (click)=onCancel()>Cancel</ion-button>&nbsp;
-        <ion-button type="submit" [disabled]="!applicationDetails?.depositAmount" [hidden]="showWorldpayIframe" (click)="showWorldpayIframeAction()" *ngIf="!applicationDetails?.isHoldingDepositPaid">Pay</ion-button>
+        <ion-button type="submit" [disabled]="!applicationDetails?.depositAmount" [hidden]="showWorldpayIframe" (click)="showWorldpayIframeAction()" *ngIf="!isStudentProperty && !applicationDetails?.isHoldingDepositPaid">Pay</ion-button>
       </form>
     </div>
     <!--payment method 3 ends -->
