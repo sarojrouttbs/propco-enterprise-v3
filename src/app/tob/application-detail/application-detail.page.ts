@@ -583,7 +583,7 @@ export class ApplicationDetailPage implements OnInit {
               this.isStudentGuarantor();
             }
             this.propertyDetails.propertyImageUrl = this.commonService.getHeadMediaUrl(res.data.media || []);
-            this.propertyDetails.propertyImageUrl = this.webImageUrl + 'images/resize.php/' + this.propertyDetails.propertyImageUrl;
+            this.propertyDetails.webImageUrl = this.webImageUrl;
             this.isTobPropertyCardReady = true;
             resolve(true);
           }
