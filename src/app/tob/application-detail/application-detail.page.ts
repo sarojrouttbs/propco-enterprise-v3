@@ -406,7 +406,7 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   private async saveApplicantsToApplication() {
-    const apiObservableArray = await this.getModifedOccupantList();
+    const apiObservableArray = await this.getModifiedOccupantList();
 
     setTimeout(() => {
       forkJoin(apiObservableArray).subscribe(async (response: any[]) => {
@@ -424,7 +424,7 @@ export class ApplicationDetailPage implements OnInit {
     }, 1000);
   }
 
-  private async getModifedOccupantList() {
+  private async getModifiedOccupantList() {
     /**Add and delete applicants*/
     let apiObservableArray = [];
     if (this.checkFormDirty(this.occupantForm) || this.isCoApplicantDeleted) {
