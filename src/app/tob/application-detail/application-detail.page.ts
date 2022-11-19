@@ -138,7 +138,7 @@ export class ApplicationDetailPage implements OnInit {
     this.initApiCalls();
   }
 
-  getSystemOptions(key) {
+  private getSystemOptions(key: string) {
     return new Promise((resolve) => {
       this.commonService.getSystemOptions(key).subscribe(
         (res) => {
