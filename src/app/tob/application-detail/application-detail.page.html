@@ -94,7 +94,7 @@
               <ng-template matStepLabel>Review</ng-template>
               <div class="action-btn-section">
                 <ng-container *ngTemplateOutlet="saveAndCancel"></ng-container>
-                <ion-button [disabled]="applicationDetails?.isSubmitted" (click)="submit()" color="success">Submit</ion-button>
+                <ion-button *ngIf="!isStudentProperty" [disabled]="applicationDetails?.isSubmitted" (click)="submit()" color="success">Submit</ion-button>
                 <button class="next-back-button" mat-button matStepperPrevious class="stepper-back">Back</button>&nbsp;
                 <button [disabled]="!showPayment" mat-button matStepperNext class="stepper-next">Next</button>
               </div>
@@ -112,7 +112,7 @@
 
 <ng-template #saveAndCancel>
   <ion-button color="danger" (click)=onCancel()>Cancel</ion-button>&nbsp;
-  <ion-button [disabled]="applicationDetails?.isSubmitted" (click)="saveStepData(stepper.selectedIndex, 'SAVE_FOR_LATER')">Save for Later
+  <ion-button *ngIf="!isStudentProperty" [disabled]="applicationDetails?.isSubmitted" (click)="saveStepData(stepper.selectedIndex, 'SAVE_FOR_LATER')">Save for Later
     <ion-icon *ngIf="saveDataLoader" name="refresh" class="rotating submit-loader"></ion-icon>
   </ion-button>&nbsp;
 </ng-template>
@@ -313,7 +313,7 @@
                       </ion-row>
                     </ion-grid>
                   </ng-container>
-                  <ng-container *ngIf="!item.controls['isAdded'].value && !applicationDetails?.isSubmitted">
+                  <ng-container *ngIf="!isStudentProperty && !item.controls['isAdded'].value && !applicationDetails?.isSubmitted">
                     <ion-col size="10">
                       <ion-item>
                         <ion-label position="floating"> Title </ion-label>
@@ -366,7 +366,7 @@
                         </ion-button>
                     </ion-col>
                   </ng-container>
-                  <ng-container *ngIf="!item.controls['isAdded'].value && !applicationDetails?.isSubmitted">
+                  <ng-container *ngIf="!isStudentProperty && !item.controls['isAdded'].value && !applicationDetails?.isSubmitted">
                     <ion-grid class="search-box-grid">
                       <ion-row class="ion-justify-content-end search-row" [formGroup]="searchApplicantForm">
                         <ion-col size-sm="50" size-xl="35" id="tob-applicant-search">
@@ -532,7 +532,7 @@
             <ion-label position="floating"> Postcode <ion-text class="mandatory">*</ion-text>
             </ion-label>
             <ion-input type="text" postcode-validator formControlName="postcode"></ion-input>
-            <ion-button color="success" [disabled]="showPostcodeLoader || applicationDetails?.isSubmitted" class="postcode-search"
+            <ion-button color="success" *ngIf="!isStudentProperty" [disabled]="showPostcodeLoader || applicationDetails?.isSubmitted" class="postcode-search"
               (click)="getAddressList('personal')">Find
               <ion-icon *ngIf="showPostcodeLoader" name="refresh" class="rotating submit-loader"></ion-icon>
             </ion-button>
@@ -605,7 +605,7 @@
               <ion-label position="floating">Postcode <ion-text class="mandatory">*</ion-text>
               </ion-label>
               <ion-input type="text" postcode-validator formControlName="postcode"></ion-input>
-              <ion-button class="postcode-search" [disabled]="showAddressLoader || applicationDetails?.isSubmitted" color="success"
+              <ion-button class="postcode-search" *ngIf="!isStudentProperty" [disabled]="showAddressLoader || applicationDetails?.isSubmitted" color="success"
                 (click)="getAddressList('correspondence-address')"> Find
                 <ion-icon *ngIf="showAddressLoader" name="refresh" class="rotating submit-loader"></ion-icon>
               </ion-button>
@@ -980,7 +980,7 @@
                 </ion-text>
               </ion-label>
               <ion-input type="text" postcode-validator formControlName="postcode"></ion-input>
-              <ion-button color="success" [disabled]="showPostcodeLoader || applicationDetails?.isSubmitted" class="postcode-search"
+              <ion-button color="success" *ngIf="!isStudentProperty" [disabled]="showPostcodeLoader || applicationDetails?.isSubmitted" class="postcode-search"
                 (click)="getAddressList('guarantor')">Find
                 <ion-icon *ngIf="showPostcodeLoader" name="refresh" class="rotating submit-loader"></ion-icon>
               </ion-button>
