@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PROPCO, APPLICATION_STATUSES, APPLICATION_ACTION_TYPE, ENTITY_TYPE, PAYMENT_TYPES, PAYMENT_CONFIG, APPLICATION_ENTITIES, DEFAULTS, DATE_FORMAT } from 'src/app/shared/constants';
+import { PROPCO, APPLICATION_STATUSES, APPLICATION_ACTION_TYPE, ENTITY_TYPE, PAYMENT_TYPES, PAYMENT_CONFIG, APPLICATION_ENTITIES, DEFAULTS, DATE_FORMAT, SYSTEM_OPTIONS } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { TobService } from '../tob.service';
 import { switchMap, debounceTime, delay } from 'rxjs/operators';
@@ -106,6 +106,7 @@ export class ApplicationDetailPage implements OnInit {
   };
   DEFAULTS = DEFAULTS;
   DATE_FORMAT = DATE_FORMAT;
+  webImageUrl: string;
   updateOccupantsInProcess = false;
 
   constructor(
@@ -135,6 +136,18 @@ export class ApplicationDetailPage implements OnInit {
     }
     this.initForms();
     this.initApiCalls();
+  }
+
+  getSystemOptions(key) {
+    return new Promise((resolve) => {
+      this.commonService.getSystemOptions(key).subscribe(
+        (res) => {
+          resolve(res);
+        },
+        (error) => {
+          resolve(null);
+      });
+    });
   }
 
   onSearch(event: any): void {
@@ -206,6 +219,8 @@ export class ApplicationDetailPage implements OnInit {
   private async initApiCalls() {
     this.getLookUpData();
     this.getTobLookupData();
+    let tmpImageObj:any = await this.getSystemOptions(SYSTEM_OPTIONS.WEB_IMAGE_URL);
+    this.webImageUrl = tmpImageObj ? tmpImageObj.WEB_IMAGE_URL : '';
     await this.getPropertyDetails(this.propertyId);
     this.getNoDeposit();
     this.initTermsAndConditionData();
@@ -620,6 +635,7 @@ export class ApplicationDetailPage implements OnInit {
               this.isStudentGuarantor();
             }
             this.propertyDetails.propertyImageUrl = this.commonService.getHeadMediaUrl(res.data.media || []);
+            this.propertyDetails.webImageUrl = this.webImageUrl;
             this.isTobPropertyCardReady = true;
             resolve(true);
           }
