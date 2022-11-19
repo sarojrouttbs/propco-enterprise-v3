@@ -301,12 +301,13 @@
                           <ion-checkbox class="ml-15" style="opacity: unset;" formControlName="isLead"
                             (click)="onLeadSelection(item); $event.stopPropagation();"
                             [checked]="item.controls['isLead'].value"
-                            [disabled]="isStudentProperty || item.controls['isLead'].value  || !item.controls['applicationApplicantId'].value && !applicationDetails?.isSubmitted"
+                            [disabled]="isStudentProperty || updateOccupantsInProcess || item.controls['isLead'].value  || !item.controls['applicationApplicantId'].value && !applicationDetails?.isSubmitted"
                             color="primary"></ion-checkbox>
                         </ion-col>
                         <ion-col size="10">
+                          <ion-spinner name="dots" *ngIf="updateOccupantsInProcess"></ion-spinner>
                           <ion-icon (click)="removeCoApplicant(item); $event.stopPropagation();" color="danger"
-                            class="remove-btn pointer" *ngIf="!item.controls['isLead'].value && !applicationDetails?.isSubmitted" name="close-circle">
+                            class="remove-btn pointer" *ngIf="!updateOccupantsInProcess && !item.controls['isLead'].value && !applicationDetails?.isSubmitted" name="close-circle">
                           </ion-icon>
                         </ion-col>
                       </ion-row>
@@ -358,8 +359,11 @@
                     </ion-col>
 
                     <ion-col style="padding-top: 5px" size="15">
-                      <ion-button color="success" [disabled]="!occupantForm.valid" (click)="addApplicant(item,i)">Add
+                      <ion-button color="success" [disabled]="!occupantForm.valid" (click)="addApplicant(item,i)" *ngIf="!updateOccupantsInProcess">Add
                         New</ion-button>
+                        <ion-button color="theme-secondary" class="ion-flot-left" *ngIf="updateOccupantsInProcess">
+                          <ion-spinner name="dots"></ion-spinner>
+                        </ion-button>
                     </ion-col>
                   </ng-container>
                   <ng-container *ngIf="!item.controls['isAdded'].value && !applicationDetails?.isSubmitted">

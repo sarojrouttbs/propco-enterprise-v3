@@ -106,6 +106,7 @@ export class ApplicationDetailPage implements OnInit {
   };
   DEFAULTS = DEFAULTS;
   DATE_FORMAT = DATE_FORMAT;
+  updateOccupantsInProcess = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -406,10 +407,14 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   private async saveApplicantsToApplication() {
+    this.updateOccupantsInProcess = true;
     const apiObservableArray = await this.getModifiedOccupantList();
-
+    if(!apiObservableArray.length) {
+      this.updateOccupantsInProcess = false;
+    }
     setTimeout(() => {
       forkJoin(apiObservableArray).subscribe(async (response: any[]) => {
+        this.updateOccupantsInProcess = false;
         this.isCoApplicantDeleted = null;
         this.occupantForm.reset(this.occupantForm.value);
         const applicants = await this.getApplicationApplicants(this.applicationId) as ApplicationModels.ICoApplicants;
@@ -419,6 +424,7 @@ export class ApplicationDetailPage implements OnInit {
           this.onSave();
         }
       }, error => {
+        this.updateOccupantsInProcess = false;
         this.occupantForm.reset(this.occupantForm.value);
       });
     }, 1000);
