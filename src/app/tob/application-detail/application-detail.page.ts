@@ -438,7 +438,13 @@ export class ApplicationDetailPage implements OnInit {
         coApplicantList.map((occupant) => {
           /**Check for new occupant*/
           if (!occupant.applicationApplicantId && occupant.isAdded && !occupant.isDeleted) {
-            newApplicationApplicants.push(occupant);
+            if (!occupant.applicantId) {
+              newApplicationApplicants.push(occupant);
+            }
+            if (occupant.applicantId) {
+              /**Link the existing occupants with the application : via search*/
+              apiObservableArray.push(this._tobService.linkApplicantToApplication(this.applicationId, occupant, occupant.applicantId));
+            }
           }
           /**Check for deleted occupant*/
           if (occupant.applicationApplicantId && occupant.isDeleted) {
@@ -784,6 +790,7 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   private addSearchApplicant(response: any, index: number) {
+    this.isCoApplicantDeleted = true;
     const coApplicants: any = this.occupantForm.get('coApplicants');
     coApplicants.push(this._formBuilder.group({
       surname: response.surname,
@@ -814,21 +821,21 @@ export class ApplicationDetailPage implements OnInit {
     if (Array.isArray(occupantsList) && occupantsList.length > 0) {
       const occupantsArray: any = this.occupantForm.get('coApplicants');
       occupantsList.forEach(element => {
-        if (element.applicantId) {
-          occupantsArray.push(this._formBuilder.group({
-            surname: element.surname,
-            forename: element.forename,
-            email: element.email,
-            mobile: element.mobile,
-            applicationApplicantId: element.applicationApplicantId,
-            isLead: element.isLead,
-            createdById: null,
-            createdBy: ENTITY_TYPE.AGENT,
-            isAdded: true,
-            isDeleted: false,
-            title: element.title,
-            applicantId: element.applicantId
-          }));
+        if (element.applicantId || element.isAdded) {
+        occupantsArray.push(this._formBuilder.group({
+          surname: element.surname,
+          forename: element.forename,
+          email: element.email,
+          mobile: element.mobile,
+          applicationApplicantId: element.applicationApplicantId,
+          isLead: element.isLead,
+          createdById: null,
+          createdBy: ENTITY_TYPE.AGENT,
+          isAdded: true,
+          isDeleted: false,
+          title: element.title,
+          applicantId: element.applicantId
+        }));
         }
       });
     }

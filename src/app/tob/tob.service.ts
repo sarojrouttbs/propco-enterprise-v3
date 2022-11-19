@@ -59,6 +59,12 @@ export class TobService {
     return this.httpClient.post(environment.API_BASE_URL + `applications/${applicationId}/applicants/${applicantId}`, body);
   }
 
+  linkApplicantToApplication(applicationId: string, body: any, applicantId) {
+    return this.httpClient.post(environment.API_BASE_URL + `applications/${applicationId}/applicants/${applicantId}`, body).pipe(
+      catchError(this.handleError<any>(''))
+    );
+  }
+
   removeApplicant(body: any, applicationId: string) {
     return this.httpClient.post(environment.API_BASE_URL + `applications/${applicationId}/applicants/remove`, body).pipe(
       catchError(this.handleError<any>(''))
