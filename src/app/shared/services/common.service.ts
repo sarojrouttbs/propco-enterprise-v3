@@ -351,13 +351,13 @@ export class CommonService {
     }, 500);
   }
 
-  getResizedImageUrl(imageName, size?, mediaHostUrl?) {
+  getResizedImageUrl(imageName: string, size?: number, mediaHostUrl?: string) {
     let srcUrl = '';
     if (imageName) {
-      let mediaHost = mediaHostUrl ? mediaHostUrl : environment.MEDIA_HOST_URL;
-      let fileName = imageName ? imageName : '';
+      const mediaHost = mediaHostUrl ? mediaHostUrl : environment.MEDIA_HOST_URL + 'images/';
+      const fileName = imageName ? imageName : '';
       size = size ? size : 400;
-      srcUrl = mediaHost + 'images/resize.php/' + fileName + '?resize(' + size + ')';
+      srcUrl = mediaHost + 'resize.php/' + fileName + '?resize(' + size + ')';
     }
     return srcUrl;
   }
