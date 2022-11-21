@@ -354,7 +354,7 @@ export class CommonService {
   getResizedImageUrl(imageName: string, size?: number, mediaHostUrl?: string) {
     let srcUrl = '';
     if (imageName) {
-      const mediaHost = mediaHostUrl ? mediaHostUrl : environment.MEDIA_HOST_URL + 'images/';
+      const mediaHost = mediaHostUrl ? mediaHostUrl : environment.MEDIA_HOST_URL;
       const fileName = imageName ? imageName : '';
       size = size ? size : 400;
       srcUrl = mediaHost + 'resize.php/' + fileName + '?resize(' + size + ')';
