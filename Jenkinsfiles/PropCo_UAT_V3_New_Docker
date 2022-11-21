@@ -23,7 +23,7 @@ pipeline {
     stage('Update Variables') {
       steps {        
           withCredentials([string(credentialsId: 'httpd_pass', variable: 'httpd_password')]) {
-              sh '''VAL_API_BASE_URL="API_BASE_URL: 'https://saas-uat-api.propco.co.uk/v3-dev/api/'",
+              sh '''VAL_API_BASE_URL="API_BASE_URL: 'https://embed-uat.propco.co.uk/v3-dev/api/'",
                 VAL_MEDIA_HOST_URL="MEDIA_HOST_URL: 'https://saas-uat.propco.co.uk/uat/',"
                 #VAL_WEB_KEY="WEB_KEY: '83e6d53a8ebf3a7fb93b449376730a31b9f641effe57d0b75dc1b7997d656c6de53c0c1e',"
                 #VAL_HOST_WEBURL="HOST_WEBURL: 'https://pentest.propco.co.uk/onboard/',"
