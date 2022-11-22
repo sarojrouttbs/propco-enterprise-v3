@@ -15,6 +15,10 @@ const routes: Routes = [
         pathMatch: 'full'
       },
       {
+        path: 'search',
+        loadChildren: () => import('./search/search.module').then( m => m.SearchPageModule)
+      },
+      {
         path: ':propertyId/offers',
         loadChildren: () => import('./offer-list/offer-list.module').then(m => m.OfferListPageModule)
       },

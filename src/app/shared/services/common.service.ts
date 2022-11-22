@@ -309,9 +309,9 @@ export class CommonService {
     toast.present();
   }
 
-  searchPropertyByText(text: string, isFAF?: boolean, officeList?: any, agreementStatus?: any): Observable<any> {
+  searchPropertyByText(text: string, isFAF?: boolean, officeList?: any, agreementStatus?: any, pageName?: string): Observable<any> {
     let params: any;
-    if (isFAF) {
+    if (isFAF && pageName !== 'application') {
       let letCategory = this.getItem(PROPCO.LET_CATEGORY, true);
       params = new HttpParams()
         .set('limit', '10')
@@ -323,13 +323,20 @@ export class CommonService {
         params = params.set('prop.mantypeLetCat', letCategory);
       }
     }
-    else {
+    else if(!isFAF && pageName !== 'application') {
       params = new HttpParams()
         .set('limit', '10')
         .set('page', '1')
         .set('text', text)
         .set('prop.agreeStatus', agreementStatus)
         .set('prop.ofc', officeList)
+        .set('types', 'PROPERTY');
+    }
+    else if(!isFAF && pageName === 'application') {
+      params = new HttpParams()
+        .set('limit', '10')
+        .set('page', '1')
+        .set('text', text)
         .set('types', 'PROPERTY');
     }
     return this.httpClient.get(environment.API_BASE_URL + `entities/search`, { params });
