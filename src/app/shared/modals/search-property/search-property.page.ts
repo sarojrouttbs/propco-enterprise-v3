@@ -19,6 +19,7 @@ export class SearchPropertyPage {
   isNotFound = false;
   officeList: any[] = [];
   agreementStatus: any;
+  pageName: string;
 
   constructor(
     private navParams: NavParams,
@@ -32,7 +33,7 @@ export class SearchPropertyPage {
 
     this.initPropertySearchForm();
     this.filteredProperty = this.propertySearchForm.get('text').valueChanges.pipe(debounceTime(300),
-      switchMap((value: string) => (value.length > 2) ? this.searchProperty(value, this.isFAF, this.officeList, this.agreementStatus) : new Observable())
+      switchMap((value: string) => (value.length > 2) ? this.searchProperty(value, this.isFAF, this.officeList, this.agreementStatus, this.pageName) : new Observable())
     );
   }
 
@@ -42,11 +43,11 @@ export class SearchPropertyPage {
     });
   }
 
-  private searchProperty(value: any, isFAF: boolean, officeList: any[], agreementStatus: any): Observable<any> {
+  private searchProperty(value: any, isFAF: boolean, officeList: any[], agreementStatus: any, pageName: string): Observable<any> {
     this.commonService.showLoader();
     this.isNotFound = false;
 
-    let response = this.commonService.searchPropertyByText(value, isFAF, officeList, agreementStatus);
+    let response = this.commonService.searchPropertyByText(value, isFAF, officeList, agreementStatus, pageName);
     response.subscribe(res => {
       this.isNotFound = res && res?.data.length > 0 ? false : true;
     },
