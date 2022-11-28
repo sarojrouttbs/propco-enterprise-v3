@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PROPCO, APPLICATION_STATUSES, APPLICATION_ACTION_TYPE, ENTITY_TYPE, PAYMENT_TYPES, PAYMENT_CONFIG, APPLICATION_ENTITIES, DEFAULTS, DATE_FORMAT, SYSTEM_OPTIONS } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
@@ -28,7 +28,7 @@ import { HttpParams } from '@angular/common/http';
 })
 export class ApplicationDetailPage implements OnInit {
   lookupdata: any;
-  toblookupdata: any;
+  tobLookupData: any;
   howLong = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30];
   occupants = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   childrens = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
@@ -108,6 +108,7 @@ export class ApplicationDetailPage implements OnInit {
   DATE_FORMAT = DATE_FORMAT;
   webImageUrl: string;
   updateOccupantsInProcess = false;
+  applicantQuestions: any = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -227,7 +228,6 @@ export class ApplicationDetailPage implements OnInit {
     let tmpImageObj: any = await this.getSystemOptions(SYSTEM_OPTIONS.WEB_IMAGE_URL);
     this.webImageUrl = tmpImageObj ? tmpImageObj.WEB_IMAGE_URL : '';
     await this.getPropertyDetails(this.propertyId);
-    await this.getNoDeposit();
     this.initTermsAndConditionData();
   }
 
@@ -254,6 +254,10 @@ export class ApplicationDetailPage implements OnInit {
     const applicants = await this.getApplicationApplicants(this.applicationId) as ApplicationModels.ICoApplicants;
     await this.setApplicationApplicants(applicants);
     await this.setLeadApplicantDetails();
+    if (this.applicantQuestions && this.applicantQuestions.length) {
+      this.createQuestionItems(this.applicantQuestions);
+      await this.getApplicationQuestionsAnswer(this.applicationId);
+    }
     if (this.PAYMENT_METHOD === PAYMENT_TYPES.WORLDPAY_OWNFORM) {
       await this.setWorldpayInternalData();
     }
@@ -262,10 +266,6 @@ export class ApplicationDetailPage implements OnInit {
       this.showPayment = true;
       this.initPaymentConfiguration();
     }
-    const questionData = await this.getApplicantQuestions();
-    this.createQuestionItems(questionData);
-    await this.getApplicationQuestionsAnswer(this.applicationId);
-
   }
 
   /** Submit Application Functionality **/
@@ -383,7 +383,7 @@ export class ApplicationDetailPage implements OnInit {
           this.saveBankDetails();
         break;
       case 4:
-        if (!this.applicationDetails.isSubmitted)
+        if (!this.applicationDetails.isSubmitted && this.applicantId)
           this.saveApplicationQuestions();
         break;
       case 5:
@@ -642,6 +642,9 @@ export class ApplicationDetailPage implements OnInit {
             this.propertyDetails.propertyImageUrl = this.commonService.getHeadMediaUrl(res.data.media || []);
             this.propertyDetails.webImageUrl = this.webImageUrl;
             this.isTobPropertyCardReady = true;
+            if (this.tobLookupData.noDepositScheme) {
+              this.propertyDetails.noDepositScheme = this.tobLookupData.noDepositScheme;
+            }
             resolve(true);
           }
         },
@@ -649,19 +652,6 @@ export class ApplicationDetailPage implements OnInit {
           reject(undefined);
         }
       );
-    });
-  }
-
-  private getNoDeposit() {
-    return new Promise((resolve, reject) => {
-      this._tobService.getNoDepositScheme().subscribe(res => {
-        if (res) {
-          this.propertyDetails.noDepositScheme = res.noDepositScheme;
-        }
-        resolve(true);
-      }, error => {
-        reject(undefined);
-      });
     });
   }
 
@@ -719,8 +709,8 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   private getTobLookupData() {
-    this.toblookupdata = this.commonService.getItem(PROPCO.TOB_LOOKUP_DATA, true);
-    if (this.toblookupdata) {
+    this.tobLookupData = this.commonService.getItem(PROPCO.TOB_LOOKUP_DATA, true);
+    if (this.tobLookupData) {
       this.setTobLookupData();
     } else {
       this.commonService.getTobLookup().subscribe(data => {
@@ -739,8 +729,9 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   private setTobLookupData(): void {
-    this.toblookupdata = this.commonService.getItem(PROPCO.TOB_LOOKUP_DATA, true);
-    this.applicationStatuses = this.toblookupdata.applicationStatuses;
+    this.tobLookupData = this.commonService.getItem(PROPCO.TOB_LOOKUP_DATA, true);
+    this.applicationStatuses = this.tobLookupData.applicationStatuses;
+    this.applicantQuestions = this.tobLookupData.applicantQuestions;
   }
 
   private initSearchForm(): void {
@@ -1170,24 +1161,35 @@ export class ApplicationDetailPage implements OnInit {
     });
   }
 
-  private saveApplicationQuestions() {
-    const apiObservableArray = [];
-    const applicantQuestions = this.applicantQuestionForm.controls.questions.value;
+  saveApplicationQuestions() {
     if (this.checkFormDirty(this.applicantQuestionForm)) {
-      applicantQuestions.forEach(question => {
-        const questionDetails: any = {};
-        questionDetails.toggle = question.toggle;
-        questionDetails.answer = question.type === 'BOOLEAN' ? question.toggle : question.answer;
-        questionDetails.answerById = question.answerById;
-        apiObservableArray.push(this._tobService.updateApplicationQuestionAnswer(this.applicationId, question.applicationQuestionId, questionDetails));
+      const questions = this.applicantQuestionForm.get('questions') as FormArray;
+      let questionAnswerObj = {} as any;
+      questionAnswerObj.answerById = this.applicantId;
+      questionAnswerObj.answers = [];
+      questions.controls.forEach(element => {
+        const question = element.value;
+        const answer = question.type === 'BOOLEAN' ? question.toggle : question.answer;
+        if (element.dirty && answer !== null) {
+          let questionDetails: any = {};
+          questionDetails.toggle = question.toggle;
+          questionDetails.answer = answer;
+          questionDetails.applicationQuestionId = question.applicationQuestionId;
+          questionAnswerObj.answers.push(questionDetails);
+          element.markAsPristine();
+        }
       });
-    }
-    forkJoin(apiObservableArray).subscribe(() => {
-      this.applicantQuestionForm.reset(this.applicantQuestionForm.value);
-      if (this.selectionType === APPLICATION_ACTION_TYPE.SAVE_FOR_LATER) {
-        this.onSave();
+      if (questionAnswerObj.answers.length) {
+        this._tobService.updateApplicationQuestionsAnswers(this.applicationId, questionAnswerObj).subscribe((res) => {
+          this.applicantQuestionForm.reset(this.applicantQuestionForm.value);
+          if (this.selectionType === APPLICATION_ACTION_TYPE.SAVE_FOR_LATER) {
+            this.onSave();
+          }
+        }, err => {
+          console.log(err);
+        });
       }
-    });
+    }
   }
 
   /** Application Question Functionality **/
