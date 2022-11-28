@@ -742,10 +742,10 @@ export class ApplicationDetailPage implements OnInit {
   private initApplicantDetailsForm(): void {
     this.applicantDetailsForm = this._formBuilder.group({
       title: [''],
-      forename: ['', [ValidationService.alphabetValidator]],
-      surname: ['', [ValidationService.alphabetValidator]],
+      forename: [''],
+      surname: [''],
       email: ['', [ValidationService.emailValidator]],
-      mobile: ['', [ValidationService.numberValidator]],
+      mobile: ['', [ValidationService.contactValidator]],
       dateOfBirth: ['', Validators.required],
       occupation: [''],
       hasPets: false,
@@ -774,8 +774,8 @@ export class ApplicationDetailPage implements OnInit {
   private createItem(): void {
     const coApplicants: any = this.occupantForm.get('coApplicants');
     coApplicants.push(this._formBuilder.group({
-      surname: ['', [Validators.required, ValidationService.alphabetValidator]],
-      forename: ['', [Validators.required, ValidationService.alphabetValidator]],
+      surname: ['', [Validators.required]],
+      forename: ['', [Validators.required]],
       email: ['', [Validators.required, ValidationService.emailValidator]],
       mobile: ['', [Validators.required, ValidationService.numberValidator]],
       applicationApplicantId: null,
@@ -879,7 +879,7 @@ export class ApplicationDetailPage implements OnInit {
   initAddressDetailsForm(): void {
     this.addressDetailsForm = this._formBuilder.group({
       address: this._formBuilder.group({
-        postcode: ['', Validators.required],
+        postcode: ['', [Validators.required, ValidationService.postcodeValidator]],
         addressdetails: [''],
         addressLine1: ['', Validators.required],
         addressLine2: '',
@@ -889,7 +889,7 @@ export class ApplicationDetailPage implements OnInit {
         country: ''
       }),
       forwardingAddress: this._formBuilder.group({
-        postcode: '',
+        postcode: ['', [ValidationService.postcodeValidator]],
         addressdetails: [''],
         addressLine1: '',
         addressLine2: '',
@@ -1309,8 +1309,8 @@ export class ApplicationDetailPage implements OnInit {
     this.guarantorForm = this._formBuilder.group({
       guarantorId: [''],
       title: ['', [ValidationService.speacialValidator]],
-      forename: ['', [ValidationService.alphabetValidator]],
-      surname: ['', [ValidationService.alphabetValidator]],
+      forename: [''],
+      surname: [''],
       email: ['', [ValidationService.emailValidator]],
       mobile: ['', [ValidationService.contactValidator, Validators.minLength(5), Validators.maxLength(15)]],
       address: this._formBuilder.group({
@@ -1330,9 +1330,9 @@ export class ApplicationDetailPage implements OnInit {
     this.guarantorForm.controls.title.setValidators(Validators.required);
     this.guarantorForm.controls.forename.setValidators(Validators.required);
     this.guarantorForm.controls.surname.setValidators(Validators.required);
-    this.guarantorForm.controls.email.setValidators(Validators.required);
-    this.guarantorForm.controls.mobile.setValidators(Validators.required);
-    this.guarantorForm.controls.address['controls'].postcode.setValidators(Validators.required);
+    this.guarantorForm.controls.email.setValidators([Validators.required, ValidationService.emailValidator]);
+    this.guarantorForm.controls.mobile.setValidators([Validators.required, ValidationService.contactValidator, Validators.minLength(5), Validators.maxLength(15)]);
+    this.guarantorForm.controls.address['controls'].postcode.setValidators([Validators.required, ValidationService.postcodeValidator]);
     this.guarantorForm.controls.address['controls'].addressLine1.setValidators(Validators.required);
     this.guarantorForm.controls.address['controls'].town.setValidators(Validators.required);
     this.guarantorForm.controls.title.updateValueAndValidity();
