@@ -642,7 +642,7 @@ export class ApplicationDetailPage implements OnInit {
             this.propertyDetails.propertyImageUrl = this.commonService.getHeadMediaUrl(res.data.media || []);
             this.propertyDetails.webImageUrl = this.webImageUrl;
             this.isTobPropertyCardReady = true;
-            if (this.tobLookupData.noDepositScheme) {
+            if (this.tobLookupData && this.tobLookupData.noDepositScheme) {
               this.propertyDetails.noDepositScheme = this.tobLookupData.noDepositScheme;
             }
             resolve(true);
