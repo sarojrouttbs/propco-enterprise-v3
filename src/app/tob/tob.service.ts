@@ -55,10 +55,6 @@ export class TobService {
     );
   }
 
-  deleteApplicationApplicant(applicationId: string, applicantId: string, body) {
-    return this.httpClient.post(environment.API_BASE_URL + `applications/${applicationId}/applicants/${applicantId}`, body);
-  }
-
   linkApplicantToApplication(applicationId: string, body: any, applicantId) {
     return this.httpClient.post(environment.API_BASE_URL + `applications/${applicationId}/applicants/${applicantId}`, body).pipe(
       catchError(this.handleError<any>(''))
@@ -158,21 +154,27 @@ export class TobService {
   getApplicationList(propertyId: string, params): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `properties/${propertyId}/applications`,{params});
   }
-
+  /**Deprecated*/
   getApplicantQuestions(): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + 'applications/applicant-questions').pipe(
       catchError(this.handleError<any>(''))
     );
   }
-
+  
   getApplicationQuestionsAnswer(applicationId: string): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `applications/${applicationId}/questions`).pipe(
       catchError(this.handleError<any>(''))
     );
   }
-
+  /**Deprecated*/
   updateApplicationQuestionAnswer(applicationId, questionId, questionDetails): Observable<any> {
     return this.httpClient.put(environment.API_BASE_URL + `applications/${applicationId}/questions/${questionId}`, questionDetails).pipe(
+      catchError(this.handleError<any>(''))
+    );
+  }
+
+  updateApplicationQuestionsAnswers(applicationId, requestObj): Observable<any> {
+    return this.httpClient.put(environment.API_BASE_URL + `applications/${applicationId}/questions/answers`, requestObj).pipe(
       catchError(this.handleError<any>(''))
     );
   }
