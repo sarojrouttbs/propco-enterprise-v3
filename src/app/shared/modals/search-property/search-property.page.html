@@ -2,7 +2,7 @@
   <ion-toolbar>
     <ion-title>Search Property</ion-title>
     <ion-buttons slot="end">
-      <ion-icon name="close" (click)="dismiss()"></ion-icon>
+      <ion-icon name="close" (click)="dismiss()" *ngIf="pageName!=='application'"></ion-icon>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -31,7 +31,7 @@
     </mat-autocomplete>
   </form>
 </ion-content>
-<ion-footer>
+<ion-footer *ngIf="pageName!=='application'">
   <ion-grid>
     <ion-row>
       <ion-col class="ion-text-end">
