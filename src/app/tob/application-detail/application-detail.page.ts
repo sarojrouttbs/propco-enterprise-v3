@@ -119,7 +119,7 @@ export class ApplicationDetailPage implements OnInit {
   ) {
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.propertyId = this.route.snapshot.paramMap.get('propertyId');
     if (!this.propertyId) {
       this.propertyId = this.route.snapshot.parent.parent.paramMap.get('propertyId');
@@ -128,14 +128,14 @@ export class ApplicationDetailPage implements OnInit {
     if (!this.applicationId) {
       this.applicationId = this.route.snapshot.parent.parent.paramMap.get('applicationId');
     }
+    this.initForms();
+    await this.initApiCalls();
     if (typeof this.applicationId !== 'undefined' && this.applicationId !== null) {
-      this.initViewApiCalls();
+      await this.initViewApiCalls();
     }
     else if (typeof this.propertyId !== 'undefined' && this.propertyId !== null) {
-      this.initCreateApiCalls();
+      await this.initCreateApiCalls();
     }
-    this.initForms();
-    this.initApiCalls();
   }
 
   private getSystemOptions(key: string) {
@@ -146,7 +146,7 @@ export class ApplicationDetailPage implements OnInit {
         },
         (error) => {
           resolve(null);
-      });
+        });
     });
   }
 
@@ -162,31 +162,36 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   async getApplicantDetails(applicantId: string, index?: number, isSearch?: boolean) {
-    if (applicantId && isSearch) {
-      let existingApplicant = this.applicationApplicantDetails.filter((occupant) => {
-        return (occupant.applicantId === applicantId);
+    return new Promise((resolve, reject) => {
+      if (applicantId && isSearch) {
+        let existingApplicant = this.applicationApplicantDetails.filter((occupant) => {
+          return (occupant.applicantId === applicantId);
+        });
+        if (existingApplicant.length) {
+          this.commonService.showAlert('Applicant', 'Applicant is already added to the application');
+          this.resultsAvailable = false;
+          return resolve(true);
+        }
+      }
+      this.applicantId = applicantId;
+      this._tobService.getApplicantDetails(applicantId).subscribe(res => {
+        if (res) {
+          this.applicantDetail = res;
+          this.resultsAvailable = false;
+          this.searchApplicantForm.get('searchApplicant').setValue('');
+          if (isSearch) {
+            this.addSearchApplicant(res, index);
+            this.getApplicantCoApplicants(applicantId);
+          }
+          else {
+            this.patchApplicantDetail();
+            this.patchApplicantAddressDetail();
+          }
+        }
+        resolve(true);
+      }, error => {
+        reject(true);
       });
-      if (existingApplicant.length) {
-        this.commonService.showAlert('Applicant', 'Applicant is already added to the application');
-        this.resultsAvailable = false;
-        return;
-      }
-    }
-    this.applicantId = applicantId;
-    this._tobService.getApplicantDetails(applicantId).subscribe(res => {
-      if (res) {
-        this.applicantDetail = res;
-        this.resultsAvailable = false;
-        this.searchApplicantForm.get('searchApplicant').setValue('');
-        if (isSearch) {
-          this.addSearchApplicant(res, index);
-          this.getApplicantCoApplicants(applicantId);
-        }
-        else {
-          this.patchApplicantDetail();
-          this.patchApplicantAddressDetail();
-        }
-      }
     });
   }
 
@@ -219,10 +224,10 @@ export class ApplicationDetailPage implements OnInit {
   private async initApiCalls() {
     this.getLookUpData();
     this.getTobLookupData();
-    let tmpImageObj:any = await this.getSystemOptions(SYSTEM_OPTIONS.WEB_IMAGE_URL);
+    let tmpImageObj: any = await this.getSystemOptions(SYSTEM_OPTIONS.WEB_IMAGE_URL);
     this.webImageUrl = tmpImageObj ? tmpImageObj.WEB_IMAGE_URL : '';
     await this.getPropertyDetails(this.propertyId);
-    this.getNoDeposit();
+    await this.getNoDeposit();
     this.initTermsAndConditionData();
   }
 
@@ -259,7 +264,7 @@ export class ApplicationDetailPage implements OnInit {
     }
     const questionData = await this.getApplicantQuestions();
     this.createQuestionItems(questionData);
-    this.getApplicationQuestionsAnswer(this.applicationId);
+    await this.getApplicationQuestionsAnswer(this.applicationId);
 
   }
 
@@ -424,7 +429,7 @@ export class ApplicationDetailPage implements OnInit {
   private async saveApplicantsToApplication() {
     this.updateOccupantsInProcess = true;
     const apiObservableArray = await this.getModifiedOccupantList();
-    if(!apiObservableArray.length) {
+    if (!apiObservableArray.length) {
       this.updateOccupantsInProcess = false;
     }
     setTimeout(() => {
@@ -598,11 +603,11 @@ export class ApplicationDetailPage implements OnInit {
     if (this.applicantId) {
       await this.getApplicantDetails(this.applicantId);
       if (this.applicationDetails.leadApplicantItemtype === 'M') {
-        this.getTenantBankDetails(this.applicantId);
-        this.getTenantGuarantors(this.applicantId);
+        await this.getTenantBankDetails(this.applicantId);
+        await this.getTenantGuarantors(this.applicantId);
       } else {
-        this.getApplicantBankDetails(this.applicantId);
-        this.getApplicantGuarantors(this.applicantId);
+        await this.getApplicantBankDetails(this.applicantId);
+        await this.getApplicantGuarantors(this.applicantId);
       }
     }
   }
@@ -612,7 +617,7 @@ export class ApplicationDetailPage implements OnInit {
     requestObj.createdBy = ENTITY_TYPE.AGENT;
     requestObj.propertyId = this.propertyId;
     requestObj.status = APPLICATION_STATUSES.NEW;
-    requestObj.rent = this.propertyDetails.advertisementRent;
+    requestObj.rent = this.propertyDetails?.advertisementRent;
     requestObj.applicationRestrictions = this.propertyRestrictions;
     requestObj.applicationClauses = this.propertyClauses;
     this._tobService.createApplication(requestObj).subscribe(
@@ -648,10 +653,15 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   private getNoDeposit() {
-    this._tobService.getNoDepositScheme().subscribe(res => {
-      if (res) {
-        this.propertyDetails.noDepositScheme = res.noDepositScheme;
-      }
+    return new Promise((resolve, reject) => {
+      this._tobService.getNoDepositScheme().subscribe(res => {
+        if (res) {
+          this.propertyDetails.noDepositScheme = res.noDepositScheme;
+        }
+        resolve(true);
+      }, error => {
+        reject(undefined);
+      });
     });
   }
 
@@ -844,20 +854,20 @@ export class ApplicationDetailPage implements OnInit {
       const occupantsArray: any = this.occupantForm.get('coApplicants');
       occupantsList.forEach(element => {
         if (element.applicantId || element.isAdded) {
-        occupantsArray.push(this._formBuilder.group({
-          surname: element.surname,
-          forename: element.forename,
-          email: element.email,
-          mobile: element.mobile,
-          applicationApplicantId: element.applicationApplicantId,
-          isLead: element.isLead,
-          createdById: null,
-          createdBy: ENTITY_TYPE.AGENT,
-          isAdded: true,
-          isDeleted: false,
-          title: element.title,
-          applicantId: element.applicantId
-        }));
+          occupantsArray.push(this._formBuilder.group({
+            surname: element.surname,
+            forename: element.forename,
+            email: element.email,
+            mobile: element.mobile,
+            applicationApplicantId: element.applicationApplicantId,
+            isLead: element.isLead,
+            createdById: null,
+            createdBy: ENTITY_TYPE.AGENT,
+            isAdded: true,
+            isDeleted: false,
+            title: element.title,
+            applicantId: element.applicantId
+          }));
         }
       });
     }
@@ -1124,18 +1134,23 @@ export class ApplicationDetailPage implements OnInit {
 
   private getApplicationQuestionsAnswer(applicationId: string) {
     const questions: any = this.applicantQuestionForm.get('questions');
-    this._tobService.getApplicationQuestionsAnswer(applicationId).subscribe(res => {
-      if (res && res.count) {
-        questions.controls.forEach(element => {
-          const item = res.data.find(answer => answer.questionId === element.value.applicantQuestionId);
-          element.patchValue({
-            toggle: item ? item.toggle : null,
-            answer: item ? item.answer : null,
-            answerById: item ? item.answerById : null,
-            applicationQuestionId: item ? item.applicationQuestionId : null,
+    return new Promise((resolve, reject) => {
+      this._tobService.getApplicationQuestionsAnswer(applicationId).subscribe(res => {
+        if (res && res.count) {
+          questions.controls.forEach(element => {
+            const item = res.data.find(answer => answer.questionId === element.value.applicantQuestionId);
+            element.patchValue({
+              toggle: item ? item.toggle : null,
+              answer: item ? item.answer : null,
+              answerById: item ? item.answerById : null,
+              applicationQuestionId: item ? item.applicationQuestionId : null,
+            });
           });
-        });
-      }
+        }
+        resolve(true);
+      }, error => {
+        reject(undefined);
+      });
     });
   }
 
@@ -1345,24 +1360,34 @@ export class ApplicationDetailPage implements OnInit {
     this.guarantorForm.controls.address['controls'].town.updateValueAndValidity();
   }
 
-  private getApplicantGuarantors(applicantId: string): void {
-    this._tobService.getApplicantGuarantors(applicantId).subscribe(
-      res => {
-        if (res && res.data) {
-          this.setGuarantorDetails(res.data[0]);
+  private getApplicantGuarantors(applicantId: string) {
+    return new Promise((resolve, reject) => {
+      this._tobService.getApplicantGuarantors(applicantId).subscribe(
+        res => {
+          if (res && res.data) {
+            this.setGuarantorDetails(res.data[0]);
+          }
+          resolve(true);
+        }, error => {
+          reject(undefined);
         }
-      }
-    );
+      );
+    });
   }
 
-  private getTenantGuarantors(applicantId: string): void {
-    this._tobService.getTenantGuarantors(applicantId).subscribe(
-      res => {
-        if (res && res.data) {
-          this.setGuarantorDetails(res.data[0]);
+  private getTenantGuarantors(applicantId: string) {
+    return new Promise((resolve, reject) => {
+      this._tobService.getTenantGuarantors(applicantId).subscribe(
+        res => {
+          if (res && res.data) {
+            this.setGuarantorDetails(res.data[0]);
+            resolve(true);
+          }
+        }, error => {
+          reject(undefined);
         }
-      }
-    );
+      )
+    });
   }
 
   private setGuarantorDetails(details: any): void {
