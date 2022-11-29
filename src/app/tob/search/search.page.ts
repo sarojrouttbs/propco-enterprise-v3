@@ -34,8 +34,7 @@ export class SearchPage implements OnInit {
     modal.onDidDismiss().then(res => {
       if (res.data.propertyId) {
         let propertyId = res.data.propertyId;
-        this.router.navigate([`/tob/${propertyId}/applications`], { relativeTo: this.route, queryParams: {
-          pId: res.data.propertyId}}).then(() => {
+        this.router.navigate([`/tob/${propertyId}/applications`], { relativeTo: this.route }).then(() => {
             location.reload();
           });
       } else {
