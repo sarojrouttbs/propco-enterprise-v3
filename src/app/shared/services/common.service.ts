@@ -240,7 +240,7 @@ export class CommonService {
             }
           },
           {
-            text: okText ? okText : 'Ok',
+            text: okText ? okText : 'OK',
             cssClass: 'ion-color-success',
             handler: (data) => {
               alertPopup.dismiss().then((res) => {
@@ -281,7 +281,7 @@ export class CommonService {
             }
           },
           {
-            text: okText ? okText : 'Ok',
+            text: okText ? okText : 'OK',
             cssClass: 'ion-color-success',
             handler: () => {
               alertPopup.dismiss().then((res) => {
