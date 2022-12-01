@@ -1686,7 +1686,7 @@ export class ApplicationDetailPage implements OnInit {
       componentProps: {
         data: message,
         heading: 'Tenancy',
-        button: 'Ok',
+        button: 'OK',
       }
     });
 
