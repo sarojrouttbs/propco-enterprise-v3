@@ -43,7 +43,7 @@
             <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
             <ion-popover class="ion-datepicker-popover" trigger="offlinePaymentDate" show-backdrop="false">
               <ng-template>
-                <ion-datetime [showDefaultButtons]="true" presentation="date" formControlName="offlinePaymentDate">
+                <ion-datetime [showDefaultButtons]="true" presentation="date" [max]="currentDate" formControlName="offlinePaymentDate">
                 </ion-datetime>
               </ng-template>
             </ion-popover>

@@ -350,7 +350,7 @@ export class ApplicationListPage implements OnInit {
   async markHoldingDepositPaid() {
     const modal = await this.modalController.create({
       component: HoldingDepositePaidModalPage,
-      cssClass: 'modal-container modal-width tob-modal-container',
+      cssClass: 'modal-container modal-width tob-modal-container holding-deposit-already-paid',
       componentProps: {
         heading: 'Holding Deposit Already Paid',
         offlinePaymentTypes: this.offlinePaymentTypes,
