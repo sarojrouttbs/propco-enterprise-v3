@@ -17,6 +17,7 @@ export class HoldingDepositePaidModalPage implements OnInit {
   offlinePaymentTypes;
   holdingDepositForm: FormGroup;
   DATE_FORMAT = DATE_FORMAT;
+  currentDate = this.commonService.getFormatedDate(new Date());
 
   constructor(private modalController: ModalController, private _formBuilder: FormBuilder, private commonService: CommonService, private holdingDepositePaidService: HodlingDepositePaidService) { }
 

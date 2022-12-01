@@ -975,6 +975,12 @@ ion-datetime {
   }
 }
 
+.holding-deposit-already-paid {
+  &::part(content){
+    height: 458px;
+  }
+}
+
 ion-popover.ion-datepicker-popover {
   &::part(content){
     --width: 270px;
