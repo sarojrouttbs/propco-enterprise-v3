@@ -6,7 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { Observable } from 'rxjs';
-import { APPLICATION_STATUSES, DATE_FORMAT, DEFAULTS, PROPCO, REFERENCING_TYPES } from 'src/app/shared/constants';
+import { APPLICATION_STATUSES, DATE_FORMAT, DEFAULTS, PROPCO, REFERENCING_TYPES, TOB_SUCCESS_MESSAGES } from 'src/app/shared/constants';
 import { HoldingDepositePaidModalPage } from 'src/app/shared/modals/holding-deposite-paid-modal/holding-deposite-paid-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { TobService } from '../tob.service';
@@ -357,6 +357,7 @@ export class ApplicationListPage implements OnInit {
 
     modal.onDidDismiss().then(res => {
       if (res?.data?.holdingDepositePaid) {
+        this.commonService.showAlert(TOB_SUCCESS_MESSAGES.PROPERTY_RESERVED_SUCCESSFULLY.title, TOB_SUCCESS_MESSAGES.PROPERTY_RESERVED_SUCCESSFULLY.message);
         this.initApiCalls();
       }
     });
