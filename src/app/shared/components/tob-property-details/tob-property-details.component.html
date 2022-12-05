@@ -5,13 +5,13 @@
     <ion-card-content class="ion-no-padding">
       <ion-grid>
         <ion-row class="main-row">
-          <ion-col size="25">
+          <ion-col size-xs="50" size-sm="40" size-md="34" size-lg="30" size-xl="22">
             <div class="property-img">
-              <img [src]=" propertyDetails?.propertyImageUrl ? commonService.getResizedImageUrl(propertyDetails?.propertyImageUrl) : 'assets/images/default.jpg'"
+              <img [src]="propertyDetails?.propertyImageUrl ? commonService.getResizedImageUrl(propertyDetails?.propertyImageUrl, null, propertyDetails?.webImageUrl) : 'assets/images/default.jpg'"
               onerror="this.src='assets/images/default.jpg'" alt="default-image">
             </div>
           </ion-col>
-          <ion-col class="property-details" size="75">
+          <ion-col class="property-details" size-xs="50" size-sm="60" size-md="66" size-lg="70" size-xl="78">
             <ion-grid style="height:100%;" class="no-padding">
               <ion-row class="property-details-row">
                 <ion-text *ngIf="propertyDetails?.publishedAddress" class="address ion-no-margin">

@@ -8,7 +8,7 @@ export const environment = {
   production: false,
   API_BASE_URL: "http://localhost:3001/api/v1/", 
   // API_BASE_URL: "https://saas-uat-api.propco.co.uk/v3-dev/api/",
-  MEDIA_HOST_URL: 'https://saas-qa.propco.co.uk/demolocal/',
+  MEDIA_HOST_URL: 'https://saas-qa.propco.co.uk/demolocal/images/',
   PAYMENT_METHOD: PAYMENT_TYPES.BARCLAYCARD_REDIRECT,
   PAYMENT_PROD: false,
   FLUTTER_HOST_URL: 'http://172.20.10.4:8080/#/'

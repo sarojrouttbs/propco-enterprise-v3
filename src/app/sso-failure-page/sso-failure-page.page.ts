@@ -55,7 +55,7 @@ export class SsoFailurePagePage implements OnInit {
       const navigateToRoute = this.commonService.getItem(PROPCO.SSO_URL_ROUTE);
       const navigateToRouteUrl = navigateToRoute.split('?')[0];
       resolve(true);
-      this.router.navigate([navigateToRouteUrl], {queryParams: {ssoKey: this.ssoKey}});
+      this.router.navigate([navigateToRouteUrl]);
     });
   }
 }

@@ -6,7 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { Observable } from 'rxjs';
-import { APPLICATION_STATUSES, DATE_FORMAT, DEFAULTS, PROPCO, REFERENCING_TYPES } from 'src/app/shared/constants';
+import { APPLICATION_STATUSES, DATE_FORMAT, DEFAULTS, PROPCO, REFERENCING_TYPES, TOB_SUCCESS_MESSAGES } from 'src/app/shared/constants';
 import { HoldingDepositePaidModalPage } from 'src/app/shared/modals/holding-deposite-paid-modal/holding-deposite-paid-modal.page';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { TobService } from '../tob.service';
@@ -24,7 +24,7 @@ export class ApplicationListPage implements OnInit {
     pageSizeOptions: [5, 10, 25, 100],
     showFirstLastButtons: true
   };
-  maxDate = this.commonService.getFormatedDate(new Date());
+  maxDate = this.commonService.getFormatedDate(new Date().toUTCString());
   @ViewChild('paginator') paginator: MatPaginator;
   obsApplicationList: Observable<any>;
   filteredApplicationList: MatTableDataSource<ApplicationData> = new MatTableDataSource<ApplicationData>([]);
@@ -48,6 +48,7 @@ export class ApplicationListPage implements OnInit {
   DEFAULTS = DEFAULTS;
   DATE_FORMAT = DATE_FORMAT;
   filterForm: FormGroup;
+  propertyType;
 
   constructor(
     private modalController: ModalController,
@@ -87,6 +88,7 @@ export class ApplicationListPage implements OnInit {
     this.hideMenu('', 'tob-application-overlay');
     this.propertyDetails = await this.getPropertyById();
     this.applicationsDetails = await this.getApplicationList();
+    this.propertyType = this.commonService.getLookupValue(this.applicationsDetails.rentCategory, this.lookupdata.rentCategories);
     this.applicationList = (this.applicationsDetails.applications && this.applicationsDetails.applications.length > 0) ? this.applicationsDetails.applications as ApplicationData[] : [];
     this.initApplicationList();
   }
@@ -343,7 +345,7 @@ export class ApplicationListPage implements OnInit {
   async markHoldingDepositPaid() {
     const modal = await this.modalController.create({
       component: HoldingDepositePaidModalPage,
-      cssClass: 'modal-container modal-width tob-modal-container',
+      cssClass: 'modal-container modal-width tob-modal-container holding-deposit-already-paid',
       componentProps: {
         heading: 'Holding Deposit Already Paid',
         offlinePaymentTypes: this.offlinePaymentTypes,
@@ -355,6 +357,7 @@ export class ApplicationListPage implements OnInit {
 
     modal.onDidDismiss().then(res => {
       if (res?.data?.holdingDepositePaid) {
+        this.commonService.showAlert(TOB_SUCCESS_MESSAGES.PROPERTY_RESERVED_SUCCESSFULLY.title, TOB_SUCCESS_MESSAGES.PROPERTY_RESERVED_SUCCESSFULLY.message);
         this.initApiCalls();
       }
     });

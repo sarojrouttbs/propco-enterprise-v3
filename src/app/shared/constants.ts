@@ -598,8 +598,8 @@ export const PAYMENT_CONFIG = {
   WORLDPAY_REDIRECT: {
     TEST_URL: 'https://secure-test.worldpay.com/wcc/purchase',
     PROD_URL: 'https://secure.worldpay.com/wcc/purchase',
-    INST_ID: 1277936,
-    MERCHANT_CODE: 'PROPCOTESTM1',
+    INST_ID: 1034945, //1277936,
+    MERCHANT_CODE: 'TARACOPROPERM1'//'PROPCOTESTM1',
   },
   BARCLAYCARD_REDIRECT: {
     TEST_URL: 'https://mdepayments.epdq.co.uk/ncol/test/orderstandard_utf8.asp',
@@ -830,3 +830,14 @@ export const HMRC_PREFERENCE_ORDER = [
   { order: 6, index: 5 },
   { order: 7, index: 0 }
 ]
+
+export const RENT_CATEGORY = {
+  STUDENT : 1
+}
+
+export const TOB_SUCCESS_MESSAGES = {
+  PROPERTY_RESERVED_SUCCESSFULLY : {
+    title: 'Congratulations!',
+    message: 'Holding deposit is marked as paid, Property has been reserved successfully.<br><br><b>Next Step</b> : Please add the amount to the Tenant reserve manually.'
+  }
+}
