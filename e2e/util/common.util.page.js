@@ -1,5 +1,6 @@
 var path = require('path');
 var cryptoJs = require('crypto-js');
+const { browser } = require('protractor');
 
 var CommonFunction = function() {
     
@@ -630,6 +631,20 @@ var CommonFunction = function() {
                 }
             };
         });        
+    }
+
+    this.generateRandomString = function(length){       
+            var string = '';
+            var letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz' //Include numbers if you want
+                    for (i = 0; i < length; i++) {
+                        string += letters.charAt(Math.floor(Math.random() * letters.length));
+                    }
+                    return string;                
+    }
+
+    this.refreshPage = function(){
+        browser.refresh();
+        
     }
 }
 module.exports = CommonFunction;
