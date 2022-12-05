@@ -27,6 +27,7 @@ var hmrc = require('./hmrc-selfassessment-form.page');
         hmrcPage.validateProgress();
         hmrcPage.validateFinish();
         userLogin.logoutFromPortal();
+        //
     });
 
     it('should validate reset filter', function(){
