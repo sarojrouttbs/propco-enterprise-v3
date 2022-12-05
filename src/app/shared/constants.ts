@@ -834,3 +834,10 @@ export const HMRC_PREFERENCE_ORDER = [
 export const RENT_CATEGORY = {
   STUDENT : 1
 }
+
+export const TOB_SUCCESS_MESSAGES = {
+  PROPERTY_RESERVED_SUCCESSFULLY : {
+    title: 'Congratulations!',
+    message: 'Holding deposit is marked as paid, Property has been reserved successfully.<br><br><b>Next Step</b> : Please add the amount to the Tenant reserve manually.'
+  }
+}
