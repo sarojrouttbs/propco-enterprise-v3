@@ -47,7 +47,8 @@ var Login = function () {
         }
     }
 
-    this.logoutFromPortal = function () {    
+    this.logoutFromPortal = function () { 
+        commonFunction.refreshPage();   
         if(browser.params.environment.includes("Portal")){    
             commonFunction.waitForElementToBeVisible(this.logoutBtn, "Logout button"); 
             // commonFunction.clickOnElement(this.userProfileBtn, "User profile button");
