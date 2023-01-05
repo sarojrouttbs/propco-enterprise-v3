@@ -1,0 +1,27 @@
+{
+    "appraisalDetails":{
+        "default":{
+            "howDidYouFindUs": "Board",
+            "office":"Accounting Center",
+            "owenership":"Jointly",
+            "numberOfOwners":"1",
+            "enquiryNotes":"Test",
+            "landlordStatus":"Active",
+            "phone":"9876543210",
+            "email": "rajatkamboj98@gmail.com",
+            "title": " Mr ",
+            "postcode": "cv312dw",
+            "address" : " 9A, Clemens Street Leamington Spa, CV31 2DW ",
+            "bedroom" : " 1 ",
+            "propertyAge": " 1901 - 1920 ",
+            "parking": " Allocated ",
+            "type": " Apartment ",
+            "style": " Above Shop ",
+            "status": " Available ",
+            "howLOng": " 1 - 2 years ",
+            "office1":" Accounting Center "
+           
+
+        }
+    }
+}

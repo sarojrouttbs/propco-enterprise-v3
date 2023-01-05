@@ -745,6 +745,7 @@ export const DATE_FORMAT = {
 
 export const HMRC = {
   START_DATE: '2017-04-06',
+  END_DATE: '2018-04-05',
   SEARCH_ON_COLUMNS_KEYS: [
     { index: 'PROPERTY_REFERENCE', value: 'Property Reference' },
     { index: 'PROPERTY_ADDRESS', value: 'Property Address' },

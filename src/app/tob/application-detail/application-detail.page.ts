@@ -1318,6 +1318,11 @@ export class ApplicationDetailPage implements OnInit {
       numberOfHouseHolds: details.numberOfHouseHolds,
       isNoDepositScheme: details.isNoDepositScheme
     });
+    if (this.isStudentProperty) {
+      this.tenancyDetailForm.patchValue({
+        numberOfHouseHolds: this.propertyDetails.numberOfBedroom
+      });
+    }
   }
 
   /** Guarantor Details Functionality **/
