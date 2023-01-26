@@ -65,7 +65,7 @@ export class NegotiateModalPage implements OnInit {
     } else if (this.clauseObj.offerRestrictionId) {
       this.saveCommentsAgainstRestriction(this.clauseObj.offerRestrictionId, [this.commentObj]);
     } else {
-      this.commentObj.createdAt = this.commonService.getFormatedDate(new Date(), DATE_FORMAT.DATE_TIME);
+      this.commentObj.createdAt = this.commonService.getFormatedDateTime(new Date());
       this.commentsArray.push(this.commentObj);
     }
   }
