@@ -101,7 +101,7 @@ declare namespace OfferModels {
     }
 
     export interface OfferClauses {
-        clauseId: number;
+        clauseId: string;
         clauseName: string;
         clauseText: string;
         isNegotiable: boolean;
