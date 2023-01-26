@@ -246,11 +246,11 @@ export class AgentService {
     return this.httpClient.post(environment.API_BASE_URL + `clauses/node`, requestObj);
   }
 
-  addEntityClause(entityId: string, clauseId: number, requestObj: any) {
+  addEntityClause(entityId: string, clauseId: string, requestObj: any) {
     return this.httpClient.post(environment.API_BASE_URL + `properties/${entityId}/clauses/${clauseId}/node`, requestObj);
   }
 
-  deleteClause(entityId: string, clauseId: number, requestObj: any) {
+  deleteClause(entityId: string, clauseId: string, requestObj: any) {
     return this.httpClient.delete(environment.API_BASE_URL + `properties/${entityId}/clauses/${clauseId}/node`, requestObj);
   }
 
