@@ -149,6 +149,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
         appraisedDate: [''],
         instructedDate: [''],
         floorArea: [''],
+        area: [''],
         phoneOne: [''],
         phoneTwo: [''],
         internalNote: [''],
@@ -237,7 +238,8 @@ export class DetailsComponent implements OnInit, OnDestroy {
       isHmoProperty: this.propertyDetails?.propertyInfo?.isHmoProperty ? this.propertyDetails?.propertyInfo?.isHmoProperty : false,
       isOnWithOtherAgent: this.propertyDetails?.propertyInfo?.isOnWithOtherAgent ? this.propertyDetails?.propertyInfo?.isOnWithOtherAgent : false,
       internalNote: this.propertyDetails?.propertyDescription?.internalNote ? this.propertyDetails?.propertyDescription?.internalNote : '',
-      azReference: this.propertyDetails?.propertyWebInfo?.azReference ? this.propertyDetails?.propertyWebInfo?.azReference : ''
+      azReference: this.propertyDetails?.propertyWebInfo?.azReference ? this.propertyDetails?.propertyWebInfo?.azReference : '',
+      area: this.propertyDetails?.propertyWebInfo?.area ? this.propertyDetails?.propertyWebInfo?.area : ''
     });
   }
 

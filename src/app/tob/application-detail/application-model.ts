@@ -83,7 +83,7 @@ declare namespace ApplicationModels {
     }
 
     export interface ApplicationClause {
-        clauseId: number;
+        clauseId: string;
         clauseText: string;
         clauseName: string;
         isNegotiable: boolean;
