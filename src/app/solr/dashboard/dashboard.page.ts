@@ -148,33 +148,40 @@ export class DashboardPage implements OnInit {
   }
 
   private authenticateSso() {
-    const snapshot = this.route.snapshot;
-    const ssoKey = encodeURIComponent(snapshot.queryParams.ssoKey);
-    this.commonService.setItem(PROPCO.SSO_URL_ROUTE, this.router.url);
-    this.commonService.setItem(PROPCO.SSO_KEY, ssoKey);
+    // const snapshot = this.route.snapshot;
+    // const ssoKey = encodeURIComponent(snapshot.queryParams.ssoKey);
+    // this.commonService.setItem(PROPCO.SSO_URL_ROUTE, this.router.url);
+    // this.commonService.setItem(PROPCO.SSO_KEY, ssoKey);
     return new Promise((resolve, reject) => {
-      this.solrService
-        .authenticateSsoToken(ssoKey)
-        .toPromise()
-        .then(
-          (response) => {
-            this.isAuthSuccess = true;
-            this.commonService.setItem(PROPCO.SSO_KEY, ssoKey);
-            this.commonService.setItem(PROPCO.ACCESS_TOKEN, response.loginId);
-            this.commonService.setItem(PROPCO.WEB_KEY, response.webKey);
-            resolve(true);
-          },
-          (err) => {
-            resolve(false);
-          }
-        );
+      let ssoKey = this.commonService.getItem(PROPCO.SSO_KEY);
+      let accessToken = this.commonService.getItem(PROPCO.ACCESS_TOKEN);
+      if (ssoKey && accessToken) {
+        resolve(true);
+      } else {
+        resolve(false);
+      }
+      // this.solrService
+      //   .authenticateSsoToken(ssoKey)
+      //   .toPromise()
+      //   .then(
+      //     (response) => {
+      //       this.isAuthSuccess = true;
+      //       this.commonService.setItem(PROPCO.SSO_KEY, ssoKey);
+      //       this.commonService.setItem(PROPCO.ACCESS_TOKEN, response.loginId);
+      //       this.commonService.setItem(PROPCO.WEB_KEY, response.webKey);
+      //       resolve(true);
+      //     },
+      //     (err) => {
+      //       resolve(false);
+      //     }
+      //   );
     });
   }
 
   openHomeCategory(key: string, value = null) {
     openScreen(key, value);
   }
-  
+
 
   private disableWelcomeTour() {
     const payload = {
