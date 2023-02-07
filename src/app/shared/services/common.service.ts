@@ -32,7 +32,7 @@ export class CommonService {
     public toastController: ToastController,
     private toastr: ToastrService,
     private sanitizer: DomSanitizer
-  ) {  }  
+  ) { }
 
   private dataChange = new Subject<any>();
   dataChanged$ = this.dataChange.asObservable();
@@ -76,7 +76,7 @@ export class CommonService {
   }
 
   authenticateSsoToken(encodedString: string): Observable<any> {
-    const requestObj = { env: 'saas-cw-uat' };
+    const requestObj = { env: 'saas-uat' };
     return this.httpClient.post(environment.API_BASE_URL + 'authentication/sso/token', requestObj, {
       headers: {
         Authorization: 'Basic ' + encodedString
@@ -84,8 +84,8 @@ export class CommonService {
     });
   }
 
-  getLookup(): Observable<Lookupdata> {
-    return this.httpClient.get<Lookupdata>(environment.API_BASE_URL + 'agents/lookup', { responseType: 'json' });
+  getLookup(params?: HttpParams): Observable<Lookupdata> {
+    return this.httpClient.get<Lookupdata>(environment.API_BASE_URL + 'agents/lookup', { responseType: 'json', params: params });
   }
 
   getTobLookup(): Observable<Lookupdata> {
@@ -323,7 +323,7 @@ export class CommonService {
         params = params.set('prop.mantypeLetCat', letCategory);
       }
     }
-    else if(!isFAF && pageName !== 'application') {
+    else if (!isFAF && pageName !== 'application') {
       params = new HttpParams()
         .set('limit', '10')
         .set('page', '1')
@@ -332,7 +332,7 @@ export class CommonService {
         .set('prop.ofc', officeList)
         .set('types', 'PROPERTY');
     }
-    else if(!isFAF && pageName === 'application') {
+    else if (!isFAF && pageName === 'application') {
       params = new HttpParams()
         .set('limit', '10')
         .set('page', '1')
@@ -387,7 +387,7 @@ export class CommonService {
     }));
   }
 
-  downloadDocument(response, fileName, fileType?:any) {
+  downloadDocument(response, fileName, fileType?: any) {
     const type = fileType;
     const blob = new Blob([response], { type: type });
     const downloadURL = window.URL.createObjectURL(blob);

@@ -118,7 +118,8 @@ export class SearchSuggestionComponent implements OnInit {
     if (this.lookupdata) {
       this.setLookupData(this.lookupdata);
     } else {
-      this.commonService.getLookup().subscribe((data) => {
+      const params = new HttpParams().set('hideLoader', 'true');
+      this.commonService.getLookup(params).subscribe((data) => {
         this.commonService.setItem(PROPCO.LOOKUP_DATA, data);
         this.lookupdata = data;
         this.setLookupData(data);
