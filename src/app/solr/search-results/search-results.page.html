@@ -846,8 +846,8 @@
                 <div>
                   <div class="title text-ellipsis" [title]="item?.fullName" (click)="$event.stopPropagation();openDetails(item)">{{item?.fullName}}</div>
                   <div class="other-details">
-                    <span *ngIf="item?.address" class="address" [title]="item?.address" >{{item?.address}}&nbsp;</span>
-                    <span class="verticalLine" *ngIf="item?.address">&nbsp;</span>
+                    <span *ngIf="item?.tenantPropertyAddress" class="address" [title]="item?.tenantPropertyAddress" >{{item?.tenantPropertyAddress}}&nbsp;</span>
+                    <span class="verticalLine" *ngIf="item?.tenantPropertyAddress">&nbsp;</span>
                     <span class="ref">Ref&nbsp;&nbsp;<span class="reftag">{{(item?.reference ) || 0}}</span></span>
                   </div>
                 </div>
