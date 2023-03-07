@@ -28,7 +28,7 @@
               <ion-input value="{{ jobCompletionForm.controls.jobCompletionAt.value | date: DATE_FORMAT.DATE_TIME }}"></ion-input>
               <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
               ></ion-icon>
-              <ion-popover class="ion-datepicker-popover" trigger="jobCompletionAt" show-backdrop="false">
+              <ion-popover class="ion-datepicker-popover-date-time" trigger="jobCompletionAt" show-backdrop="false">
                 <ng-template>
                   <ion-datetime
                     showDefaultButtons="true"
