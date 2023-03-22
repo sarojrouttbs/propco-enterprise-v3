@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatDrawer } from '@angular/material/sidenav';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DATE_FORMAT, DEFAULTS, PROPCO } from 'src/app/shared/constants';
+import { DATE_FORMAT, DEFAULTS, PROPCO, propertyAgreementStatus } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { SolrService } from '../solr.service';
 declare function openScreen(key: string, value: any): any;
@@ -139,6 +139,7 @@ export class SearchResultsPage implements OnInit {
   DATE_FORMAT = DATE_FORMAT;
   isEntityFilterApplied = false;
   isResetPageIndex = false;
+  propertyAgreementStatus = propertyAgreementStatus;
 
   constructor(
     private route: ActivatedRoute,
@@ -526,6 +527,15 @@ export class SearchResultsPage implements OnInit {
       .subscribe((res) => {
         this.results = res && res.data ? res.data : [];
         this.results.map((x) => {
+          /** 
+           * For Agreement status: 2,5,6 (Confirmed, Given Notice, Extended) → Showing Property Address 
+           * For Agreement status: except above→ Showing Tenant Address
+          */
+          if(x.entityType === 'TENANT' || x.entityType === 'COTENANT' ) {
+            if(this.propertyAgreementStatus.length) {
+              x.tenantPropertyAddress = this.propertyAgreementStatus.indexOf(x.propertyAgreementStatus) !== -1 ? x.address : x.tenantPropertyAddress;
+            }
+          }
           if (x.officeCode) {
             const newValues = x.officeCode.map((code) => {
               return this.officeCodesMap.get(code);
