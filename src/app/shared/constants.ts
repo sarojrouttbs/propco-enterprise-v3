@@ -842,3 +842,5 @@ export const TOB_SUCCESS_MESSAGES = {
     message: 'Holding deposit is marked as paid, Property has been reserved successfully.<br><br><b>Next Step</b> : Please add the amount to the Tenant reserve manually.'
   }
 }
+
+export const propertyAgreementStatus = [2,5,6] //[Confirmed, Given Notice, Extended]
