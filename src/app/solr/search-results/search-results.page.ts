@@ -533,7 +533,7 @@ export class SearchResultsPage implements OnInit {
           */
           if(x.entityType === 'TENANT' || x.entityType === 'COTENANT' ) {
             if(this.propertyAgreementStatus.length) {
-              x.tenantPropertyAddress = this.propertyAgreementStatus.indexOf(x.propertyAgreementStatus) !== -1 ? x.address : x.tenantPropertyAddress;
+              x.tenantPropertyAddress = this.propertyAgreementStatus.indexOf(x.propertyAgreementStatus) !== -1 ? x.tenantPropertyAddress : x.address;
             }
           }
           if (x.officeCode) {
