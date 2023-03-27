@@ -158,14 +158,13 @@ export class SearchPropertyPage {
     if (action === 'skip') {
       this.modalController.dismiss(action);
     } else {
-      let title = '';
       let message = '';
       if (this.cardType === 'OpenApplicantCard') {
         message = 'Personal details will be copied from an existing record, please sense check the data before finishing the process.';
       } else {
         message = 'Personal details will be copied from an existing record, please sense check the data before finishing the process.';
       }
-      await this.commonService.showAlert('', message);
+      await this.commonService.showAlert(this.solrPageTitle, message);
       this.modalController.dismiss(this.solrSelectedItemPropcoId);
     }
   }
