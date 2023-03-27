@@ -31,6 +31,7 @@ export class SearchPropertyPage {
   lookupdata: any;
   solrSelectedItemPropcoId = null;
   value;
+  cardType;
 
   constructor(
     private navParams: NavParams,
@@ -153,10 +154,18 @@ export class SearchPropertyPage {
     }
   }
 
-  dismissToSolrDashboard(action?: string) {
+  async dismissToSolrDashboard(action?: string) {
     if (action === 'skip') {
       this.modalController.dismiss(action);
     } else {
+      let title = '';
+      let message = '';
+      if (this.cardType === 'OpenApplicantCard') {
+        message = 'Personal details will be copied from an existing record, please sense check the data before finishing the process.';
+      } else {
+        message = 'Personal details will be copied from an existing record, please sense check the data before finishing the process.';
+      }
+      await this.commonService.showAlert('', message);
       this.modalController.dismiss(this.solrSelectedItemPropcoId);
     }
   }

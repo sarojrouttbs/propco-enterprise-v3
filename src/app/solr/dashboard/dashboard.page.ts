@@ -240,7 +240,8 @@ export class DashboardPage implements OnInit {
         isFAF: false,
         isSolrDashboard: true,
         types: types,
-        solrPageTitle: solrPageTitle
+        solrPageTitle: solrPageTitle,
+        cardType: cardType
       }
     });
 
