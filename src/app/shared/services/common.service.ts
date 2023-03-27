@@ -32,7 +32,7 @@ export class CommonService {
     public toastController: ToastController,
     private toastr: ToastrService,
     private sanitizer: DomSanitizer
-  ) {  }  
+  ) { }
 
   private dataChange = new Subject<any>();
   dataChanged$ = this.dataChange.asObservable();
@@ -323,7 +323,7 @@ export class CommonService {
         params = params.set('prop.mantypeLetCat', letCategory);
       }
     }
-    else if(!isFAF && pageName !== 'application') {
+    else if (!isFAF && pageName !== 'application') {
       params = new HttpParams()
         .set('limit', '10')
         .set('page', '1')
@@ -332,13 +332,22 @@ export class CommonService {
         .set('prop.ofc', officeList)
         .set('types', 'PROPERTY');
     }
-    else if(!isFAF && pageName === 'application') {
+    else if (!isFAF && pageName === 'application') {
       params = new HttpParams()
         .set('limit', '10')
         .set('page', '1')
         .set('text', text)
         .set('types', 'PROPERTY');
     }
+    return this.httpClient.get(environment.API_BASE_URL + `entities/search`, { params });
+  }
+
+  searchEntityByText(text: string, types: []): Observable<any> {
+    let params: any;
+      params = new HttpParams()
+        .set('searchTerm', text)
+        .set('searchSwitch',true)
+        .set('searchTypes', types.toString());
     return this.httpClient.get(environment.API_BASE_URL + `entities/search`, { params });
   }
 
@@ -387,7 +396,7 @@ export class CommonService {
     }));
   }
 
-  downloadDocument(response, fileName, fileType?:any) {
+  downloadDocument(response, fileName, fileType?: any) {
     const type = fileType;
     const blob = new Blob([response], { type: type });
     const downloadURL = window.URL.createObjectURL(blob);

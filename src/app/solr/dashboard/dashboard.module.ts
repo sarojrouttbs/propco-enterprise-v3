@@ -10,6 +10,7 @@ import { DashboardPage } from './dashboard.page';
 import { MaterialModule } from 'src/app/material.module';
 import { GuidedTourModule, GuidedTourService } from 'ngx-guided-tour';
 import { ComponentsModule } from 'src/app/shared/components/components.module';
+import { SearchPropertyPageModule } from 'src/app/shared/modals/search-property/search-property.module';
 
 @NgModule({
   imports: [
@@ -21,6 +22,7 @@ import { ComponentsModule } from 'src/app/shared/components/components.module';
     ReactiveFormsModule,
     ComponentsModule,
     GuidedTourModule,
+    SearchPropertyPageModule
   ],
   declarations: [DashboardPage],
   providers: [GuidedTourService],

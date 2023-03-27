@@ -10,15 +10,27 @@ ion-content {
   border-bottom: 1px solid gray;
   line-height: 16px;
   font-size: 14px;
+
   div {
+    width: 92%;
+    word-break: wo;
     display: inline-block;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    /* IE 5.5-7 */
+    white-space: -moz-pre-wrap;
+    text-align: justify;
+
+    /* Firefox 1.0-2.0 */
     .address,
     .rent {
       color: var(--ion-color-one);
     }
+
     .ref {
       color: var(--ion-color-three);
     }
+
     .status {
       color: var(--ion-color-success);
     }
