@@ -32,7 +32,8 @@
       <ion-skeleton-text class="searchbar-skeleton" animated *ngIf="!loaded"></ion-skeleton-text>
     <ion-row class="ion-align-items-center ion-justify-content-center tour-4">
       <ion-col size-xl="20" size="20"  style="margin-right: 15px;"  class="ion-no-padding">
-        <div class="block" (click)="openHomeCategory('OpenApplicantCard')">
+        <!-- <div class="block" (click)="openHomeCategory('OpenApplicantCard')"> -->
+          <div class="block" (click)="searchEnity('OpenApplicantCard')">
           <i class="propcoicon red-icon propcoicon-applicant-card"></i>
           <p>Applicant Card</p>
         </div>
@@ -44,7 +45,7 @@
         </div>
       </ion-col>
       <ion-col size-xl="20" size="20"  style="margin-right: 15px;"  class="ion-no-padding">
-        <div class="block" (click)="openHomeCategory('OpenMarketAppraisal')">
+        <div class="block" (click)="searchEnity('OpenMarketAppraisal')">
           <i class="propcoicon red-icon propcoicon-market-apprasial"></i>
           <p>Market Appraisal</p>
         </div>
