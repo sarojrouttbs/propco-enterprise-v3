@@ -120,7 +120,11 @@ export class DashboardPage implements OnInit {
   private async getSystemConfigs(key: string): Promise<any> {
     return new Promise((resolve) => {
       this.commonService.getSystemConfig(key).subscribe(res => {
-        resolve(res[key] === '1' ? true : false);
+        if (res) {
+          resolve(res[key] === '1' ? true : false);
+        } else {
+          resolve(false);
+        }
       }, error => {
         resolve(true);
       });
