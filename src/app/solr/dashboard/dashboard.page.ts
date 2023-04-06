@@ -2,7 +2,7 @@ import { HttpParams } from '@angular/common/http';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PROPCO } from 'src/app/shared/constants';
+import { PROPCO, SYSTEM_CONFIG } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { SolrService } from '../solr.service';
 import { GuidedTourService } from 'ngx-guided-tour';
@@ -10,6 +10,8 @@ import {
   GuidedTour,
   Orientation,
 } from '../../shared/interface/guided-tour.model';
+import { SearchPropertyPage } from 'src/app/shared/modals/search-property/search-property.page';
+import { ModalController } from '@ionic/angular';
 declare function openScreen(key: string, value: any): any;
 @Component({
   selector: 'app-dashboard',
@@ -67,6 +69,7 @@ export class DashboardPage implements OnInit {
   };
   isSolrTourDone = false;
   private routeSnapShot;
+  isCheckForExistingRecordsEnabled = false;
 
 
   constructor(
@@ -74,7 +77,8 @@ export class DashboardPage implements OnInit {
     private route: ActivatedRoute,
     private commonService: CommonService,
     private guidedTourService: GuidedTourService,
-    private router: Router
+    private router: Router,
+    private modalController: ModalController
   ) {
     this.routeSnapShot = route.snapshot;
   }
@@ -92,6 +96,7 @@ export class DashboardPage implements OnInit {
     const webKey = this.commonService.getItem(PROPCO.WEB_KEY);
     const userData = this.commonService.getItem(PROPCO.USER_DETAILS, true);
     if (accessToken && webKey && userData) {
+      this.isCheckForExistingRecordsEnabled = await this.getSystemConfigs(SYSTEM_CONFIG.ENABLE_CHECK_FOR_EXISTING_RECORDS);
       this.setDefaultHome(true);
       this.loggedInUserData = userData;
       this.isSolrTourDone = this.loggedInUserData.isSolrTourDone;
@@ -101,6 +106,7 @@ export class DashboardPage implements OnInit {
     }
     const isAuthSuccess = await this.authenticateSso();
     if (isAuthSuccess) {
+      this.isCheckForExistingRecordsEnabled = await this.getSystemConfigs(SYSTEM_CONFIG.ENABLE_CHECK_FOR_EXISTING_RECORDS);
       this.setDefaultHome(true);
       this.loggedInUserData = await this.getUserDetailsPvt();
       this.isSolrTourDone = this.loggedInUserData.isSolrTourDone;
@@ -109,6 +115,16 @@ export class DashboardPage implements OnInit {
     } else {
       this.router.navigate(['/sso-failure-page'], { replaceUrl: true });
     }
+  }
+
+  private async getSystemConfigs(key: string): Promise<any> {
+    return new Promise((resolve) => {
+      this.commonService.getSystemConfig(key).subscribe(res => {
+        resolve(res[key] === '1' ? true : false);
+      }, error => {
+        resolve(true);
+      });
+    });
   }
 
   private getUserDetailsPvt() {
@@ -201,5 +217,52 @@ export class DashboardPage implements OnInit {
         this.guidedTourService.startTour(this.dashboardTour);
       }, 300);
     }
+  }
+
+  /** Duplicate Record Search */
+  async searchEnity(cardType: string) {
+    if (!this.isCheckForExistingRecordsEnabled) {
+      if (cardType === 'OpenApplicantCard') {
+        this.openHomeCategory('OpenApplicantCard');
+        return;
+      } else if (cardType === 'OpenMarketAppraisal') {
+        this.openHomeCategory('OpenMarketAppraisal');
+        return;
+      }
+    }
+    let types;
+    let solrPageTitle;
+    if (cardType === 'OpenApplicantCard') {
+      types = ['APPLICANT', 'TENANT', 'COTENANT'];
+      solrPageTitle = 'New Applicant Card - Scan duplicates';
+    } else if (cardType === 'OpenMarketAppraisal') {
+      types = ['LANDLORD'];
+      solrPageTitle = 'New Market Appraisal - Scan duplicates';
+    }
+    const modal = await this.modalController.create({
+      component: SearchPropertyPage,
+      cssClass: 'modal-container entity-search',
+      backdropDismiss: false,
+      componentProps: {
+        isFAF: false,
+        isSolrDashboard: true,
+        types: types,
+        solrPageTitle: solrPageTitle,
+        cardType: cardType
+      }
+    });
+
+    modal.onDidDismiss().then(res => {
+      if (!res.data) {
+        return;
+      }
+      else if (res.data === 'skip') {
+        this.openHomeCategory(cardType);
+        return;
+      } else {
+        this.openHomeCategory(cardType, res.data);
+      }
+    });
+    await modal.present();
   }
 }

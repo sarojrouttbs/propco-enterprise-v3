@@ -61,7 +61,7 @@
           <ion-input value="{{ contractorDetailForm.controls.estimatedVisitAt.value | date: DATE_FORMAT.DATE_TIME }}"></ion-input>
           <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"
           ></ion-icon>
-          <ion-popover class="ion-datepicker-popover" trigger="estimatedVisitAt" show-backdrop="false">
+          <ion-popover class="ion-datepicker-popover-date-time" trigger="estimatedVisitAt" show-backdrop="false">
             <ng-template>
               <ion-datetime
               interface="popover"
