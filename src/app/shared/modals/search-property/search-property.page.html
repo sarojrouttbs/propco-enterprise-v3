@@ -1,6 +1,7 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Search Property</ion-title>
+    <ion-title *ngIf="!isSolrDashboard">Search Property</ion-title>
+    <ion-title *ngIf="isSolrDashboard">{{solrPageTitle}}</ion-title>
     <ion-buttons slot="end">
       <ion-icon name="close" (click)="dismiss()" *ngIf="pageName!=='application'"></ion-icon>
     </ion-buttons>
@@ -8,25 +9,39 @@
 </ion-header>
 
 <ion-content>
-  <form [formGroup]='propertySearchForm' style="padding: 0 8px;">
+    <form style="padding: 0 8px;">
+    <p style="font-size: 14px;text-align: justify;" *ngIf="isSolrDashboard">
+      The system can help you to check for duplicate/ previously added records with similar Name and Contact details. This is completely optional and can be skipped if you wish to create a brand new record.
+    </p>
     <br>
     <mat-form-field>
-      <input matInput placeholder="Start typing to search" [matAutocomplete]="auto" formControlName='text'>
+      <input matInput [placeholder]="!isSolrDashboard ? 'Start typing to search':'Start typing to search for duplicate records'" [matAutocomplete]="auto"   [formControl]='propertySearchForm'>
+      <button type="button" mat-button *ngIf="filteredProperty && filteredProperty?.length" matSuffix mat-icon-button aria-label="Clear" (click)="resetSearch()">
+        <ion-icon name="close"></ion-icon>
+      </button>
     </mat-form-field>
     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSelectionChange($event)">
-      <mat-option *ngFor="let result of (filteredProperty | async)?.data" [value]="result" class="search-option">
-        <span>
-          <i class="propcoicon no-background propcoicon-property"
-            style="background: transparent;vertical-align:middle"></i>
-        </span>
-        <div>
-          <span class="address">{{result.address}}&nbsp;</span> <br>
-          <span class="ref">{{result.reference}}</span>&nbsp;
-          <span ng-if="result.entityType === 'PROPERTY'" class="rent">{{result.propertyAdvertisedRent | currency : "£"}}</span>&nbsp;
-          <span class="text-color-lightgreen" class="status">{{result.status}}</span>&nbsp;
-        </div>
-      </mat-option>
-      <mat-option *ngIf='(propertySearchForm.controls.text.value).length > 2 && isNotFound'>No record found.
+      <ng-container *ngIf="!isSolrDashboard">
+        <mat-option *ngFor="let result of filteredProperty" [value]="result" class="search-option">
+          <ng-container [ngTemplateOutlet]="propertySuggestion"  *ngIf="result?.entityType === 'PROPERTY'"
+          [ngTemplateOutletContext]="{item:result}">
+          </ng-container>
+        </mat-option>
+      </ng-container>
+      <ng-container *ngIf="isSolrDashboard">
+        <mat-option *ngFor="let result of filteredProperty" [value]="result" class="search-option">
+        <ng-container [ngTemplateOutlet]="landlordSuggestion"  *ngIf="result?.entityType === 'LANDLORD'"
+        [ngTemplateOutletContext]="{item:result}">
+        </ng-container>
+        <ng-container [ngTemplateOutlet]="applicantSuggestion"  *ngIf="result?.entityType === 'APPLICANT'"
+        [ngTemplateOutletContext]="{item:result}">
+        </ng-container>
+        <ng-container [ngTemplateOutlet]="tenantSuggestion"  *ngIf="result?.entityType === 'TENANT' || result?.entityType === 'COTENANT'"
+        [ngTemplateOutletContext]="{item:result}">
+        </ng-container>
+        </mat-option>
+      </ng-container>
+      <mat-option *ngIf='isNotFound'>No record found.
       </mat-option>
     </mat-autocomplete>
   </form>
@@ -34,9 +49,82 @@
 <ion-footer *ngIf="pageName!=='application'">
   <ion-grid>
     <ion-row>
-      <ion-col class="ion-text-end">
+      <ion-col class="ion-text-end" *ngIf="!isSolrDashboard">
         <ion-button (click)="dismiss()">close</ion-button>
+      </ion-col>
+      <ion-col class="ion-text-end" *ngIf="isSolrDashboard">
+        <ion-button (click)="dismissToSolrDashboard()" [disabled]="!solrSelectedItemPropcoId">Copy from existing</ion-button>
+        <ion-button (click)="dismissToSolrDashboard('skip')">Skip & continue</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>
 </ion-footer>
+
+<ng-template #propertySuggestion  let-item="item">
+  <div style="display: block;width: 100%;">
+    <span style="display: block;float: left;">
+      <i class="propcoicon no-background propcoicon-property"
+        style="background: transparent;vertical-align:middle"></i>
+    </span>
+    <div style="display: block;float: right;">
+      <span class="address">{{item.address}}&nbsp;</span>
+      <span class="ref">{{item.reference}}</span>&nbsp;
+      <span ng-if="result.entityType === 'PROPERTY'" class="rent">{{item.propertyAdvertisedRent | currency : "£"}}</span>&nbsp;
+      <span class="text-color-lightgreen" class="status">{{item.status}}</span>&nbsp;
+    </div>
+  </div>
+</ng-template>
+<ng-template #landlordSuggestion  let-item="item">
+  <div style="display: block;width: 100%;">
+    <span style="display: block;float: left;">
+      <i class="propcoicon no-background propcoicon-landlord red-icon"
+      style="background: transparent;vertical-align:middle"></i>
+    </span>
+    <div style="display: block;float: right;">
+      <span >{{officeLookupMap.get(item.office)}}</span>&nbsp;
+      <span>{{item.name}}</span>&nbsp;
+      <span class="ref">{{item?.reference?.split(",")[0]}}</span>&nbsp;
+      <span class="address" *ngIf="item.address">{{item.address | slice:0:30}},&nbsp;</span>
+      <span class="address" *ngIf="item.postcode">{{item.postcode}}&nbsp;</span>
+      <span *ngIf="item.daytime">{{item.daytime}}&nbsp;</span>
+      <span *ngIf="item.mobile">{{item.mobile}}&nbsp;</span>
+      <span class="text-color-lightgreen" class="status">{{item.status}}</span>&nbsp;
+    </div>
+  </div>
+</ng-template>
+<ng-template #applicantSuggestion  let-item="item">
+ <div style="display: block;width: 100%;">
+  <span style="display: block;float: left;">
+    <i class="propcoicon no-background propcoicon-applicant-let red-icon"
+    style="background: transparent;vertical-align:middle"></i>
+  </span>
+  <div style="display: block;float: right;">
+    <span >{{officeLookupMap.get(item.office)}}</span>&nbsp;
+    <span>{{item.name}}</span>&nbsp;
+    <span class="ref">{{item?.reference?.split(",")[0]}}</span>&nbsp;
+    <span class="address" *ngIf="item.address">{{item.address | slice:0:30}},&nbsp;</span>
+    <span class="address" *ngIf="item.postcode">{{item.postcode}}&nbsp;</span>
+    <span *ngIf="item.daytime">{{item.daytime}}&nbsp;</span>
+    <span *ngIf="item.mobile">{{item.mobile}}&nbsp;</span>
+    <span class="text-color-lightgreen" class="status">{{item.status}}</span>&nbsp;
+  </div>
+ </div>
+</ng-template>
+<ng-template #tenantSuggestion  let-item="item">
+  <div style="display: block;width: 100%;">
+  <span style="display: block;float: left;">
+    <i class="propcoicon no-background propcoicon-tenant red-icon"
+    style="background: transparent;vertical-align:middle"></i>
+  </span>
+  <div style="display: block;float: right;">
+    <span >{{officeLookupMap.get(item.office)}}</span>&nbsp;
+    <span>{{item.name}}</span>&nbsp;
+    <span class="ref">{{item?.reference?.split(",")[0]}}</span>&nbsp;
+    <span class="address" *ngIf="item.address">{{item.address | slice:0:30}},&nbsp;</span>
+    <span class="address" *ngIf="item.postcode">{{item.postcode}}&nbsp;</span>
+    <span *ngIf="item.daytime">{{item.daytime}}&nbsp;</span>
+    <span *ngIf="item.mobile">{{item.mobile}}&nbsp;</span>
+    <span class="text-color-lightgreen" class="status">{{item.status}}</span>&nbsp;
+  </div>
+  </div>
+</ng-template>

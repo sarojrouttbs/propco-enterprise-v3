@@ -276,6 +276,12 @@ ion-item {
   }
 }
 
+.entity-search-solrdashboard{
+    &::part(content){
+    height: 300px;
+  }
+}
+
 .tenant-list,.fee-charge-modal-container {
   // .modal-wrapper {
     &::part(content){

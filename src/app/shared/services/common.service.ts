@@ -342,6 +342,15 @@ export class CommonService {
     return this.httpClient.get(environment.API_BASE_URL + `entities/search`, { params });
   }
 
+  searchEntityByText(text: string, types: []): Observable<any> {
+    let params: any;
+      params = new HttpParams()
+        .set('searchTerm', text)
+        .set('searchSwitch',true)
+        .set('searchTypes', types.toString());
+    return this.httpClient.get(environment.API_BASE_URL + `entities/search`, { params });
+  }
+
   showLoader(duration?: number) {
     const elem = document.getElementById('loading');
     if (elem) {
