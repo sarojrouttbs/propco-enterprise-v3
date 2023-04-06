@@ -10,9 +10,12 @@
 
 <ion-content>
     <form style="padding: 0 8px;">
+    <p style="font-size: 14px;text-align: justify;" *ngIf="isSolrDashboard">
+      The system can help you to check for duplicate/ previously added records with similar Name and Contact details. This is completely optional and can be skipped if you wish to create a brand new record.
+    </p>
     <br>
     <mat-form-field>
-      <input matInput placeholder="Start typing to search" [matAutocomplete]="auto"   [formControl]='propertySearchForm'>
+      <input matInput [placeholder]="!isSolrDashboard ? 'Start typing to search':'Start typing to search for duplicate records'" [matAutocomplete]="auto"   [formControl]='propertySearchForm'>
       <button type="button" mat-button *ngIf="filteredProperty && filteredProperty?.length" matSuffix mat-icon-button aria-label="Clear" (click)="resetSearch()">
         <ion-icon name="close"></ion-icon>
       </button>

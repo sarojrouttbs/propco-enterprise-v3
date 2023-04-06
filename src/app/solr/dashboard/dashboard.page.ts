@@ -241,7 +241,7 @@ export class DashboardPage implements OnInit {
     }
     const modal = await this.modalController.create({
       component: SearchPropertyPage,
-      cssClass: 'modal-container entity-search',
+      cssClass: 'modal-container entity-search entity-search-solrdashboard',
       backdropDismiss: false,
       componentProps: {
         isFAF: false,
