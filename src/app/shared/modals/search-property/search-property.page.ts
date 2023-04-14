@@ -63,7 +63,7 @@ export class SearchPropertyPage {
       let response = this.commonService.searchPropertyByText(value, isFAF, officeList, agreementStatus, pageName);
       response.subscribe(res => {
         this.isNotFound = res && res?.data.length > 0 ? false : true;
-        this.filteredProperty = res && res?.data.length > 0 ? res?.data : '';
+        this.filteredProperty = res && res?.data.length > 0 ? res?.data : [];
       },
         error => {
           console.log(error);
@@ -77,7 +77,7 @@ export class SearchPropertyPage {
         .set('searchSwitch', true));
       response.subscribe(res => {
         this.isNotFound = res ? false : true;
-        this.filteredProperty = res && res.length > 0 ? res : '';
+        this.filteredProperty = res && res.length > 0 ? res : [];
       },
         error => {
           console.log(error);
