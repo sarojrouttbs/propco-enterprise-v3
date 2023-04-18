@@ -585,6 +585,7 @@ export const PAYMENT_TYPES = {
   WORLDPAY_OWNFORM: 'WORLDPAY_OWNFORM',
   WORLDPAY_REDIRECT: 'WORLDPAY_REDIRECT',
   BARCLAYCARD_REDIRECT: 'BARCLAYCARD_REDIRECT',
+  STRIPE_ELEMENT: 'STRIPE_ELEMENT',
 };
 
 export const PAYMENT_CONFIG = {
@@ -834,14 +835,38 @@ export const HMRC_PREFERENCE_ORDER = [
 ]
 
 export const RENT_CATEGORY = {
-  STUDENT : 1
+  STUDENT: 1
 }
 
 export const TOB_SUCCESS_MESSAGES = {
-  PROPERTY_RESERVED_SUCCESSFULLY : {
+  PROPERTY_RESERVED_SUCCESSFULLY: {
     title: 'Congratulations!',
     message: 'Holding deposit is marked as paid, Property has been reserved successfully.<br><br><b>Next Step</b> : Please add the amount to the Tenant reserve manually.'
   }
 }
 
-export const propertyAgreementStatus = [2,5,6] //[Confirmed, Given Notice, Extended]
+export const propertyAgreementStatus = [2, 5, 6] //[Confirmed, Given Notice, Extended]
+
+export const STRIPE_ELEMENT_CONFIG = {
+  frontEndConfig: {
+    publishableKey: "",
+    appearance: {
+      theme: 'stripe',
+      labels: 'floating'
+    },
+    elementOptions: {
+      locale: 'en-GB'
+    },
+    stripeIntentOptions: {
+      currency: 'GBP',
+      payment_method_types: ['card'],
+      country: 'GB'
+    },
+    stripeBrandInfo: {
+      website: 'https://stripe.com/'
+    }
+  },
+  nodeConfig: {
+    secret_key: ''
+  }
+}
