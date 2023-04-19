@@ -1,0 +1,67 @@
+<!-- <ion-content> -->
+  <ng-container *ngIf="showStripeElementForm">
+    <div class="stripe-container">
+      <div [formGroup]="stripeElementForm" style="width: 83%;margin: 0 auto;">
+        <p>Please do not refresh the page and wait while we are processing your payment.</p>
+        <ng-container *ngIf="elementsOptions?.clientSecret">
+          <ngx-stripe-payment
+            [appearance]="appearance"
+            [clientSecret]="elementsOptions?.clientSecret"
+          ></ngx-stripe-payment>
+        </ng-container>
+        <div style="margin-bottom: 10px"></div>
+        <div style="display: flex; flex-direction: row; gap: 10px">
+          <mat-form-field appearance="outline" style="flex: 1">
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="name" />
+          </mat-form-field>
+          <mat-form-field appearance="outline" style="flex: 1">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email" type="email" />
+          </mat-form-field>
+        </div>
+        <div style="display: flex; flex-direction: row; gap: 10px">
+          <mat-form-field appearance="outline" style="flex: 1">
+            <mat-label>Address Line1</mat-label>
+            <input matInput formControlName="line1" />
+          </mat-form-field>
+        </div>
+        <div style="display: flex; flex-direction: row; gap: 10px">
+          <mat-form-field appearance="outline" style="flex: 1">
+            <mat-label>Address Line2</mat-label>
+            <input matInput formControlName="line2" />
+          </mat-form-field>
+        </div>
+        <div style="display: flex; flex-direction: row; gap: 10px">
+          <mat-form-field appearance="outline" style="flex: 1">
+            <mat-label>City</mat-label>
+            <input matInput formControlName="city" />
+          </mat-form-field>
+        </div>
+      </div>
+     </div>
+     <ion-grid class="action-buttons-block ion-text-center" *ngIf="!stripeElementPaymentDone">
+      <ion-row class="ion-align-items-center">
+        <ion-col *ngIf="showStripeElementForm">
+          <ion-button color="danger" (click)="onCancelStripePayment('cancel')" style="margin-left: 5px;">Cancel</ion-button>&nbsp;&nbsp;
+          <ion-button type="submit"  [disabled]="paying" (click)="collectStripePayment()" style="margin-left: 5px;">
+            <span *ngIf="!paying">
+            Pay <span *ngIf="data?.intentData?.amount">{{ data?.intentData?.amount / 100 | currency: 'GBP' }}</span>
+            </span>
+            <span *ngIf="paying">Processing...</span>
+        </ion-button>&nbsp;&nbsp;&nbsp;
+        </ion-col>
+      </ion-row>
+      <ion-row class="ion-align-items-center" *ngIf="showStripeElementForm">
+        <ion-col>
+          <a [href]="this.paymentConfig?.stripeBrandInfo?.website" target="_blank">
+            <img src="assets/images/poweredbystripe.svg"  alt="stripe-brand-logo" style="height:31px">
+          </a>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ng-container>
+  <!-- <ng-container *ngIf="showStripeElementForm">
+    Something went wrong
+  </ng-container> -->
+<!-- </ion-content> -->
