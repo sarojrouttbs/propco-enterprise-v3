@@ -1,0 +1,5 @@
+<ion-content>
+  <div class="stripe-container" *ngIf="showStripeElementForm && !stripeElementPaymentDone">
+    <app-stripe-element [paymentConfig]="stripeConfigurations" [data]="stripeElementData" (onCancelStripeElement)="_handleErrorStripeElement($event)" (onSuccessStripeElement)="_handleSuccessStripeElement($event)"></app-stripe-element>
+    </div>
+</ion-content>

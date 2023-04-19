@@ -50,7 +50,8 @@
         <ion-button (click)="dismiss()">close</ion-button>
       </ion-col>
       <ion-col class="ion-text-end" *ngIf="isSolrDashboard">
-        <ion-button (click)="dismissToSolrDashboard()" [disabled]="!solrSelectedItemPropcoId">Copy from existing</ion-button>
+        <ion-button (click)="dismissToSolrDashboard('existing')" [disabled]="!solrSelectedItemPropcoId">Select existing</ion-button>
+        <ion-button (click)="dismissToSolrDashboard('copy')" [disabled]="!solrSelectedItemPropcoId">Copy from existing</ion-button>
         <ion-button (click)="dismissToSolrDashboard('skip')">Skip & continue</ion-button>
       </ion-col>
     </ion-row>

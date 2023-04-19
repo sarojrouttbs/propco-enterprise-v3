@@ -159,7 +159,7 @@ export class SearchSuggestionComponent implements OnInit {
   }
 
   goToPage() {
-    if (this.router.url.includes('/solr/dashboard')) {
+    if (this.router.url.includes('/solr/dashboard') || this.router.url.includes('/solr/search')) {
       this.router.navigate(['/solr/search-results'], {
         queryParams: {
           searchTerm: this.searchTermControl.value,

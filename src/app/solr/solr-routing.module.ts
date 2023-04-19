@@ -22,6 +22,13 @@ const routes: Routes = [
           ),
       },
       {
+        path: 'search',
+        loadChildren: () =>
+          import('./dashboard/dashboard.module').then(
+            (m) => m.DashboardPageModule
+          ),
+      },
+      {
         path: 'search-results',
         loadChildren: () =>
           import('./search-results/search-results.module').then(
