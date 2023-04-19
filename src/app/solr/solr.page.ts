@@ -13,10 +13,10 @@ export class SolrPage implements OnInit {
   ngOnInit() {
     this.router.events.subscribe((event: any) => {
       if (event instanceof NavigationEnd) {
-        if (event.url.includes('solr/dashboard')) {
-          this.visibility = false;
-        } else {
+        if (event.url.includes('solr/search-result')) {
           this.visibility = true;
+        } else {
+          this.visibility = false;
         }
       }
     });

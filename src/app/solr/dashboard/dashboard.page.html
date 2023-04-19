@@ -1,5 +1,5 @@
 <ion-content id="solr-dashboard">
-  <ion-grid>
+  <ion-grid *ngIf="!onlySearch">
     <ion-row>
       <ion-col>
         <div class="swap-icon" (click)="setDefaultHome(false)">
@@ -17,12 +17,12 @@
   </ion-grid>  
   <div class="divider"></div>
   <ion-grid class="ion-no-padding" fixed >
-    <ion-row class="ion-justify-content-center">
+    <ion-row class="ion-justify-content-center" *ngIf="!onlySearch">
       <ion-col size="30" class="ion-text-center ion-no-padding">
         <img src="assets/images/solr/propcoLogo.svg" alt="propco-logo"/>
       </ion-col>
     </ion-row>
-    <ion-row>
+    <ion-row *ngIf="!onlySearch">
       <ion-col class="ion-text-center ion-no-padding">
         <h4 class="ion-no-margin" *ngIf="loaded">Welcome {{loggedInUserData?.name}}</h4>
         <ion-skeleton-text class="welcome-skeleton" animated *ngIf="!loaded"></ion-skeleton-text>
@@ -30,7 +30,7 @@
     </ion-row>
       <app-search-suggestion [isAuthSuccess]="isAuthSuccess" [entityControl]="entityControl" [pageType]="'dashboard'" *ngIf="loaded"></app-search-suggestion>
       <ion-skeleton-text class="searchbar-skeleton" animated *ngIf="!loaded"></ion-skeleton-text>
-    <ion-row class="ion-align-items-center ion-justify-content-center tour-4">
+    <ion-row class="ion-align-items-center ion-justify-content-center tour-4" *ngIf="!onlySearch">
       <ion-col size-xl="20" size="20"  style="margin-right: 15px;"  class="ion-no-padding">
         <!-- <div class="block" (click)="openHomeCategory('OpenApplicantCard')"> -->
           <div class="block" (click)="searchEnity('OpenApplicantCard')">

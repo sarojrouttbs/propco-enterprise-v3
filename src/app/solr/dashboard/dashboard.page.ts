@@ -70,6 +70,7 @@ export class DashboardPage implements OnInit {
   isSolrTourDone = false;
   private routeSnapShot;
   isCheckForExistingRecordsEnabled = false;
+  onlySearch = false;
 
 
   constructor(
@@ -81,6 +82,11 @@ export class DashboardPage implements OnInit {
     private modalController: ModalController
   ) {
     this.routeSnapShot = route.snapshot;
+    if (this.router.url) { 
+      if(this.router.url.includes('/solr/search')){
+        this.onlySearch = true;
+      }
+    }
   }
 
   ngOnInit() {
