@@ -12,7 +12,7 @@ import {
 } from '../../shared/interface/guided-tour.model';
 import { SearchPropertyPage } from 'src/app/shared/modals/search-property/search-property.page';
 import { ModalController } from '@ionic/angular';
-declare function openScreen(key: string, value: any): any;
+declare function openScreen(key: string, value: any, existing: any): any;
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.page.html',
@@ -187,8 +187,8 @@ export class DashboardPage implements OnInit {
     });
   }
 
-  openHomeCategory(key: string, value = null) {
-    openScreen(key, value);
+  openHomeCategory(key: string, value = null, existing = false) {
+    openScreen(key, value, existing);
   }
 
 
@@ -249,11 +249,13 @@ export class DashboardPage implements OnInit {
       if (!res.data) {
         return;
       }
-      else if (res.data === 'skip') {
+      else if (res.data.action === 'skip') {
         this.openHomeCategory(cardType);
         return;
-      } else {
+      } else if (res.data.action === 'copy') {
         this.openHomeCategory(cardType, res.data);
+      } else if (res.data.action === 'existing') {
+        this.openHomeCategory(cardType, res.data, true);
       }
     });
     await modal.present();

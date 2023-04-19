@@ -155,17 +155,25 @@ export class SearchPropertyPage {
   }
 
   async dismissToSolrDashboard(action?: string) {
+    let message = '';
     if (action === 'skip') {
-      this.modalController.dismiss(action);
-    } else {
-      let message = '';
+      this.modalController.dismiss({ action: action, id: null });
+    } else if (action === 'copy') {
       if (this.cardType === 'OpenApplicantCard') {
         message = 'Personal details will be copied from an existing record, please sense check the data before finishing the process.';
       } else {
         message = 'Personal details will be copied from an existing record, please sense check the data before finishing the process.';
       }
       await this.commonService.showAlert(this.solrPageTitle, message);
-      this.modalController.dismiss(this.solrSelectedItemPropcoId);
+      this.modalController.dismiss({ action: action, id: this.solrSelectedItemPropcoId });
+    } else {
+      if (this.cardType === 'OpenApplicantCard') {
+        message = 'A new record will not be created. Upon clicking OK, the Applicant Card will load for the selected record.';
+      } else {
+        message = 'A new record will not be created. Upon clicking OK, the MA Form will load for the selected record.';
+      }
+      await this.commonService.showAlert(this.solrPageTitle, message);
+      this.modalController.dismiss({ action: action, id: this.solrSelectedItemPropcoId });
     }
   }
 }
