@@ -24,6 +24,7 @@ export interface ServiceProviderConf {
     middleName: string
     salutation: string
     displayAs: string
+    email: string
   }
   
   export interface PropertyAddress {
