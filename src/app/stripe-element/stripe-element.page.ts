@@ -25,6 +25,7 @@ export class StripeElementPage implements OnInit {
   stripeIntentResponse: any;
   @Input() data: any;
   @Input() paymentConfig: any;
+  @Input() defaultPaymentResponseData: any;
   @Output() onCancelStripeElement = new EventEmitter();
   @Output() onSuccessStripeElement = new EventEmitter();
   /**End*/
@@ -60,10 +61,11 @@ export class StripeElementPage implements OnInit {
   private pathStripeElementForm(): void {
     this.stripeElementForm.patchValue({
       email: this.data.billingAddress.email,
+      name: this.data.billingAddress.name,
       line1: this.data.billingAddress.line1,
       line2: this.data.billingAddress.line2,
       postal_code: this.data.billingAddress.postal_code,
-      city: this.data.billingAddress.town,
+      city: this.data.billingAddress.city,
       state: this.data.billingAddress.county
     });
   }
@@ -86,6 +88,7 @@ export class StripeElementPage implements OnInit {
           this.elementsOptions.clientSecret = pi.client_secret;
           resolve(true);
         }, err => {
+          this.onCancelStripeElement.emit({ type: 'server_error', error: err });
           this.commonService.showMessage('Payment', 'Something went wrong.', 'error');
           resolve(false);
         });
@@ -106,7 +109,7 @@ export class StripeElementPage implements OnInit {
       },
       method: environment.PAYMENT_METHOD,
       env: environment.PAYMENT_PROD ? 'PROD' : 'TEST',
-      paymentConfig:this.paymentConfig
+      paymentConfig: this.paymentConfig
     };
   }
 
@@ -173,8 +176,12 @@ export class StripeElementPage implements OnInit {
   }
 
   onCancelStripePayment(action: any, error?: any) {
-    if (action === 'cancel') {
-      this.onCancelStripeElement.emit({ type: action, error: null });
+    if (action === 'cancelled') {
+      this.commonService.showConfirm('Payment', 'Are you sure, you want to cancel this payment ?', '', 'YES', 'NO').then(response => {
+        if (response) {
+          this.onCancelStripeElement.emit({ type: action, error: null });
+        }
+      });
     }
   }
 

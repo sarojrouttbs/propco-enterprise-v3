@@ -7,6 +7,7 @@ import { SolrService } from 'src/app/solr/solr.service';
 import { environment } from 'src/environments/environment';
 import { OnlinePaymentService } from './online-payment.service';
 import { ServiceProviderConf } from './ServiceProviderInterface';
+declare function openScreen(key: string, value: any): any;
 
 @Component({
   selector: 'app-online-payment',
@@ -21,6 +22,8 @@ export class OnlinePaymentPage implements OnInit {
   stripeElementPaymentDone = false;
   stripeElementData: any;
   loggedInUserData;
+  defaultPaymentResponseData: any;
+  stripeIntentResponse: any;
   constructor(
     private activatedRoute: ActivatedRoute,
     private onlinePaymentService: OnlinePaymentService,
@@ -103,7 +106,7 @@ export class OnlinePaymentPage implements OnInit {
         );
     });
   }
-  
+
   private prepareStripeElementData() {
     let date = new Date().toLocaleDateString().replace(/\//g, '');
     date = date.slice(0, 5) + date.slice(7);
@@ -115,7 +118,7 @@ export class OnlinePaymentPage implements OnInit {
         description: this.serviceProviderConf.paymentDetail?.propertyReference
           + ' - ' + this.serviceProviderConf.paymentDetail?.propertyAddress?.addressLine1
           + ', ' + this.serviceProviderConf.paymentDetail?.propertyAddress?.postcode
-          + ` / ${this.commonService.getItem('user_details', true).name}`,
+          + ` / ${this.serviceProviderConf.paymentDetail?.displayAs}`,
         metadata: {
           propertyId: this.serviceProviderConf.paymentDetail.propertyId,
           entityId: this.serviceProviderConf.paymentDetail.entityId,
@@ -126,7 +129,8 @@ export class OnlinePaymentPage implements OnInit {
       method: environment.PAYMENT_METHOD,
       env: environment.PAYMENT_PROD ? 'PROD' : 'TEST',
       billingAddress: {
-        // email: this.serviceProviderConf?.email,
+        name: this.serviceProviderConf?.paymentDetail.displayAs,
+        email: this.serviceProviderConf?.paymentDetail.email,
         line1: this.serviceProviderConf?.paymentDetail.propertyAddress.addressLine1,
         line2: this.serviceProviderConf?.paymentDetail.propertyAddress.addressLine2,
         postal_code: this.serviceProviderConf?.paymentDetail.propertyAddress.postcode,
@@ -138,7 +142,6 @@ export class OnlinePaymentPage implements OnInit {
   }
 
   private preparePaymentConfReq() {
-    console.log(this.incomingReqParams)
     const params = new HttpParams()
       .set('paymentProcess', this.incomingReqParams.paymentProcess)
       .set('paymentServiceProvider', this.incomingReqParams.paymentServiceProvider)
@@ -146,7 +149,7 @@ export class OnlinePaymentPage implements OnInit {
       .set('entityId', this.incomingReqParams.entityId)
       .set('entityType', this.incomingReqParams.entityType)
       .set('propertyId', this.incomingReqParams.propertyId);
-      return params;
+    return params;
   }
 
   private initApiCall() {
@@ -155,6 +158,12 @@ export class OnlinePaymentPage implements OnInit {
         .getServiceProviderPaymentConf(this.incomingReqParams.paymentServiceProvider, this.preparePaymentConfReq())
         .subscribe((res) => {
           this.serviceProviderConf = res;
+          this.defaultPaymentResponseData = Object.assign({}, this.serviceProviderConf);
+          this.defaultPaymentResponseData.userDetail = {
+            userName: this.commonService.getItem('user_details', true).name,
+            userId: this.commonService.getItem('user_details', true).userId
+          }
+          delete this.defaultPaymentResponseData.stripeConfig;
           // this.serviceProviderConf = { "paymentServiceProvider": "STRIPE", "paymentProcess": "FEE_PAYMENT", "stripeConfig": { "publishableKey": "pk_test_51MAbP2IXDb8tSMRBgPquMx4ACRSyQp4LHL7UgDBtDAAHGVsC4RjHoc4ZGh4SgXTu1KO7mxieV2cXyhnNrVw4rE7a00H1qxdhUT", "secretKey": "sk_test_51MAbP2IXDb8tSMRBrz0pfzNZ9XzgrIqquidcnFLUZJ91L8vweaGfoF2U7XookrNHZzBLPBdMupGPc3nsH8fojqDh00BiSo2nIM" }, "paymentDetail": { "amount": 50, "propertyReference": "000000012", "propertyAddress": { "addressLine1": "Middliton", "addressLine2": "Stuplehurst", "addressLine3": "Calyton Way", "county": "Orimlington", "country": "UK", "street": null, "buildingName": "1234", "buildingNumber": "123", "postcode": "WN35 3JA", "latitude": "0.0", "longitude": "0.0", "organisationName": "BNl5BvNrBk=+f.pN!,{Lq9@n;", "plotNumber": null, "locality": "Snointon", "town": "Loicestershrie", "pafReference": "5727592.00" }, "propertyId": "0fc83ed0-0ab7-4314-a7e0-79243d90c863", "entityId": "ac1137a8-71c8-16d3-8171-c82703570183", "entityType": "TENANT", "reference": "000000006", "title": null, "foreName": "Winfrod", "surName": "Likin", "middleName": "Hillen", "salutation": "Dr Likin", "displayAs": "Winfrod Likin" } };
           this.stripeConfigurations.frontEndConfig.publishableKey = this.serviceProviderConf.stripeConfig.publishableKey;
           this.stripeConfigurations.nodeConfig.secret_key = this.serviceProviderConf.stripeConfig.secretKey;
@@ -167,21 +176,36 @@ export class OnlinePaymentPage implements OnInit {
   }
 
   _handleErrorStripeElement(response: any) {
-    if (response.action === 'cancel') {
+    if (response.type === 'cancelled') {
       this.onCancelStripePayment();
+    } else {
+      this.sendResponseToHost('error', response.error);
     }
   }
 
   _handleSuccessStripeElement(response: any) {
     this.stripeElementPaymentDone = true;
     setTimeout(() => {
-      const amount = response.paymentIntent.amount / 100;
-    }, 100);
+      this.stripeIntentResponse = response
+      this.sendResponseToHost('success', response);
+    }, 1000);
   }
 
   onCancelStripePayment() {
     this.showStripeElementForm = false;
     this.stripeElementPaymentDone = false;
     this.commonService.showMessage('Sorry, your payment has failed.', 'Payment Failed', 'error');
+    this.sendResponseToHost('error', { status: 'cancelled' });
+  }
+
+  private sendResponseToHost(type: string, error: any) {
+    let tmpRes: any = error || {};
+    tmpRes.intentData = this.defaultPaymentResponseData;
+    if (type === 'error') {
+      openScreen('OnlinePaymentResponse', JSON.stringify(tmpRes));
+    }
+    if (type === 'success') {
+      openScreen('OnlinePaymentResponse', JSON.stringify(tmpRes));
+    }
   }
 }
