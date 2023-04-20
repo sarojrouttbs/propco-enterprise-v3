@@ -97,7 +97,7 @@ export class SearchPropertyPage {
       } else {
         this.solrSelectedItemPropcoId = null;
         this.propertySearchForm.markAsUntouched();
-        this.propertySearchForm.setValue(`${data.option.value.name} (${data.option.value.propcoId})`, { onlySelf: true, emitEvent: false });
+        this.propertySearchForm.setValue(`${data.option.value.name} (PropCo ID#: ${data.option.value.propcoId})`, { onlySelf: true, emitEvent: false });
         this.solrSelectedItemPropcoId = data.option.value.propcoId;
       }
     }
