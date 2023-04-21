@@ -7,7 +7,7 @@ import { SolrService } from 'src/app/solr/solr.service';
 import { environment } from 'src/environments/environment';
 import { OnlinePaymentService } from './online-payment.service';
 import { ServiceProviderConf } from './ServiceProviderInterface';
-declare function openScreen(key: string, value: any): any;
+declare function openScreenAdvance(data: any): any;
 
 @Component({
   selector: 'app-online-payment',
@@ -202,10 +202,10 @@ export class OnlinePaymentPage implements OnInit {
     let tmpRes: any = error || {};
     tmpRes.intentData = this.defaultPaymentResponseData;
     if (type === 'error') {
-      openScreen('OnlinePaymentResponse', JSON.stringify(tmpRes));
+      openScreenAdvance({ requestType: 'OnlinePaymentResponse', requestValue: tmpRes });
     }
     if (type === 'success') {
-      openScreen('OnlinePaymentResponse', JSON.stringify(tmpRes));
+      openScreenAdvance({ requestType: 'OnlinePaymentResponse', requestValue: tmpRes });
     }
   }
 }

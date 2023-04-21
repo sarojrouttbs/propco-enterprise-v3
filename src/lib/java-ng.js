@@ -8,3 +8,14 @@ function openScreen(key, value, existing = false) {
         onFailure: function (error_code, error_message) {}
     });
 }
+
+function openScreenAdvance(data) {
+    window.propCoFunctionAdvanced({
+        request: `"${data}"`,
+        persistent: false,
+        onSuccess: function (response) {
+            print(response);
+        },
+        onFailure: function (error_code, error_message) {}
+    });
+}
