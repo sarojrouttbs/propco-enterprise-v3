@@ -259,9 +259,9 @@ export class DashboardPage implements OnInit {
         this.openHomeCategory(cardType);
         return;
       } else if (res.data.action === 'copy') {
-        this.openHomeCategory(cardType, res.data);
+        this.openHomeCategory(cardType, res.data.id);
       } else if (res.data.action === 'existing') {
-        this.openHomeCategory(cardType, res.data, true);
+        this.openHomeCategory(cardType, res.data.id, true);
       }
     });
     await modal.present();
