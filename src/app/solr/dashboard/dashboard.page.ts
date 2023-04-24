@@ -252,6 +252,7 @@ export class DashboardPage implements OnInit {
     });
 
     modal.onDidDismiss().then(res => {
+      console.log('res: - ',res)
       if (!res.data) {
         return;
       }
