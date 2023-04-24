@@ -202,10 +202,10 @@ export class OnlinePaymentPage implements OnInit {
     let tmpRes: any = error || {};
     tmpRes.intentData = this.defaultPaymentResponseData;
     if (type === 'error') {
-      openScreenAdvance(JSON.stringify({ requestType: 'OnlinePaymentResponse', requestValue: tmpRes }));
+      openScreenAdvance({ requestType: 'OnlinePaymentResponse', requestValue: tmpRes });
     }
     if (type === 'success') {
-      openScreenAdvance(JSON.stringify({ requestType: 'OnlinePaymentResponse', requestValue: tmpRes }));
+      openScreenAdvance({ requestType: 'OnlinePaymentResponse', requestValue: tmpRes });
     }
   }
 }
