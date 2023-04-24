@@ -61,6 +61,10 @@ const routes: Routes = [
   {
     path: 'sso-failure-page',
     loadChildren: () => import('./sso-failure-page/sso-failure-page.module').then( m => m.SsoFailurePagePageModule)
+  },
+  {
+    path: 'v2/online-payment',
+    loadChildren: () => import('./v2/online-payment/online-payment.module').then( m => m.OnlinePaymentPageModule)
   }
 ];
 

@@ -1,0 +1,18 @@
+<ion-content>
+  <div class="stripe-container" *ngIf="showStripeElementForm && !stripeElementPaymentDone">
+    <app-stripe-element [paymentConfig]="stripeConfigurations" [defaultPaymentResponseData]="defaultPaymentResponseData" [data]="stripeElementData" (onCancelStripeElement)="_handleErrorStripeElement($event)" (onSuccessStripeElement)="_handleSuccessStripeElement($event)"></app-stripe-element>
+    </div>
+    <ion-grid *ngIf="stripeElementPaymentDone">
+      <ion-row class="ion-text-center">
+        <ion-col size="100">
+          <h2>Payment</h2>
+        </ion-col>
+        <ion-col size="100">
+          <h3>Your payment has been completed!</h3>
+          <h3 *ngIf="stripeIntentResponse">Transaction Id: {{stripeIntentResponse?.id}}</h3>
+          <p>Please do not refresh the page and wait while we are processing your payment.</p>
+          <ion-spinner name="dots"></ion-spinner>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+</ion-content>
