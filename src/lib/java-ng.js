@@ -11,7 +11,7 @@ function openScreen(key, value, existing = false) {
 
 function openScreenAdvance(data) {
     window.propCoFunctionAdvanced({
-        request: `"${data}"`,
+        request: `${data}`,
         persistent: false,
         onSuccess: function (response) {
             print(response);
