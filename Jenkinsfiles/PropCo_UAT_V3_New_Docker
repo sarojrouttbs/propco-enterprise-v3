@@ -27,7 +27,7 @@ pipeline {
                 VAL_MEDIA_HOST_URL="MEDIA_HOST_URL: 'https://saas-uat.propco.co.uk/uat/',"
                 #VAL_WEB_KEY="WEB_KEY: '83e6d53a8ebf3a7fb93b449376730a31b9f641effe57d0b75dc1b7997d656c6de53c0c1e',"
                 #VAL_HOST_WEBURL="HOST_WEBURL: 'https://pentest.propco.co.uk/onboard/',"
-                VAL_PAYMENT_METHOD="PAYMENT_METHOD: 'BARCLAYCARD_REDIRECT',"
+                VAL_PAYMENT_METHOD="PAYMENT_METHOD: 'STRIPE_ELEMENT',"
 
                 sed -i "/  API_BASE_URL/c\\  $VAL_API_BASE_URL" src/environments/*
                 sed -i "/  MEDIA_HOST_URL/c\\  $VAL_MEDIA_HOST_URL" src/environments/*
