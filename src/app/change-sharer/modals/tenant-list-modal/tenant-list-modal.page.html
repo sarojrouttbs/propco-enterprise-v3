@@ -1,0 +1,82 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Select Tenant</ion-title>
+    <ion-buttons slot="end">
+      <ion-icon name="close" (click)="cancel()"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content id="tenant-list-modal">
+  <ion-grid class="search-box-grid">
+    <ion-row class="ion-justify-content-end search-row">
+      <ion-col size-sm="50" size-xl="50" id="tob-applicant-search">
+        <ion-searchbar 
+          placeholder="Start Typing to Search Applicants" 
+          class="applicantSearchbarCustom" 
+          debounce="300" 
+          (ionInput)="onSearch($event)"
+          [formControl]="searchApplicantControl"
+        ></ion-searchbar>
+        <ion-list class="applicant-list" *ngIf="resultsAvailable">
+          <ion-item *ngFor="let result of (applicantList | async)?.data" button
+          (click)="onSelectApplicant(result)">
+            <span>
+              <i class="propcoicon no-background propcoicon-applicant-let"></i>
+            </span>&nbsp;
+            <label color="dark">{{result.fullName}}&nbsp;
+              <ion-text color="medium">{{result.address}}</ion-text>&nbsp;
+              <ion-text color="medium">{{result.reference}}</ion-text>&nbsp;
+              <ion-text color="success">{{result.status}}</ion-text>&nbsp;
+            </label>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+      <ion-col size="4" class="ion-no-padding">
+        <ion-buttons end class="search-button">
+          <i class="propcoicon propcoicon-search no-background"></i>
+        </ion-buttons>     
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <h4 style="padding: 0 10px;">{{paramMessage}}</h4>
+  <div class="table-container" *ngIf="isTableReady && laTenantList.length > 0">
+    <table datatable [dtOptions]="dtOptions" class="row-border hover table-width" aria-describedby="tenant">
+      <thead>
+        <tr>
+          <th scope="col" style="width:7%">Select</th>
+          <th scope="col" style="width:16%;min-width:80px;">Ref</th>
+          <th scope="col" style="width:20%">Name</th>
+          <th scope="col" style="width:15%">Type</th>
+          <th scope="col" style="width:15%">Lead</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let tenant of laTenantList; let i=index;"  class="table-row" style="background-color: transparent;">
+          <td>
+            <ion-checkbox [checked]="tenant?.isRowChecked"
+            (ionChange)="selectTenant(tenant, $event)" 
+            color="primary">
+          </ion-checkbox>
+          </td>
+          <td>{{tenant?.reference ? tenant?.reference : DEFAULTS.NOT_AVAILABLE}}</td>
+          <td>{{tenant?.name ? tenant?.name : DEFAULTS.NOT_AVAILABLE}}</td>  
+          <td>{{tenant?.type}}</td>
+          <td>
+            <ion-toggle (ionChange)="toggleReferencing(tenant, $event)" slot="start" [checked]="tenant.isReferencingRequired"></ion-toggle>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div *ngIf="isTableReady && laTenantList.length === 0" style="padding-top: 20px;"> No Record Found</div>
+</ion-content>
+<ion-footer>
+  <ion-grid>
+    <ion-row>
+      <ion-col class="ion-text-end">
+        <ion-button class="cancel-button" (click)="cancel()">Cancel</ion-button>
+        <ion-button class="submit-button" [disabled]="!isSelected" (click)="dismiss()">OK</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>
