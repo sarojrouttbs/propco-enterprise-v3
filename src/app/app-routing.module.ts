@@ -65,6 +65,11 @@ const routes: Routes = [
   {
     path: 'v2/online-payment',
     loadChildren: () => import('./v2/online-payment/online-payment.module').then( m => m.OnlinePaymentPageModule)
+  },
+  {
+    path: 'change-sharer',
+    loadChildren: () => import('./change-sharer/change-sharer.module').then( m => m.ChangeSharerPageModule),
+    canActivate: [AuthGuard]
   }
 ];
 

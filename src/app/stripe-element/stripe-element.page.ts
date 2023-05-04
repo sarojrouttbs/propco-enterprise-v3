@@ -28,6 +28,7 @@ export class StripeElementPage implements OnInit {
   @Input() defaultPaymentResponseData: any;
   @Output() onCancelStripeElement = new EventEmitter();
   @Output() onSuccessStripeElement = new EventEmitter();
+  enablePayButton: boolean = false;
   /**End*/
   constructor(private commonService: CommonService,
     private fb: FormBuilder,
@@ -56,6 +57,13 @@ export class StripeElementPage implements OnInit {
       state: [''],
     });
     this.pathStripeElementForm();
+    this.stripeElementForm.valueChanges.subscribe((rs) => {
+      if (this.stripeElementForm.valid) {
+        this.enablePayButton = true;
+      } else {
+        this.enablePayButton = false;
+      }
+    });
   }
 
   private pathStripeElementForm(): void {
@@ -187,6 +195,14 @@ export class StripeElementPage implements OnInit {
 
   onSuccessStripePayment(response) {
     this.onSuccessStripeElement.emit(response);
+  }
+
+  check(event: any) {
+    if (event && event.complete && this.stripeElementForm.valid) {
+      this.enablePayButton = true;
+    } else {
+      this.enablePayButton = false;
+    }
   }
   /**End */
 
