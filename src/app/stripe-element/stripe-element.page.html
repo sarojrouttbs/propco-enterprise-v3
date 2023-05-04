@@ -7,6 +7,7 @@
           <ngx-stripe-payment
             [appearance]="appearance"
             [clientSecret]="elementsOptions?.clientSecret"
+            (change)="check($event)"
           ></ngx-stripe-payment>
         </ng-container>
         <div style="margin-bottom: 10px"></div>
@@ -44,7 +45,7 @@
       <ion-row class="ion-align-items-center">
         <ion-col *ngIf="showStripeElementForm">
           <ion-button color="danger" (click)="onCancelStripePayment('cancelled')" style="margin-left: 5px;">Cancel</ion-button>&nbsp;&nbsp;
-          <ion-button type="submit"  [disabled]="paying" (click)="collectStripePayment()" style="margin-left: 5px;">
+          <ion-button type="submit" [color]="enablePayButton ? 'success':''" [disabled]="paying || !enablePayButton" (click)="collectStripePayment()" style="margin-left: 5px;">
             <span *ngIf="!paying">
             Pay <span *ngIf="data?.intentData?.amount">{{ data?.intentData?.amount / 100 | currency: 'GBP' }}</span>
             </span>
