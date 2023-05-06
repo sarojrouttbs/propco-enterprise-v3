@@ -22,6 +22,16 @@ export class ChangeSharerService {
     return this.httpClient.get(environment.API_BASE_URL + `entities/search`, { params });
   }
 
+  getApplicantCoApplicants(applicantId: string): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `applicants/${applicantId}/co-applicants`);
+  }
+
+  changeSharer(agreementId: string, req: any): Observable<any> {
+    return this.httpClient.post<any>(
+      environment.API_BASE_URL + `agreements/${agreementId}/cos`, req
+    );
+  }
+
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.log(`${operation} failed: ${error.message}`);
