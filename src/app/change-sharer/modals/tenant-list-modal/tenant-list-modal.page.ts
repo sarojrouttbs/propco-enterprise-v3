@@ -9,6 +9,7 @@ import { CommonService } from 'src/app/shared/services/common.service';
 import { ChangeSharerService } from '../../change-sharer.service';
 import { FormControl } from '@angular/forms';
 import { debounceTime, refCount, switchMap } from 'rxjs/operators';
+declare function openScreen(key: string): any;
 
 @Component({
   selector: 'app-tenant-list-modal',
@@ -39,12 +40,15 @@ export class TenantListModalPage implements OnInit {
   @Input() paramPropertyId: string;
   @Input() paramAgreementId: string;
   @Input() paramMessage: string;
+  @Input() singleTenantOption: string;
   isTableReady: boolean = false;
   DEFAULTS = DEFAULTS;
   tenantCaseId: any;
   searchApplicantControl: FormControl = new FormControl();
   resultsAvailable = null;
-  applicantList: Observable<OfferModels.IApplicantLisResponse>;
+  applicantList = [];
+  selectedTenants = [];
+  isItemAvailable = false;
 
   constructor(
     private referencingService: ReferencingService,
@@ -57,7 +61,7 @@ export class TenantListModalPage implements OnInit {
   async ngOnInit() {
     this.propertyId = this.navParams.get('paramPropertyId');
     this.agreementId = this.navParams.get('paramAgreementId');
-    this.getLookupData();
+    this.singleTenantOption = this.navParams.get('singleTenantOption');
     this.dtOptions = {
       paging: false,
       pagingType: 'full_numbers',
@@ -71,39 +75,6 @@ export class TenantListModalPage implements OnInit {
     this.isTableReady = true;
 
   }
-
-  private getLookupData() {
-    this.lookupdata = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);
-    this.referencingLookupdata = this.commonService.getItem(PROPCO.REFERENCING_LOOKUP_DATA, true);
-    if (this.lookupdata) {
-      this.setLookupData(this.lookupdata);
-    } else {
-      this.commonService.getLookup().subscribe(data => {
-        this.commonService.setItem(PROPCO.LOOKUP_DATA, data);
-        this.lookupdata = data;
-        this.setLookupData(data);
-      });
-    }
-
-    if (this.referencingLookupdata) {
-      this.setReferencingLookupData(this.referencingLookupdata);
-    } else {
-      this.referencingService.getLookupData(REFERENCING.LET_ALLIANCE_REFERENCING_TYPE).subscribe(data => {
-        this.commonService.setItem(PROPCO.REFERENCING_LOOKUP_DATA, data);
-        this.referencingLookupdata = data;
-        this.setReferencingLookupData(data);
-      });
-    }
-  }
-
-  private setLookupData(data: any): void {
-    this.agreementStatuses = data.agreementStatuses;
-  }
-
-  private setReferencingLookupData(data: any): void {
-    this.referencingApplicantStatusTypes = data.applicantStatusTypes;
-  }
-
   private getPropertyTenancy() {
     return new Promise((resolve) => {
       this.changeSharerService.getPropertyTenancy(this.propertyId).subscribe(
@@ -123,6 +94,7 @@ export class TenantListModalPage implements OnInit {
             } else {
               item.type = 'Co-Tenant'
             }
+            item.isLead = false;
           });
           console.log(JSON.stringify(this.laTenantList))
           resolve(this.laTenantList);
@@ -134,65 +106,47 @@ export class TenantListModalPage implements OnInit {
     });
   }
 
-  toggleReferencing(tenant: any, event: any) {
-    tenant.isReferencingRequired = event.target.checked;
-    const tmpObj = {
-      isReferencingRequired: tenant.isReferencingRequired,
+  toggleLead(tenant: any, event: any) {
+    if (!event.target.checked) {
+      tenant.isLead = event.target.checked;
+      this.getSelectedTenantList();
+      return;
     }
-    if (!tenant.isReferencingRequired) {
-      tenant.isRowChecked = false;
-    }
-    this.updateTenantDetails(tenant.tenantId, tmpObj);
-  }
-
-  private updateTenantDetails(tenantId: any, requestObj: any) {
-    return new Promise((resolve) => {
-      this.referencingService.updateTenantDetails(tenantId, requestObj).subscribe(
-        res => {
-          resolve(true);
-        },
-        (error) => {
-          console.log(error);
-          resolve(false);
-        }
-      );
-    });
+    // if (this.singleTenantOption) {
+    //   const checkIfLeadPresent = this.laTenantList.filter(x => x.isLead && x.isRowChecked);
+    //   if (!checkIfLeadPresent.length) {
+    //     tenant.isLead = event.target.checked;
+    //   } else {
+    //     if(tenant.isRowChecked) {
+    //       this.commonService.showAlert('Change Sharer', `Only one record can be set as ‘Lead Tenant’`);
+    //       tenant.isLead = false;
+    //       event.target.checked = false;
+    //     }
+    //   }
+    // } else {
+    //   tenant.isLead = event.target.checked;
+    // }
+    tenant.isLead = event.target.checked;
+    this.getSelectedTenantList();
   }
 
   selectTenant(tenant: any, event: any) {
     tenant.isRowChecked = event.target.checked;
-
-    if (event.target.checked) {
-      this.tenantId = tenant.tenantId;
-      this.tenantCaseId = tenant.caseId;
-      this.referencingApplicationStatus = tenant.referencingApplicationStatus;
-      this.isSelected = true;
-      this.laTenantList.forEach(
-        ele => {
-          if (ele.tenantId != tenant.tenantId) {
-            ele.isRowChecked = false;
-          }
-        })
-    }
-    else {
-      const selectedRow = this.laTenantList.find(item => item.isRowChecked === true);
-      if (selectedRow) {
-        this.tenantId = selectedRow.tenantId;
-        this.tenantCaseId = selectedRow.caseId;
-        this.referencingApplicationStatus = selectedRow.referencingApplicationStatus;
-        this.isSelected = true;
-      }
-      else {
-        this.isSelected = false;
-        this.tenantId = null;
-        this.tenantCaseId = null;
-        this.referencingApplicationStatus = null;
-      }
-    }
+    this.getSelectedTenantList();
   }
 
-  getLookupValue(index: any, lookup: any) {
-    return this.commonService.getLookupValue(index, lookup);
+  private getSelectedTenantList() {
+    this.selectedTenants = [];
+    const tenantList = this.laTenantList.filter(x => x.isRowChecked);
+    if (tenantList.length) {
+      tenantList.map((list) => {
+        this.selectedTenants.push({
+          applicantId: list.entityId,
+          isLead: list.isLead
+        });
+      });
+    }
+    return tenantList;
   }
 
   dismiss() {
@@ -203,28 +157,126 @@ export class TenantListModalPage implements OnInit {
       dismissed: true
     });
   }
+
   cancel() {
-    this.modalController.dismiss();
+    this.commonService.showConfirm('Change sharer', 'Are you sure you want to cancel?', '', 'YES', 'NO').then(response => {
+      if (response) {
+        openScreen('CloseDialog');
+      }
+    });
   }
 
   onSearch(event: any): void {
     const searchString = event.target.value;
-    if (searchString.length > 2) {
-      this.resultsAvailable = true;
+    // if the value is an empty string don't filter the items
+    if (searchString && searchString.trim() !== '' && searchString.length > 3) {
+      this.searchApplicant(searchString);
     } else {
-      this.resultsAvailable = false;
+      this.isItemAvailable = false;
     }
-    this.applicantList = this.searchApplicantControl.valueChanges.pipe(
-      debounceTime(300),
-      switchMap((value: string) => (value && value.length > 2) ? this.searchApplicant(value) : new Observable())
+  }
+
+  private searchApplicant(searchString: string) {
+    this.changeSharerService.searchApplicant(searchString).subscribe((res) => {
+      if (res && res.data) {
+        this.applicantList = res.data;
+        this.isItemAvailable = true;
+      } else {
+        this.isItemAvailable = false;
+      }
+    }, error => {
+      this.isItemAvailable = true;
+    });
+  }
+
+  async onSelectApplicant(result: any) {
+    const checkForDuplicateRecord = this.laTenantList.filter(x => x.entityId === result.entityId);
+    if(checkForDuplicateRecord.length) {
+      this.commonService.showMessage('This applicant is already added.', 'Change sharer', 'error');
+      return;
+    }
+    const coApplicants = await this.getApplicantCoApplicants(result?.entityId) as any[];
+    let applicant = result;
+    applicant.name = applicant.fullName;
+    applicant.isRowChecked = false;
+    applicant.type = 'Applicant';
+    applicant.isLead = false;
+    const newA = [applicant].concat(this.laTenantList);
+    this.laTenantList = [];
+    this.laTenantList = newA;
+    if (coApplicants?.length) {
+      coApplicants.map((coApp) => {
+        coApp.name = coApp.fullName;
+        coApp.isRowChecked = false;
+        coApp.type = 'Co-Applicant';
+        coApp.isLead = false;
+        coApp.entityId = coApp.applicantId;
+        const newA = [coApp].concat(this.laTenantList);
+        this.laTenantList = [];
+        this.laTenantList = newA;
+      });
+    }
+  }
+
+  private getApplicantCoApplicants(applicantId: any) {
+    return new Promise((resolve) => {
+      this.changeSharerService.getApplicantCoApplicants(applicantId).subscribe(
+        res => {
+          resolve(res ? res?.data : []);
+        },
+        (error) => {
+          resolve([]);
+        }
       );
+    });
   }
 
-  private searchApplicant(applicantId: string): Observable<any> {
-    return this.changeSharerService.searchApplicant(applicantId);
+  private changeSharer(agreementId: any, req: any) {
+    return new Promise((resolve) => {
+      this.changeSharerService.changeSharer(agreementId, req).subscribe(
+        res => {
+          resolve(true);
+        },
+        (error) => {
+          this.commonService.showMessage((error.error && error.error.message) ? error.error.message : error.error, 'Change sharer', 'error');
+          resolve(false);
+        }
+      );
+    });
   }
 
-  onSelectApplicant(result: any) {
-
+  hideSuggestion() {
+    setTimeout(() => {
+      this.isItemAvailable = false;
+    }, 200);
   }
+
+  submit() {
+    this.commonService.showConfirm('Change sharer', 'Are you sure you want to proceed?', '', 'YES', 'NO').then(async response => {
+      if (response) {
+        if (this.selectedTenants.length) {
+          if (this.singleTenantOption) {
+            const getLeadsList = this.selectedTenants.filter(x => x.isLead);
+            if (getLeadsList.length > 1) {
+              this.commonService.showAlert('Change Sharer', `Only one record can be set as ‘Lead Tenant’`);
+              return;
+            }
+          }
+          const checkAtleastOneLead = this.selectedTenants.filter(x => x.isLead);
+          if (checkAtleastOneLead.length) {
+            const changed = await this.changeSharer(this.agreementId, this.selectedTenants);
+            if (changed) {
+              openScreen('CloseDialog');
+            }
+          } else {
+            this.commonService.showAlert('Change sharer', 'Please select a lead.');
+          }
+        } else {
+          this.commonService.showAlert('Change sharer', 'Please select tenant(s) to proceed.')
+        }
+      }
+    });
+  }
+
+
 }
