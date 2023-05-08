@@ -1,10 +1,12 @@
+import { HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ModalController } from '@ionic/angular';
-import { SYSTEM_CONFIG } from '../shared/constants';
+import { AgentService } from '../agent/agent.service';
+import { DEFAULT_MESSAGES, SYSTEM_CONFIG } from '../shared/constants';
 import { CommonService } from '../shared/services/common.service';
 import { TenantListModalPage } from './modals/tenant-list-modal/tenant-list-modal.page';
-
+declare function openScreen(key: string): any;
 @Component({
   selector: 'app-change-sharer',
   templateUrl: './change-sharer.page.html',
@@ -15,7 +17,8 @@ export class ChangeSharerPage implements OnInit {
   singleTenantOption: boolean;
   constructor(private activatedRoute: ActivatedRoute,
     private commonService: CommonService,
-    private modalController: ModalController) {
+    private modalController: ModalController,
+    private agentService: AgentService) {
     var snapshot = activatedRoute.snapshot;
     this.incomingReqParams.propertyId = snapshot.queryParams.propertyId;
     this.incomingReqParams.agreementId = snapshot.queryParams.agreementId;
@@ -30,20 +33,33 @@ export class ChangeSharerPage implements OnInit {
   }
 
   private async initApiCall() {
-    const sysConfig = await this.getSystemConfigs(SYSTEM_CONFIG.ENABLE_CHECK_FOR_EXISTING_RECORDS);
+    const sysConfig = await this.getOptions() as boolean;
     this.singleTenantOption = sysConfig;
-    if (this.singleTenantOption) {
+    if (sysConfig !== null) {
       this.selectTenant();
+    } else {
+      this.commonService.showMessage(
+        DEFAULT_MESSAGES.errors.SOMETHING_WENT_WRONG,
+        'Error',
+        'error'
+      );
+      openScreen('CloseDialog');
     }
   }
 
-  private async getSystemConfigs(key: string): Promise<any> {
+  getOptions() {
+    const params = new HttpParams()
+      .set('option', SYSTEM_CONFIG.ENABLESINGLETENANTOPTION);
     return new Promise((resolve) => {
-      this.commonService.getSystemConfig(key).subscribe(res => {
-        resolve(res[key] === '1' ? true : false);
-      }, error => {
-        resolve(true);
-      });
+      this.agentService.getSyatemOptions(params).subscribe(
+        (res) => {
+          const option = res ? res[SYSTEM_CONFIG.ENABLESINGLETENANTOPTION] : '';
+          resolve(option === 1 ? true : false);
+        },
+        (error) => {
+          resolve(null);
+        }
+      );
     });
   }
 
@@ -55,35 +71,12 @@ export class ChangeSharerPage implements OnInit {
       componentProps: {
         paramPropertyId: this.incomingReqParams.propertyId,
         paramMessage: message,
-        paramAgreementId: this.incomingReqParams.agreementId
+        paramAgreementId: this.incomingReqParams.agreementId,
+        singleTenantOption: true
       }
     });
 
     modal.onDidDismiss().then(res => {
-      // if (res?.data?.tenantId) {
-      //   if (res.data.referencingApplicationStatus == 0 || res.data.referencingApplicationStatus == 1) {
-      //     this.applicationAlert();
-      //   }
-      //   else {
-      //     this.tenantId = res.data.tenantId;
-      //     this.tenantCaseId = res.data.tenantCaseId ? res.data.tenantCaseId : null;
-      //     if (message) {
-      //       this.router.navigate(['../add-application'], {
-      //         relativeTo: this.route, queryParams: {
-      //           pId: this.propertyId,
-      //           tId: res.data.tenantId
-      //         }
-      //       }).then(() => {
-      //         location.reload();
-      //       });
-      //     }
-      //     else {
-      //       this.initiateApplication();
-      //     }
-      //   }
-      // } else {
-      //   this.router.navigate(['../dashboard'], { replaceUrl: true, relativeTo: this.route });
-      // }
     });
     await modal.present();
   }
