@@ -5,6 +5,7 @@ import { StripePaymentElementComponent, StripeService } from 'ngx-stripe';
 import { PAYMENT_TYPES } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { environment } from 'src/environments/environment';
+import { ValidationService } from '../shared/services/validation.service';
 import { StripeElementService } from './stripe.service';
 
 @Component({
@@ -28,6 +29,8 @@ export class StripeElementPage implements OnInit {
   @Input() defaultPaymentResponseData: any;
   @Output() onCancelStripeElement = new EventEmitter();
   @Output() onSuccessStripeElement = new EventEmitter();
+  enablePayButton: boolean = false;
+  isStripeElementsValid: boolean = false;
   /**End*/
   constructor(private commonService: CommonService,
     private fb: FormBuilder,
@@ -47,7 +50,7 @@ export class StripeElementPage implements OnInit {
   private initStripeElementForm() {
     this.stripeElementForm = this.fb.group({
       name: ['', [Validators.required]],
-      email: ['', [Validators.required]],
+      email: ['', [Validators.required, ValidationService.emailValidator]],
       line1: ['', [Validators.required]],
       line2: ['', [Validators.required]],
       postal_code: [''],
@@ -56,6 +59,13 @@ export class StripeElementPage implements OnInit {
       state: [''],
     });
     this.pathStripeElementForm();
+    this.stripeElementForm.valueChanges.subscribe((rs) => {
+      if (this.stripeElementForm.valid && this.isStripeElementsValid) {
+        this.enablePayButton = true;
+      } else {
+        this.enablePayButton = false;
+      }
+    });
   }
 
   private pathStripeElementForm(): void {
@@ -187,6 +197,16 @@ export class StripeElementPage implements OnInit {
 
   onSuccessStripePayment(response) {
     this.onSuccessStripeElement.emit(response);
+  }
+
+  check(event: any) {
+    if (event && event.complete && this.stripeElementForm.valid) {
+      this.isStripeElementsValid = event.complete;
+      this.enablePayButton = true;
+    } else {
+      this.isStripeElementsValid = false;
+      this.enablePayButton = false;
+    }
   }
   /**End */
 
