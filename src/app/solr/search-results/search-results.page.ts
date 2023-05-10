@@ -527,15 +527,6 @@ export class SearchResultsPage implements OnInit {
       .subscribe((res) => {
         this.results = res && res.data ? res.data : [];
         this.results.map((x) => {
-          /** 
-           * For Agreement status: 2,5,6 (Confirmed, Given Notice, Extended) → Showing Property Address 
-           * For Agreement status: except above→ Showing Tenant Address
-          */
-          if(x.entityType === 'TENANT' || x.entityType === 'COTENANT' ) {
-            if(this.propertyAgreementStatus.length) {
-              x.tenantPropertyAddress = this.propertyAgreementStatus.indexOf(x.propertyAgreementStatus) !== -1 ? x.tenantPropertyAddress : x.address;
-            }
-          }
           if (x.officeCode) {
             const newValues = x.officeCode.map((code) => {
               return this.officeCodesMap.get(code);
