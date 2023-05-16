@@ -13,15 +13,9 @@ ion-content {
 
   div {
     width: 92%;
-    word-break: wo;
-    display: inline-block;
-    white-space: pre-wrap;
+    white-space: initial;
     word-wrap: break-word;
-    /* IE 5.5-7 */
-    white-space: -moz-pre-wrap;
     text-align: justify;
-
-    /* Firefox 1.0-2.0 */
     .address,
     .rent {
       color: var(--ion-color-one);
