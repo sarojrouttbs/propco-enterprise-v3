@@ -169,7 +169,7 @@ export class SearchSuggestionComponent implements OnInit {
   }
 
   goToPage() {
-    if (this.router.url.includes('/solr/dashboard') || this.router.url.includes('/solr/search/')) {
+    if (!this.router.url.includes('/solr/search-result') && (this.router.url.includes('/solr/dashboard') || this.router.url.includes('/solr/search'))) {
       this.openV2Search();
       return;
     }
