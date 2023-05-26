@@ -200,7 +200,8 @@
               &.landlord-header-panel,
               &.tenant-header-panel,
               &.applicant-header-panel,
-              &.contractor-header-panel {
+              &.contractor-header-panel,
+              &.vendor-header-panel {
                 .ag-left-side {
                   display: grid;
                   justify-content: flex-start;
@@ -250,7 +251,8 @@
             .landlord-content-panel,
             .tenant-content-panel,
             .applicant-content-panel,
-            .contractor-content-panel {
+            .contractor-content-panel,
+            .vendor-content-panel {
               display: grid;
               justify-content: start;
               grid-template-columns: 45px 1fr;
