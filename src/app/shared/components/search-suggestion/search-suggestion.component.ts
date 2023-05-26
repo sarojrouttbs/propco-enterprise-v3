@@ -40,6 +40,7 @@ export class SearchSuggestionComponent implements OnInit {
     'Applicant',
     'Agent',
     'Contractor',
+    'Vendor'
   ];
   lookupdata: any;
   officeLookupDetails: any;
@@ -168,8 +169,8 @@ export class SearchSuggestionComponent implements OnInit {
   }
 
   goToPage() {
-    if (this.router.url.includes('/solr/dashboard') || this.router.url.includes('/solr/search')) {
-      openV2Search();
+    if (this.router.url.includes('/solr/dashboard') || this.router.url.includes('/solr/search/')) {
+      this.openV2Search();
       return;
     }
     if (this.router.url.includes('/agent/')) {

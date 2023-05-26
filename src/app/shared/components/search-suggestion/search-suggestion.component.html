@@ -1,11 +1,10 @@
 <ion-row
-[ngClass]="pageType === 'dashboard' ? 'ion-align-items-center ion-justify-content-center ion-margin-vertical' : 
-(pageType === 'solr-resultpage' ? 'ion-align-items-center main-row ion-justify-content-end ion-margin-vertical' : 'ion-align-items-center main-row agent-main-row ion-margin-vertical')"
-
->
+  [ngClass]="pageType === 'dashboard' ? 'ion-align-items-center ion-justify-content-center ion-margin-vertical' : 
+(pageType === 'solr-resultpage' ? 'ion-align-items-center main-row ion-justify-content-end ion-margin-vertical' : 'ion-align-items-center main-row agent-main-row ion-margin-vertical')">
   <ion-col [size]="pageType == 'dashboard'?'12':'22'" class="solrMutiSelect ion-no-padding tour-1">
     <mat-form-field appearance="fill">
-      <mat-select [formControl]="entityControl" (selectionChange)="onChangeEntity()" multiple class="mat-select-red solr-entity-selector ion-text-center">
+      <mat-select [formControl]="entityControl" (selectionChange)="onChangeEntity()" multiple
+        class="mat-select-red solr-entity-selector ion-text-center">
         <mat-select-trigger>
           {{entityControl.value ? entityControl.value[0] : ''}}
           <span *ngIf="entityControl.value?.length > 1" class="example-additional-selection">
@@ -18,39 +17,36 @@
   </ion-col>
   <ion-col [size]="pageType == 'dashboard'?'68':'70'" style="padding-right: 0;" class="ion-no-padding tour-2">
     <div>
-      <ion-searchbar 
-      #solrSearchBar
-      [(ngModel)]="searchTerm" 
-      [placeholder]="'Start typing to search ' + (entityControl.value.length ? ''+ (entityControl.value.join(', ')) + '':'')" 
-      class="searchbarCustom" 
-      debounce="500" 
-      (ionChange)="getItems($event)"
-      [formControl]="searchTermControl"
-      (ionBlur) = "hideSuggestion()"
-      (ionFocus) = "suggestions.length > 0 ? isItemAvailable = true : false"
-      >
+      <ion-searchbar #solrSearchBar [(ngModel)]="searchTerm"
+        [placeholder]="'Start typing to search ' + (entityControl.value.length ? ''+ (entityControl.value.join(', ')) + '':'')"
+        class="searchbarCustom" debounce="500" (ionChange)="getItems($event)" [formControl]="searchTermControl"
+        (ionBlur)="hideSuggestion()" (ionFocus)="suggestions.length > 0 ? isItemAvailable = true : false">
       </ion-searchbar>
-      <ion-progress-bar color="danger" [type]="'indeterminate'" *ngIf="showLoader" style="position: absolute;"></ion-progress-bar>
-      <ion-list *ngIf="isItemAvailable" class="solrSuggestionList" 
-      [class.solr-dashboard] = "pageType === 'dashboard'">
+      <ion-progress-bar color="danger" [type]="'indeterminate'" *ngIf="showLoader"
+        style="position: absolute;"></ion-progress-bar>
+      <ion-list *ngIf="isItemAvailable" class="solrSuggestionList" [class.solr-dashboard]="pageType === 'dashboard'">
         <ion-item *ngFor="let item of suggestions" class="solrSuggestionListItem">
-          <ng-container [ngTemplateOutlet]="propertySuggestion"  *ngIf="item?.entityType === 'PROPERTY'"
-              [ngTemplateOutletContext]="{item:item}">
+          <ng-container [ngTemplateOutlet]="propertySuggestion" *ngIf="item?.entityType === 'PROPERTY'"
+            [ngTemplateOutletContext]="{item:item}">
           </ng-container>
-          <ng-container [ngTemplateOutlet]="landlordSuggestion"  *ngIf="item?.entityType === 'LANDLORD'"
-              [ngTemplateOutletContext]="{item:item}">
+          <ng-container [ngTemplateOutlet]="landlordSuggestion" *ngIf="item?.entityType === 'LANDLORD'"
+            [ngTemplateOutletContext]="{item:item}">
           </ng-container>
-          <ng-container [ngTemplateOutlet]="applicantSuggestion"  *ngIf="item?.entityType === 'APPLICANT'"
-              [ngTemplateOutletContext]="{item:item}">
+          <ng-container [ngTemplateOutlet]="applicantSuggestion" *ngIf="item?.entityType === 'APPLICANT'"
+            [ngTemplateOutletContext]="{item:item}">
           </ng-container>
-          <ng-container [ngTemplateOutlet]="tenantSuggestion"  *ngIf="item?.entityType === 'TENANT' || item?.entityType === 'COTENANT'"
-          [ngTemplateOutletContext]="{item:item}">
+          <ng-container [ngTemplateOutlet]="tenantSuggestion"
+            *ngIf="item?.entityType === 'TENANT' || item?.entityType === 'COTENANT'"
+            [ngTemplateOutletContext]="{item:item}">
           </ng-container>
-          <ng-container [ngTemplateOutlet]="contractorSuggestion"  *ngIf="item?.entityType === 'CONTRACTOR'"
-              [ngTemplateOutletContext]="{item:item}">
+          <ng-container [ngTemplateOutlet]="contractorSuggestion" *ngIf="item?.entityType === 'CONTRACTOR'"
+            [ngTemplateOutletContext]="{item:item}">
           </ng-container>
-          <ng-container [ngTemplateOutlet]="agentSuggestion"  *ngIf="item?.entityType === 'AGENT'"
-              [ngTemplateOutletContext]="{item:item}">
+          <ng-container [ngTemplateOutlet]="agentSuggestion" *ngIf="item?.entityType === 'AGENT'"
+            [ngTemplateOutletContext]="{item:item}">
+          </ng-container>
+          <ng-container [ngTemplateOutlet]="vendorSuggestion" *ngIf="item?.entityType === 'VENDOR'"
+            [ngTemplateOutletContext]="{item:item}">
           </ng-container>
         </ion-item>
       </ion-list>
@@ -59,88 +55,101 @@
   <ion-col [size]="pageType == 'dashboard'?'4':'8'" class="ion-no-padding tour-3 pointer">
     <ion-buttons end (click)="goToPage()">
       <i class="propcoicon propcoicon-search no-background red-icon search-icon"></i>
-    </ion-buttons>     
+    </ion-buttons>
   </ion-col>
 </ion-row>
 
-<ng-template #propertySuggestion  let-item="item">
+<ng-template #propertySuggestion let-item="item">
   <div (click)="openHomeCategory('OpenProperty',item)" style="width: 100%">
     <span>
       <i class="propcoicon no-background propcoicon-property red-icon"></i>
     </span>
-    <span >{{officeLookupMap.get(item.office)}}</span>&nbsp;
-    <span >{{item.address | slice:0:30}}, {{item.postcode}}</span>&nbsp;
-    <span >{{item.reference}}</span>&nbsp;
+    <span>{{officeLookupMap.get(item.office)}}</span>&nbsp;
+    <span>{{item.address | slice:0:30}}, {{item.postcode}}</span>&nbsp;
+    <span>{{item.reference}}</span>&nbsp;
     <span class=" ng-scope">{{item.propertyRent || 0 | currency : "£"}}</span>&nbsp;
     <span class="text-color-lightgreen">{{item.status}}</span>
   </div>
 </ng-template>
 
-<ng-template #landlordSuggestion  let-item="item">
+<ng-template #landlordSuggestion let-item="item">
   <div (click)="openHomeCategory('OpenLandlord',item)" style="width: 100%">
     <span>
       <i class="propcoicon no-background propcoicon-landlord red-icon"></i>
     </span>
-    <span >{{officeLookupMap.get(item.office)}}</span>&nbsp;
+    <span>{{officeLookupMap.get(item.office)}}</span>&nbsp;
     <span>{{item.name}}</span>&nbsp;
-    <span >{{item?.reference?.split(",")[0]}}</span>&nbsp;
-    <span >{{item.address | slice:0:30}}, {{item.postcode}}</span>&nbsp;
+    <span>{{item?.reference?.split(",")[0]}}</span>&nbsp;
+    <span>{{item.address | slice:0:30}}, {{item.postcode}}</span>&nbsp;
     <span>{{item.daytime}}</span>&nbsp;
     <span>{{item.mobile}}</span>&nbsp;
     <span class="text-color-lightgreen">{{item.status}}</span>
   </div>
 </ng-template>
 
-<ng-template #applicantSuggestion  let-item="item">
+<ng-template #applicantSuggestion let-item="item">
   <div (click)="openHomeCategory('OpenApplicant',item)" style="width: 100%">
     <span>
       <i class="propcoicon no-background propcoicon-applicant-let red-icon"></i>
     </span>
-    <span >{{officeLookupMap.get(item.office)}}</span>&nbsp;
+    <span>{{officeLookupMap.get(item.office)}}</span>&nbsp;
     <span>{{item.name}}</span>&nbsp;
-    <span >{{item.reference}}</span>&nbsp;
-    <span >{{item.address | slice:0:30}}, {{item.postcode}}</span>&nbsp;
+    <span>{{item.reference}}</span>&nbsp;
+    <span>{{item.address | slice:0:30}}, {{item.postcode}}</span>&nbsp;
     <span>{{item.daytime}}</span>&nbsp;
     <span>{{item.mobile}}</span>&nbsp;
     <span class="text-color-lightgreen">{{item.status}}</span>
   </div>
 </ng-template>
 
-<ng-template #tenantSuggestion  let-item="item">
+<ng-template #tenantSuggestion let-item="item">
   <div (click)="openHomeCategory('OpenTenant',item)" style="width: 100%">
     <span>
       <i class="propcoicon no-background propcoicon-tenant red-icon"></i>
     </span>
     <span>{{item.name}}</span>&nbsp;
-    <span >{{item.reference}}</span>&nbsp;
-    <span >{{item.address | slice:0:30}}, {{item.postcode}}</span>&nbsp;
+    <span>{{item.reference}}</span>&nbsp;
+    <span>{{item.address | slice:0:30}}, {{item.postcode}}</span>&nbsp;
     <span>{{item.daytime}}</span>&nbsp;
     <span>{{item.mobile}}</span>&nbsp;
     <span class="text-color-lightgreen">{{item.status}}</span>
   </div>
 </ng-template>
 
-<ng-template #contractorSuggestion  let-item="item">
+<ng-template #contractorSuggestion let-item="item">
   <div (click)="openHomeCategory('OpenContractor',item)" style="width: 100%">
     <span>
       <i class="propcoicon no-background propcoicon-contractor red-icon"></i>
     </span>
     <span>{{item.name}}</span>&nbsp;
-    <span >{{item.reference}}</span>&nbsp;
-    <span >{{item.address | slice:0:30}}, {{item.postcode}}</span>&nbsp;
+    <span>{{item.reference}}</span>&nbsp;
+    <span>{{item.address | slice:0:30}}, {{item.postcode}}</span>&nbsp;
     <span>{{item.daytime}}</span>&nbsp;
     <span>{{item.mobile}}</span>&nbsp;
     <span class="text-color-lightgreen">{{item.status}}</span>
   </div>
 </ng-template>
 
-<ng-template #agentSuggestion  let-item="item">
+<ng-template #agentSuggestion let-item="item">
   <div (click)="openHomeCategory('OpenAgent',item)" style="width:100%">
     <span>
       <i class="propcoicon no-background propcoicon-agent red-icon"></i>
     </span>
     <span>{{item.name}}</span>&nbsp;
-    <span >{{item.reference}}</span>&nbsp;
+    <span>{{item.reference}}</span>&nbsp;
+    <span class="text-color-lightgreen">{{item.status}}</span>
+  </div>
+</ng-template>
+<ng-template #vendorSuggestion let-item="item">
+  <div (click)="openHomeCategory('OpenVendor',item)" style="width:100%">
+    <span>
+      <i class="propcoicon no-background propcoicon-vendor red-icon"></i>
+    </span>
+    <span>{{officeLookupMap.get(item.office)}}</span>&nbsp;
+    <span>{{item.name}}</span>&nbsp;
+    <span>{{item?.reference?.split(",")[0]}}</span>&nbsp;
+    <span>{{item.address | slice:0:30}}, {{item.postcode}}</span>&nbsp;
+    <span>{{item.mobile}}</span>&nbsp;
     <span class="text-color-lightgreen">{{item.status}}</span>
   </div>
 </ng-template>
