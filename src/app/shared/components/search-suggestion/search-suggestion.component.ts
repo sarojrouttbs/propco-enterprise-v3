@@ -8,6 +8,7 @@ import { SolrService } from '../../../solr/solr.service';
 import { SolrSearchHandlerService } from '../../services/solr-search-handler.service';
 import { WorkspaceService } from 'src/app/agent/workspace/workspace.service';
 declare function openScreen(key: string, value: any): any;
+declare function openScreenAdvance(data: any): any;
 
 @Component({
   selector: 'app-search-suggestion',
@@ -39,6 +40,7 @@ export class SearchSuggestionComponent implements OnInit {
     'Applicant',
     'Agent',
     'Contractor',
+    'Vendor'
   ];
   lookupdata: any;
   officeLookupDetails: any;
@@ -158,15 +160,19 @@ export class SearchSuggestionComponent implements OnInit {
     /*Navigate to java fx page (If solr loads inside v2)*/
     openScreen(key, value.propcoId);
   }
+  
+  openV2Search() {
+    /*Navigate to java fx page (If solr loads inside v2)*/
+    let searchDetail: any = {};
+    searchDetail.searchTerm = this.searchTermControl.value;
+    searchDetail.searchEntity = this.entityControl.value;
+    openScreenAdvance({ requestType: 'OpenSearchResult', requestValue: searchDetail });
+  }
 
   goToPage() {
-    if (this.router.url.includes('/solr/dashboard') || this.router.url.includes('/solr/search')) {
-      this.router.navigate(['/solr/search-results'], {
-        queryParams: {
-          searchTerm: this.searchTermControl.value,
-          type: this.entityControl.value,
-        }, replaceUrl: true
-      });
+    if (!this.router.url.includes('/solr/search-result') && (this.router.url.includes('/solr/dashboard') || this.router.url.includes('/solr/search'))) {
+      this.openV2Search();
+      return;
     }
     if (this.router.url.includes('/agent/')) {
       this.router.navigate(['/agent/solr/search-results'], {
