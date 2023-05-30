@@ -61,6 +61,7 @@ export class SearchResultsPage implements OnInit {
   agentCheck = new FormControl();
   contractorCheck = new FormControl();
   vandorCheck = new FormControl();
+  purchaserCheck = new FormControl();
 
   propertyFilter: FormGroup;
   landlordFilter: FormGroup;
@@ -69,6 +70,7 @@ export class SearchResultsPage implements OnInit {
   contractorFilter: FormGroup;
   applicantFilter: FormGroup;
   vendorFilter: FormGroup;
+  purchaserFilter: FormGroup;
 
   lookupdata: any;
   managementTypes;
@@ -96,6 +98,8 @@ export class SearchResultsPage implements OnInit {
   contractorSkillsFiltered;
   vendorStatuses;
   vendorStatusesFiltered;
+  purchaserStatuses;
+  purchaserStatusesFiltered;
 
   refreshType: string;
   isAllselected = false;
@@ -106,7 +110,8 @@ export class SearchResultsPage implements OnInit {
     'Applicant',
     'Agent',
     'Contractor',
-    'Vendor'
+    'Vendor',
+    'Purchaser'
   ];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -125,6 +130,7 @@ export class SearchResultsPage implements OnInit {
   contractorStatusFilterCtrl: FormControl = new FormControl();
   contractorSkillFilterCtrl: FormControl = new FormControl();
   vendorStatusFilterCtrl: FormControl = new FormControl();
+  purchaserStatusFilterCtrl: FormControl = new FormControl();
 
   propRentOptions: Options = {
     floor: 0,
@@ -231,7 +237,10 @@ export class SearchResultsPage implements OnInit {
       this.filterMultiSearch(src, 'agentStatus');
     });
     this.vendorStatusFilterCtrl.valueChanges.subscribe((src) => {
-      this.filterMultiSearch(src, 'venStatus');
+      this.filterMultiSearch(src, 'vendorStatus');
+    });
+    this.purchaserStatusFilterCtrl.valueChanges.subscribe((src) => {
+      this.filterMultiSearch(src, 'purchaserStatus');
     });
   }
 
@@ -359,15 +368,26 @@ export class SearchResultsPage implements OnInit {
         this.contractorStatusesFiltered = tmp;
         break;
       }
-      case 'venStatus': {
+      case 'vendorStatus': {
         if (!srchStr) {
-          this.landlordStatusesFiltered = this.vendorStatuses;
+          this.vendorStatusesFiltered = this.vendorStatuses;
           return;
         }
         tmp = this.vendorStatuses.filter(
           (x) => x.value.toLowerCase().indexOf(srchStr.toLocaleLowerCase()) > -1
         );
         this.vendorStatusesFiltered = tmp;
+        break;
+      }
+      case 'purchaserStatus': {
+        if (!srchStr) {
+          this.purchaserStatusesFiltered = this.purchaserStatuses;
+          return;
+        }
+        tmp = this.purchaserStatuses.filter(
+          (x) => x.value.toLowerCase().indexOf(srchStr.toLocaleLowerCase()) > -1
+        );
+        this.purchaserStatusesFiltered = tmp;
         break;
       }
     }
@@ -397,7 +417,7 @@ export class SearchResultsPage implements OnInit {
     this.landlordStatuses = this.landlordStatusesFiltered =
       data.landlordStatuses;
     this.vendorStatuses = this.vendorStatusesFiltered =
-      data.landlordStatuses;
+      data.vendorStatuses;
     this.applicantStatuses = this.applicantStatusesFiltered =
       data.applicantStatuses;
     this.agentStatuses = this.agentStatusesFiltered =
@@ -407,6 +427,8 @@ export class SearchResultsPage implements OnInit {
       data.contractorSkills;
     this.contractorStatuses = this.contractorStatusesFiltered =
       data.contractorStatuses;
+    this.purchaserStatuses = this.purchaserStatusesFiltered =
+      data.purchaserStatuses;
   }
 
   private setOfficeCodeMap() {    
@@ -451,6 +473,8 @@ export class SearchResultsPage implements OnInit {
           this.contractorCheck.setValue(true);
         } else if (res === 'Vendor') {
           this.vandorCheck.setValue(true);
+        } else if (res === 'Purchaser') {
+          this.purchaserCheck.setValue(true);
         }
       });
     }
@@ -501,6 +525,10 @@ export class SearchResultsPage implements OnInit {
       isOverseas: false,
       isChain: false,
     });
+    this.purchaserFilter = this.fb.group({
+      status: [[]],
+      officeCode: [[]],
+    });
   }
 
   private customizePaginator(): void {
@@ -535,6 +563,7 @@ export class SearchResultsPage implements OnInit {
     this.agentCheck.setValue(false);
     this.contractorCheck.setValue(false);
     this.vandorCheck.setValue(false);
+    this.purchaserCheck.setValue(false);
   }
 
   getSearchResults(global?: boolean) {   
@@ -615,6 +644,10 @@ export class SearchResultsPage implements OnInit {
         delete vendorFilter.isOverseas;
       }
       params.vendorFilter = vendorFilter;
+    }
+    if (this.entityControl.value.indexOf('Purchaser') !== -1) {
+      const purchaserFilter = Object.assign(this.purchaserFilter.value, {});
+      params.purchaserFilter = purchaserFilter;
     }
     if (this.entityControl.value.indexOf('Agent') !== -1) {
       const atFilter = Object.assign(this.agentFilter.value, {});
@@ -715,6 +748,9 @@ export class SearchResultsPage implements OnInit {
       case 'VENDOR':
         action = 'OpenVendor';
         break;
+      case 'PURCHASER':
+        action = 'OpenPurchaser';
+        break;
       default:
         return;
     }
@@ -744,6 +780,7 @@ export class SearchResultsPage implements OnInit {
     this.agentFilter.reset();
     this.contractorFilter.reset();
     this.vendorFilter.reset();
+    this.purchaserFilter.reset();
     this.getSearchResults();
   }
 
@@ -756,6 +793,7 @@ export class SearchResultsPage implements OnInit {
     this.contractorCheck.setValue(true);
     this.agentCheck.setValue(true);
     this.vandorCheck.setValue(true);
+    this.purchaserCheck.setValue(true);
     this.entityControl.setValue([]);
     this.entityControl.setValue(this.entityList);
     this.commonService.dataChanged({ entity: this.entityControl.value, term: this.solrSearchConfig.searchTerm });
@@ -770,6 +808,7 @@ export class SearchResultsPage implements OnInit {
     this.contractorCheck.setValue(false);
     this.agentCheck.setValue(false);
     this.vandorCheck.setValue(false);
+    this.purchaserCheck.setValue(false);
     this.entityControl.setValue([]);
     this.commonService.dataChanged({ entity: this.entityControl.value, term: this.solrSearchConfig.searchTerm });
   }
@@ -833,6 +872,11 @@ export class SearchResultsPage implements OnInit {
           ? tmpArray.push('Vendor')
           : tmpArray.splice(tmpArray.indexOf('Vendor'), 1);
         break;
+      case 'purchaser':
+        !this.purchaserCheck.value
+          ? tmpArray.push('Purchaser')
+          : tmpArray.splice(tmpArray.indexOf('Purchaser'), 1);
+        break;  
     }
     this.entityControl.setValue(tmpArray);
     this.commonService.dataChanged({ entity: this.entityControl.value, term: this.solrSearchConfig.searchTerm });
