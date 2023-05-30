@@ -48,6 +48,9 @@
           <ng-container [ngTemplateOutlet]="vendorSuggestion" *ngIf="item?.entityType === 'VENDOR'"
             [ngTemplateOutletContext]="{item:item}">
           </ng-container>
+          <ng-container [ngTemplateOutlet]="purchaserSuggestion" *ngIf="item?.entityType === 'PURCHASER'"
+            [ngTemplateOutletContext]="{item:item}">
+          </ng-container>
         </ion-item>
       </ion-list>
     </div>
@@ -144,6 +147,19 @@
   <div (click)="openHomeCategory('OpenVendor',item)" style="width:100%">
     <span>
       <i class="propcoicon no-background propcoicon-vendor red-icon"></i>
+    </span>
+    <span>{{officeLookupMap.get(item.office)}}</span>&nbsp;
+    <span>{{item.name}}</span>&nbsp;
+    <span>{{item?.reference?.split(",")[0]}}</span>&nbsp;
+    <span>{{item.address | slice:0:30}}, {{item.postcode}}</span>&nbsp;
+    <span>{{item.mobile}}</span>&nbsp;
+    <span class="text-color-lightgreen">{{item.status}}</span>
+  </div>
+</ng-template>
+<ng-template #purchaserSuggestion let-item="item">
+  <div (click)="openHomeCategory('OpenPurchaser',item)" style="width:100%">
+    <span>
+      <i class="propcoicon no-background propcoicon-purchaser red-icon"></i>
     </span>
     <span>{{officeLookupMap.get(item.office)}}</span>&nbsp;
     <span>{{item.name}}</span>&nbsp;
