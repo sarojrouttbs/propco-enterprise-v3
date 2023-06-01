@@ -154,7 +154,8 @@
                 height: 100%;
               }
 
-              &.property-header-panel {
+              &.property-header-panel,
+              &.sales-property-header-panel {
                 .emenities-container {
                   display: grid;
                   justify-content: flex-start;
@@ -202,7 +203,8 @@
               &.applicant-header-panel,
               &.contractor-header-panel,
               &.vendor-header-panel,
-              &.purchaser-header-panel {
+              &.purchaser-header-panel,
+              &.sales-applicant-header-panel {
                 .ag-left-side {
                   display: grid;
                   justify-content: flex-start;
@@ -229,7 +231,8 @@
               }
             }
 
-            .property-content-panel {
+            .property-content-panel,
+            .sales-property-content-panel {
               display: grid;
               justify-content: start;
               grid-template-columns: 180px 4fr;
@@ -254,7 +257,8 @@
             .applicant-content-panel,
             .contractor-content-panel,
             .vendor-content-panel,
-            .purchaser-content-panel {
+            .purchaser-content-panel,
+            .sales-applicant-content-panel {
               display: grid;
               justify-content: start;
               grid-template-columns: 45px 1fr;
