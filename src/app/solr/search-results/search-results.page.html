@@ -537,6 +537,234 @@
             <ion-button size="small" color="medium" (click)="refresh('VENDOR')">Apply</ion-button>
           </mat-action-row>
         </mat-expansion-panel>
+        <mat-expansion-panel [expanded]="step === 7" (opened)="setStep(7)" #purchaserFilterPanel hideToggle>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-checkbox color="primary" [formControl]="purchaserCheck"
+                (click)="$event.stopPropagation();onChangeEntity('purchaser')" (keydown)="$event.stopPropagation()">
+                Purchaser
+              </mat-checkbox>
+            </mat-panel-title>
+            <mat-panel-description>
+              <div>
+                <span *ngIf="!purchaserFilterPanel.expanded" class="accordian-icon" title="Expand">
+                  <ion-icon name="add-circle" style="pointer-events:none"></ion-icon>
+                </span>
+                <span *ngIf="purchaserFilterPanel.expanded" class="accordian-icon" title="Collapse">
+                  <ion-icon name="remove-circle" style="pointer-events:none"></ion-icon>
+                </span>
+              </div>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <form [formGroup]="purchaserFilter">
+            <ion-grid>
+              <ion-row>
+                <ion-col size="50">
+                  <mat-form-field [floatLabel]="'never'">
+                    <mat-select placeholder="Status" formControlName="status" multiple>
+                      <mat-option>
+                        <ngx-mat-select-search [formControl]="purchaserStatusFilterCtrl" placeholderLabel="search"
+                          noEntriesFoundLabel="'no matching found'"></ngx-mat-select-search>
+                      </mat-option>
+                      <mat-option *ngFor="let item of purchaserStatusesFiltered"
+                        [value]="item.value">{{item.value}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </ion-col>
+                <ion-col size="50">
+                  <mat-form-field [floatLabel]="'never'">
+                    <mat-select placeholder="Office" formControlName="officeCode" multiple>
+                      <mat-option>
+                        <ngx-mat-select-search [formControl]="officeCodesFilterCtrl" placeholderLabel="search"
+                          noEntriesFoundLabel="'no matching found'"></ngx-mat-select-search>
+                      </mat-option>
+                      <mat-option *ngFor="let item of officeCodesFiltered" [value]="item.index">{{item.value}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </form>
+          <mat-action-row>
+            <ion-button size="small" color="danger" (click)="reset(purchaserFilter)">Reset</ion-button>
+            <ion-button size="small" color="medium" (click)="refresh('PURCHASER')">Apply</ion-button>
+          </mat-action-row>
+        </mat-expansion-panel>
+        <mat-expansion-panel [expanded]="step === 8" (opened)="setStep(8)" #salesPropertyFilterPanel hideToggle>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-checkbox [formControl]="salesPropertyCheck"
+                (click)="$event.stopPropagation();onChangeEntity('sales_property')" (keydown)="$event.stopPropagation()">
+                Sales Property
+              </mat-checkbox>
+            </mat-panel-title>
+            <mat-panel-description>
+              <div>
+                <span *ngIf="!salesPropertyFilterPanel.expanded" class="accordian-icon" title="Expand">
+                  <ion-icon name="add-circle" style="pointer-events:none"></ion-icon>
+                </span>
+                <span *ngIf="salesPropertyFilterPanel.expanded" class="accordian-icon" title="Collapse">
+                  <ion-icon name="remove-circle" style="pointer-events:none"></ion-icon>
+                </span>
+              </div>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <form [formGroup]="salesPropertyFilter">
+        
+            <ion-list class="list" lines="none">
+              <ion-list-header>
+                <ion-label>Asking Price Range</ion-label>
+              </ion-list-header>
+              <ion-item style="--padding-end:0; --inner-padding-end: 0">
+                <ngx-slider color="primary" [options]="propRentOptions" formControlName="propertyRent"></ngx-slider>
+              </ion-item>
+            </ion-list>
+            <ion-list class="list" lines="none">
+              <ion-list-header>
+                <ion-label>Bed Range</ion-label>
+              </ion-list-header>
+              <ion-item style="--padding-end:0; --inner-padding-end: 0">
+                <ngx-slider [options]="numberOfBedroomOptions" formControlName="numberOfBedroom"></ngx-slider>
+              </ion-item>
+            </ion-list>
+            <ion-grid>
+              <ion-row>
+                <ion-col size="50">
+                  <mat-form-field [floatLabel]="'never'">
+                    <mat-select placeholder="Tenure" formControlName="propertyTenure" multiple>
+                      <mat-option>
+                        <ngx-mat-select-search [formControl]="propertyTenureFilterCtrl" placeholderLabel="search"
+                          noEntriesFoundLabel="'no matching found'"></ngx-mat-select-search>
+                      </mat-option>
+                      <mat-option *ngFor="let item of propertyTenureFiltered" [value]="item.value">{{item.value}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </ion-col>
+                <ion-col size="50">
+                  <mat-form-field [floatLabel]="'never'">
+                    <mat-select placeholder="Style" formControlName="propertyStyle" multiple>
+                      <mat-option>
+                        <ngx-mat-select-search [formControl]="propertyStyleFilterCtrl" placeholderLabel="search"
+                          noEntriesFoundLabel="'no matching found'"></ngx-mat-select-search>
+                      </mat-option>
+                      <mat-option *ngFor="let item of propertyStylesFiltered" [value]="item.value">{{item.value}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size="50">
+                  <mat-form-field [floatLabel]="'never'">
+                    <mat-select placeholder="Type" formControlName="houseType" multiple>
+                      <mat-option>
+                        <ngx-mat-select-search [formControl]="houseTypeFilterCtrl" placeholderLabel="search"
+                          noEntriesFoundLabel="'no matching found'"></ngx-mat-select-search>
+                      </mat-option>
+                      <mat-option *ngFor="let item of houseTypesFiltered" [value]="item.value">{{item.value}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </ion-col>
+                <ion-col size="50">
+                  <mat-form-field [floatLabel]="'never'">
+                    <mat-select placeholder="Status" formControlName="status" multiple>
+                      <mat-option>
+                        <ngx-mat-select-search [formControl]="salesPropertyStatusFilterCtrl" placeholderLabel="search"
+                          noEntriesFoundLabel="'no matching found'"></ngx-mat-select-search>
+                      </mat-option>
+                      <mat-option *ngFor="let item of salesPropertyStatusesFiltered"
+                        [value]="item.value">{{item.value}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size="50">
+                  <mat-form-field [floatLabel]="'never'">
+                    <mat-select placeholder="Office" formControlName="officeCode" multiple>
+                      <mat-option>
+                        <ngx-mat-select-search [formControl]="officeCodesFilterCtrl" placeholderLabel="search"
+                          noEntriesFoundLabel="'no matching found'"></ngx-mat-select-search>
+                      </mat-option>
+                      <mat-option *ngFor="let item of officeCodesFiltered" [value]="item.index">{{item.value}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </form>
+          <mat-action-row>
+            <ion-button size="small" color="danger" (click)="reset(salesPropertyFilter)">Reset</ion-button>
+            <ion-button size="small" color="medium" (click)="refresh('_SALES_PROPERTY')">Apply</ion-button>
+          </mat-action-row>
+        </mat-expansion-panel>
+        <mat-expansion-panel [expanded]="step === 9" (opened)="setStep(9)" #salesApplicantFilterPanel hideToggle>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-checkbox [formControl]="salesApplicantCheck" color="primary"
+                (click)="$event.stopPropagation();onChangeEntity('sales_applicant')" (keydown)="$event.stopPropagation()">
+                Sales Applicant
+              </mat-checkbox>
+            </mat-panel-title>
+            <mat-panel-description>
+              <div>
+                <span *ngIf="!salesApplicantFilterPanel.expanded" class="accordian-icon" title="Expand">
+                  <ion-icon name="add-circle" style="pointer-events:none"></ion-icon>
+                </span>
+                <span *ngIf="salesApplicantFilterPanel.expanded" class="accordian-icon" title="Collapse">
+                  <ion-icon name="remove-circle" style="pointer-events:none"></ion-icon>
+                </span>
+              </div>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <form [formGroup]="salesApplicantFilter">
+            <ion-list class="list" lines="none">
+              <ion-list-header>
+                <ion-label>Asking Price Range</ion-label>
+              </ion-list-header>
+              <ion-item style="--padding-end:0; --inner-padding-end: 0">
+                <ngx-slider color="primary" [options]="propRentOptions" formControlName="propertyRent"></ngx-slider>
+              </ion-item>
+            </ion-list>
+            <ion-list class="list" lines="none">
+              <ion-list-header>
+                <ion-label>Bed Range</ion-label>
+              </ion-list-header>
+              <ion-item style="--padding-end:0; --inner-padding-end: 0">
+                <ngx-slider [options]="numberOfBedroomOptions" formControlName="numberOfBedroom"></ngx-slider>
+              </ion-item>
+            </ion-list>
+            <ion-grid>
+              <ion-row>
+                <ion-col size="50">
+                  <mat-form-field [floatLabel]="'never'">
+                    <mat-select placeholder="Tenure" formControlName="propertyTenure" multiple>
+                      <mat-option>
+                        <ngx-mat-select-search [formControl]="propertyTenureFilterCtrl" placeholderLabel="search"
+                          noEntriesFoundLabel="'no matching found'"></ngx-mat-select-search>
+                      </mat-option>
+                      <mat-option *ngFor="let item of propertyTenureFiltered" [value]="item.value">{{item.value}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </ion-col>
+                <ion-col size="50">
+                  <mat-form-field [floatLabel]="'never'">
+                    <mat-select placeholder="Office" formControlName="officeCode" multiple>
+                      <mat-option>
+                        <ngx-mat-select-search [formControl]="officeCodesFilterCtrl" placeholderLabel="search"
+                          noEntriesFoundLabel="'no matching found'"></ngx-mat-select-search>
+                      </mat-option>
+                      <mat-option *ngFor="let item of officeCodesFiltered" [value]="item.index">{{item.value}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </form>
+          <mat-action-row>
+            <ion-button size="small" color="danger" (click)="reset(salesApplicantFilter)">Reset</ion-button>
+            <ion-button size="small" color="medium" (click)="refresh('SALES_APPLICANT')">Apply</ion-button>
+          </mat-action-row>
+        </mat-expansion-panel>
       </mat-accordion>
     </mat-drawer>
     <mat-drawer-content class="solr-pagginater-container">
@@ -598,6 +826,15 @@
             </ng-container>
             <ng-container [ngTemplateOutlet]="vendorSearchListView" *ngIf="item?.entityType === 'VENDOR'"
                   [ngTemplateOutletContext]="{item:item}">
+            </ng-container>
+            <ng-container [ngTemplateOutlet]="purchaserSearchListView" *ngIf="item?.entityType === 'PURCHASER'"
+                  [ngTemplateOutletContext]="{item:item}">
+            </ng-container>
+            <ng-container [ngTemplateOutlet]="salesApplicantSearchListView" *ngIf="item?.entityType === 'SALES_APPLICANT'"
+              [ngTemplateOutletContext]="{item:item}">
+            </ng-container>
+            <ng-container [ngTemplateOutlet]="salesPropertySearchListView" *ngIf="item?.entityType === 'SALES_PROPERTY'"
+              [ngTemplateOutletContext]="{item:item}">
             </ng-container>
           </ng-container>
         </ng-container>
@@ -1185,7 +1422,7 @@
                   <p class="status">{{item?.status ? item?.status : 'unknown'}}</p>
                 </div>
                 <div>
-                  <i (click)="showMenu($event, 'search-result-overlay', item, 'tenant-header-panel', false)"
+                  <i (click)="showMenu($event, 'search-result-overlay', item, 'vendor-header-panel', false)"
                     class="propcoicon propcoicon-actions-on action-btn pointer"></i>
                 </div>
                 <div>
@@ -1250,6 +1487,316 @@
         </div>
       </ion-card-content>
     </mat-expansion-panel>
+  </mat-accordion>
+</ng-template>
+<ng-template #purchaserSearchListView let-item="item">
+  <mat-accordion class="list-view-accordian" multi>
+    <mat-expansion-panel #purchaserSearchPanel hideToggle style="position: static;">
+      <mat-expansion-panel-header class="purchaser-header-panel">
+        <ion-grid style="width: 100%;">
+          <ion-row>
+            <ion-col size-xl="70" size-lg="70" size-md="60" size-sm="60" size-xs="50">
+              <div class="ag-left-side">
+                <div (click)="$event.stopPropagation();openDetails(item)">
+                  <i class="propcoicon propcoicon-purchaser no-background"></i>
+                </div>
+                <div>
+                  <div class="title text-ellipsis" [title]="item?.fullName"
+                    (click)="$event.stopPropagation();openDetails(item)">{{item?.fullName}}</div>
+                  <div class="other-details">
+                    <span *ngIf="item?.address" class="address" [title]="item?.address">{{item?.address}}&nbsp;</span>
+                    <span class="verticalLine" *ngIf="item?.address">&nbsp;</span>
+                    <span class="ref">Ref&nbsp;&nbsp;<span class="reftag">{{(item?.reference ) || 0}}</span></span>
+                  </div>
+                </div>
+              </div>
+            </ion-col>
+            <ion-col size-xl="30" size-lg="30" size-md="40" size-sm="40" size-xs="50">
+              <div class="status-action">
+                <div>
+                  <p class="ref">Status</p>
+                  <p class="status">{{item?.status ? item?.status : 'unknown'}}</p>
+                </div>
+                <div>
+                  <i (click)="showMenu($event, 'search-result-overlay', item, 'purchaser-header-panel', false)"
+                    class="propcoicon propcoicon-actions-on action-btn pointer"></i>
+                </div>
+                <div>
+                  <span *ngIf="!purchaserSearchPanel.expanded" class="accordian-icon" title="Expand">
+                    <ion-icon name="add-circle" style="pointer-events:none"></ion-icon>
+                  </span>
+                  <span *ngIf="purchaserSearchPanel.expanded" class="accordian-icon" title="Collapse">
+                    <ion-icon name="remove-circle" style="pointer-events:none"></ion-icon>
+                  </span>
+                </div>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </mat-expansion-panel-header>
+      <ion-card-content class="purchaser-content-panel details">
+        <div>
+          &nbsp;
+        </div>
+        <div>
+          <ion-grid style="padding:0">
+            <ion-row class="ion-justify-content-start">
+              <ion-col size-xl="25" size-lg="33.3" size-md="33.3" size-sm="50" size-xs="100" class="header-content">
+                <ion-text class="header">PropCo ID</ion-text><br />
+                <ion-text class="content">{{item?.propcoId || DEFAULTS.NOT_AVAILABLE}}</ion-text>
+              </ion-col>
+              <ion-col size-xl="25" size-lg="33.3" size-md="33.3" size-sm="50" size-xs="100" class="header-content">
+                <ion-text class="header">Office</ion-text><br />
+                <ion-text class="content">{{item?.officeCode || DEFAULTS.NOT_AVAILABLE}}</ion-text>
+              </ion-col>
+              <ion-col size-xl="25" size-lg="33.3" size-md="33.3" size-sm="50" size-xs="100" class="header-content">
+                <ion-text class="header">Type</ion-text><br />
+                <ion-text class="content">{{item?.type || DEFAULTS.NOT_AVAILABLE}}</ion-text>
+              </ion-col>
+              <ion-col size-xl="25" size-lg="33.3" size-md="33.3" size-sm="50" size-xs="100" class="header-content">
+                <ion-text class="header">Email</ion-text><br />
+                <ion-text class="content">{{item?.email || DEFAULTS.NOT_AVAILABLE}}</ion-text>
+              </ion-col>
+              <ion-col size-xl="25" size-lg="33.3" size-md="33.3" size-sm="50" size-xs="100" class="header-content">
+                <ion-text class="header">Phone</ion-text><br />
+                <ion-text class="content">{{item?.phoneNumber || DEFAULTS.NOT_AVAILABLE}}</ion-text>
+              </ion-col>
+              <ion-col size-xl="25" size-lg="33.3" size-md="33.3" size-sm="50" size-xs="100" class="header-content">
+                <ion-text class="header">Chain</ion-text><br />
+                <ion-text class="content">{{item?.chain || DEFAULTS.NOT_AVAILABLE}}</ion-text>
+              </ion-col>
+
+              <ion-col size-xl="75" size-lg="66.6" size-md="66.6" size-sm="100" size-xs="100" class="header-content">
+                <ion-text class="header">Property Ref & Address</ion-text><br />
+                <ion-text class="content">
+                  <span
+                    *ngIf="item?.landlordFirstPropertyReference">{{item?.landlordFirstPropertyReference}}&nbsp;</span>
+                  <span class="verticalLine"
+                    *ngIf="item?.landlordFirstPropertyReference && item?.landlordFirstPropertyAddress">&nbsp;</span>
+                  <span *ngIf="item?.landlordFirstPropertyAddress">{{item?.landlordFirstPropertyAddress}}</span>
+                  <span
+                    *ngIf="!item?.landlordFirstPropertyReference && !item?.landlordFirstPropertyAddress">{{DEFAULTS.NOT_AVAILABLE}}</span>
+                </ion-text>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </ion-card-content>
+    </mat-expansion-panel>
+  </mat-accordion>
+</ng-template>
+<ng-template #salesApplicantSearchListView let-item="item">
+  <mat-accordion class="list-view-accordian" multi>
+    <mat-expansion-panel #salesApplicantSearchPanel hideToggle style="position: static;">
+      <mat-expansion-panel-header class="sales-applicant-header-panel">
+        <ion-grid style="width: 100%;">
+          <ion-row>
+            <ion-col size-xl="70" size-lg="70" size-md="60" size-sm="60" size-xs="50">
+              <div class="ag-left-side">
+                <div (click)="$event.stopPropagation();openDetails(item)">
+                  <i class="propcoicon propcoicon-applicant-sale no-background"></i>
+                </div>
+                <div>
+                  <div class="title text-ellipsis" [title]="item?.fullName"
+                    (click)="$event.stopPropagation();openDetails(item)">
+                    {{item?.fullName}}&nbsp;&nbsp;
+                  </div>
+                  <div class="other-details">
+                    <span *ngIf="item?.address" class="address" [title]="item?.address">{{item?.address}}&nbsp;</span>
+                    <span class="verticalLine" *ngIf="item?.address">&nbsp;</span>
+                    <span class="ref">Ref&nbsp;&nbsp;<span class="reftag">{{(item?.reference ) || 0}}</span></span>
+                  </div>
+                </div>
+              </div>
+            </ion-col>
+            <ion-col size-xl="30" size-lg="30" size-md="40" size-sm="40" size-xs="50">
+              <div class="status-action">
+                <div>
+                  <p class="ref">Status</p>
+                  <p class="status">{{item?.status ? item?.status : 'unknown'}}</p>
+                </div>
+                <div>
+                  <i (click)="showMenu($event, 'search-result-overlay', item, 'sales-applicant-header-panel', false)"
+                    class="propcoicon propcoicon-actions-on action-btn pointer"></i>
+                </div>
+                <div>
+                  <span *ngIf="!salesApplicantSearchPanel.expanded" class="accordian-icon" title="Expand">
+                    <ion-icon name="add-circle" style="pointer-events:none"></ion-icon>
+                  </span>
+                  <span *ngIf="salesApplicantSearchPanel.expanded" class="accordian-icon" title="Collapse">
+                    <ion-icon name="remove-circle" style="pointer-events:none"></ion-icon>
+                  </span>
+                </div>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </mat-expansion-panel-header>
+      <ion-card-content class="sales-applicant-content-panel details">
+        <div>
+          &nbsp;
+        </div>
+        <div>
+          <ion-grid style="padding:0">
+            <ion-row class="ion-justify-content-start">
+              <ion-col size-xl="25" size-lg="33.3" size-md="33.3" size-sm="50" size-xs="100" class="header-content">
+                <ion-text class="header">PropCo ID</ion-text><br />
+                <ion-text class="content">{{item?.propcoId || DEFAULTS.NOT_AVAILABLE}}</ion-text>
+              </ion-col>
+              <ion-col size-xl="25" size-lg="33.3" size-md="33.3" size-sm="50" size-xs="100" class="header-content">
+                <ion-text class="header">Office</ion-text><br />
+                <ion-text class="content">{{item?.officeCode || DEFAULTS.NOT_AVAILABLE}}</ion-text>
+              </ion-col>
+              <ion-col size-xl="25" size-lg="33.3" size-md="33.3" size-sm="50" size-xs="100" class="header-content">
+                <ion-text class="header">Sales Negotiator</ion-text><br />
+                <ion-text class="content">{{item?.negotiator || DEFAULTS.NOT_AVAILABLE}}</ion-text>
+              </ion-col>
+              <ion-col size-xl="25" size-lg="33.3" size-md="33.3" size-sm="50" size-xs="100" class="header-content">
+                <ion-text class="header">Asking Price Range</ion-text><br />
+                <ion-text class="content">{{item?.priceRange || DEFAULTS.NOT_AVAILABLE}}</ion-text>
+              </ion-col>
+              <ion-col size-xl="25" size-lg="33.3" size-md="33.3" size-sm="50" size-xs="100" class="header-content">
+                <ion-text class="header">Minimum number of beds</ion-text><br />
+                <ion-text class="content">{{item?.bedRange || DEFAULTS.NOT_AVAILABLE}}</ion-text>
+              </ion-col>
+              <ion-col size-xl="25" size-lg="33.3" size-md="33.3" size-sm="50" size-xs="100" class="header-content">
+                <ion-text class="header">Tenure</ion-text><br />
+                <ion-text class="content">{{item?.tenure || DEFAULTS.NOT_AVAILABLE}}</ion-text>
+              </ion-col>
+              <ion-col size-xl="25" size-lg="33.3" size-md="33.3" size-sm="50" size-xs="100" class="header-content">
+                <ion-text class="header">Enquiry Date</ion-text><br />
+                <ion-text class="content">{{(item?.enquiryDate | date: DATE_FORMAT.DATE) ||
+                  DEFAULTS.NOT_AVAILABLE}}</ion-text>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </ion-card-content>
+    </mat-expansion-panel>
+  </mat-accordion>
+</ng-template>
+<ng-template #salesPropertySearchListView let-item="item">
+  <mat-accordion class="list-view-accordian" multi>
+    <mat-expansion-panel #salesPropertySearchPanel hideToggle style="position: static;">
+      <mat-expansion-panel-header class="sales-property-header-panel">
+        <ion-grid style="width: 100%;">
+          <ion-row>
+            <ion-col size-xl="70" size-lg="70" size-md="60" size-sm="60" size-xs="50">
+              <ion-grid class="ion-no-padding">
+                <ion-row>
+                  <ion-col size="100" class="ion-no-padding" style="margin-bottom: 8px;">
+                    <div class="title text-ellipsis" [title]="item?.address"
+                      (click)="$event.stopPropagation();openDetails(item)">
+                      <strong>{{item?.officeCode || DEFAULTS.NOT_AVAILABLE}}</strong> {{item?.address}}
+                    </div>
+                  </ion-col>
+                  <ion-col size="100" class="ion-no-padding">
+                    <div class="emenities-container">
+                      <div class="emenities-wrapper">
+                        <p class="ref">Asking Price&nbsp;
+                          <span class="pricetag">£{{(item?.propertyRent | number: '1.2-2' ) || 0}}</span>
+                          <span class="verticalLine"></span>
+                        </p>
+                      </div>
+                      <div class="emenities-wrapper">
+                        <i class="propcoicon propcoicon-beds no-background"></i>
+                        <span>{{item?.numberOfBedroom || 0}}</span>
+                      </div>
+                      <div class="emenities-wrapper">
+                        <i class="propcoicon propcoicon-bathrooms no-background"></i>
+                        <span>{{item?.propertyBathrooms || 0}}</span>
+                      </div>
+                      <div class="emenities-wrapper">
+                        <i class="propcoicon propcoicon-lounge no-background"></i>
+                        <span>{{item?.propertyReceptions || 0}}</span>
+                      </div>
+                      <div class="emenities-wrapper">
+                        <i class="propcoicon propcoicon-garage no-background"></i>
+                        <span [ngClass]="{'garage-ellipse' : item?.propertyParkings}"
+                          title="{{item?.propertyParkings}}">{{item?.propertyParkings || 0}}</span>
+                      </div>
+                      <div class="emenities-wrapper" style="align-self: flex-end;">
+                        <p class="ref"><span class="verticalLine"></span>Ref&nbsp;&nbsp;<span
+                            class="reftag">{{(item?.reference ) || 0}}</span></p>
+                      </div>
+                    </div>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-col>
+            <ion-col size-xl="30" size-lg="30" size-md="40" size-sm="40" size-xs="50">
+              <div class="status-action">
+                <div>
+                  <p class="ref">Status</p>
+                  <p class="status">{{item?.status}}</p>
+                </div>
+                <div>
+                  <i (click)="showMenu($event, 'search-result-overlay', item, 'sales-property-header-panel', false)"
+                    class="propcoicon propcoicon-actions-on action-btn pointer"></i>
+                </div>
+                <div>
+                  <span class="accordian-icon" *ngIf="!salesPropertySearchPanel.expanded" title="Expand">
+                    <ion-icon name="add-circle" style="pointer-events:none"></ion-icon>
+                  </span>
+                  <span class="accordian-icon" *ngIf="salesPropertySearchPanel.expanded" title="Collapse">
+                    <ion-icon name="remove-circle" style="pointer-events:none"></ion-icon>
+                  </span>
+                </div>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </mat-expansion-panel-header>
+      <ion-card-content class="sales-property-content-panel details">
+        <div style="padding-top: 10px;">
+          <img [src]="item?.propertyImage" onerror="this.onerror=null;this.src='assets/images/solr/placeholder.png';"
+            style="width: 100%;" alt="placeholder-image">
+        </div>
+        <div>
+          <ion-grid style="padding:0">
+            <ion-row class="ion-justify-content-start">
+              <ion-col size-xl="25" size-lg="33.3" size-md="33.3" size-sm="50" size-xs="100" class="header-content">
+                <ion-text class="header">PropCo ID</ion-text><br />
+                <ion-text class="content">{{item?.propcoId || DEFAULTS.NOT_AVAILABLE}}</ion-text>
+              </ion-col>
+              <ion-col size-xl="25" size-lg="33.3" size-md="33.3" size-sm="50" size-xs="100" class="header-content">
+                <ion-text class="header">Tenure</ion-text><br />
+                <ion-text class="content">{{item?.propertyTenure || DEFAULTS.NOT_AVAILABLE}}</ion-text>
+              </ion-col>
+              <ion-col size-xl="25" size-lg="33.3" size-md="33.3" size-sm="50" size-xs="100" class="header-content">
+                <ion-text class="header">Vendor</ion-text><br />
+                <ion-text class="content">{{item?.propertyVendor || DEFAULTS.NOT_AVAILABLE}}</ion-text>
+              </ion-col>
+              <ion-col size-xl="25" size-lg="33.3" size-md="33.3" size-sm="50" size-xs="100" class="header-content">
+                <ion-text class="header">Purchaser</ion-text><br />
+                <ion-text class="content">{{item?.propertyPurchaser || DEFAULTS.NOT_AVAILABLE}}</ion-text>
+              </ion-col>
+              <ion-col size-xl="25" size-lg="33.3" size-md="33.3" size-sm="50" size-xs="100" class="header-content">
+                <ion-text class="header">Sale Negotiator</ion-text><br />
+                <ion-text class="content">{{item?.propertyNegotiator || DEFAULTS.NOT_AVAILABLE}}</ion-text>
+              </ion-col>
+              <ion-col size-xl="25" size-lg="33.3" size-md="33.3" size-sm="50" size-xs="100" class="header-content">
+                <ion-text class="header">Type</ion-text><br />
+                <ion-text class="content">{{item?.houseType || DEFAULTS.NOT_AVAILABLE}}</ion-text>
+              </ion-col>
+              <ion-col size-xl="25" size-lg="33.3" size-md="33.3" size-sm="50" size-xs="100" class="header-content">
+                <ion-text class="header">Style</ion-text><br />
+                <ion-text class="content">{{item?.propertyStyle || DEFAULTS.NOT_AVAILABLE}}</ion-text>
+              </ion-col>
+              <ion-col size-xl="25" size-lg="33.3" size-md="33.3" size-sm="50" size-xs="100" class="header-content">
+                <ion-text class="header">Furnishing</ion-text><br />
+                <ion-text class="content">{{item?.propertyFurnishing || DEFAULTS.NOT_AVAILABLE}}</ion-text>
+              </ion-col>
+              <ion-col size-xl="25" size-lg="33.3" size-md="33.3" size-sm="50" size-xs="100" class="header-content">
+                <ion-text class="header">Sole Agent</ion-text><br />
+                <ion-text class="content">{{item?.propertySoleAgent || DEFAULTS.NOT_AVAILABLE}}</ion-text>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </ion-card-content>
+    </mat-expansion-panel>
+
   </mat-accordion>
 </ng-template>
 <!--List view ends-->
