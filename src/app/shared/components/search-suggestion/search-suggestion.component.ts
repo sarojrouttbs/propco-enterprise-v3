@@ -41,7 +41,9 @@ export class SearchSuggestionComponent implements OnInit {
     'Agent',
     'Contractor',
     'Vendor',
-    'Purchaser'
+    'Purchaser',
+    'Sales_Property',
+    'Sales_Applicant'
   ];
   lookupdata: any;
   officeLookupDetails: any;
