@@ -35,24 +35,24 @@ export class DashboardPage implements OnInit {
         content:
           'Just getting started? Let\'s take a look at the new user interface.',
       },
-      // {
-      //   title: 'New & Improved Search',
-      //   selector: '.tour-1',
-      //   content: 'Please select entities here.',
-      //   orientation: Orientation.Bottom,
-      // },
-      // {
-      //   title: 'New & Improved Search',
-      //   selector: '.tour-2',
-      //   content: 'Please type to search an entity.',
-      //   orientation: Orientation.Bottom,
-      // },
-      // {
-      //   title: 'New & Improved Search',
-      //   selector: '.tour-3',
-      //   content: 'Click on this button to fetch the result(s).',
-      //   orientation: Orientation.Bottom,
-      // },
+      {
+        title: 'New & Improved Search',
+        selector: '.tour-1',
+        content: 'Please select entities here.',
+        orientation: Orientation.Bottom,
+      },
+      {
+        title: 'New & Improved Search',
+        selector: '.tour-2',
+        content: 'Please type to search an entity.',
+        orientation: Orientation.Bottom,
+      },
+      {
+        title: 'New & Improved Search',
+        selector: '.tour-3',
+        content: 'Click on this button to fetch the result(s).',
+        orientation: Orientation.Bottom,
+      },
       {
         title: 'Quick Links',
         selector: '.tour-4',
@@ -82,8 +82,14 @@ export class DashboardPage implements OnInit {
     private modalController: ModalController
   ) {
     this.routeSnapShot = route.snapshot;
-    if (this.router.url) { 
-      if(this.router.url.includes('/solr/search')){
+    if (this.router.url) {      
+      if (this.router.url.includes('/solr/search')) {
+        this.onlySearch = true;
+      } else if (this.router.url.includes('/solr/entity-finder')) {
+        let entityType = this.routeSnapShot.params['entityType'];
+        if (entityType != null && entityType != '' && entityType != undefined) {
+          this.entityControl = new FormControl([entityType]);
+        }
         this.onlySearch = true;
       }
     }

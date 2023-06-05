@@ -35,6 +35,20 @@ const routes: Routes = [
             (m) => m.SearchResultsPageModule
           ),
       },
+      {
+        path: 'entity-finder/:entityType',
+        loadChildren: () =>
+          import('./dashboard/dashboard.module').then(
+            (m) => m.DashboardPageModule
+          ),
+      },
+      {
+        path: 'finder-results/:entityType',
+        loadChildren: () =>
+          import('./search-results/search-results.module').then(
+            (m) => m.SearchResultsPageModule
+          ),
+      },
     ],
   },
 ];
