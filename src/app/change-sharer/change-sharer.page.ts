@@ -29,7 +29,8 @@ export class ChangeSharerPage implements OnInit {
   }
 
   initApp() {
-    this.initApiCall();
+    // this.initApiCall();
+    this.selectTenant();
   }
 
   private async initApiCall() {
@@ -72,7 +73,7 @@ export class ChangeSharerPage implements OnInit {
         paramPropertyId: this.incomingReqParams.propertyId,
         paramMessage: message,
         paramAgreementId: this.incomingReqParams.agreementId,
-        singleTenantOption: true
+        // singleTenantOption: true
       }
     });
 
