@@ -771,8 +771,8 @@
       <div *ngIf="!showSkeleton">
         <ng-container *ngIf="length > 0">
           <div [ngClass]="!drawer.opened ? 'paginator-grid' : 'paginator-grid sidenav-opened'">
-            <div *ngIf="!drawer.opened">
-              <ion-buttons (click)="drawer.toggle();toggleSideMenu();" style="cursor: pointer;">
+            <div *ngIf="!drawer.opened" >
+              <ion-buttons *ngIf="!isEntityFinder" (click)="drawer.toggle();toggleSideMenu();" style="cursor: pointer;" >
                 <ion-icon name="options-outline"></ion-icon>
               </ion-buttons>
             </div>

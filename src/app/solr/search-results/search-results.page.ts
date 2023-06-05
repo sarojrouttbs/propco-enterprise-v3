@@ -7,6 +7,7 @@ import { DATE_FORMAT, DEFAULTS, PROPCO, propertyAgreementStatus } from 'src/app/
 import { CommonService } from 'src/app/shared/services/common.service';
 import { SolrService } from '../solr.service';
 declare function openScreen(key: string, value: any): any;
+declare function openScreenAdvance(data: any): any;
 import { Options, LabelType } from '@angular-slider/ngx-slider';
 import { SolrSearchHandlerService } from 'src/app/shared/services/solr-search-handler.service';
 import { WorkspaceService } from 'src/app/agent/workspace/workspace.service';
@@ -45,7 +46,7 @@ export class SearchResultsPage implements OnInit {
     'Sausage',
     'Tomato',
   ];
-
+  isEntityFinder = false;
   results: any[] = [];
   pageEvent: PageEvent;
   length: number;
@@ -196,6 +197,9 @@ export class SearchResultsPage implements OnInit {
   }
 
   ngOnInit() {
+    if (this.router.url.includes('/solr/finder-results')) {
+      this.isEntityFinder = true;
+    }
     this.initResults();
     this.initFilterForm();
     this.multiSearchFilterHandler();
@@ -814,6 +818,13 @@ export class SearchResultsPage implements OnInit {
 
   openDetails(value?) {    
     this.hideMenu('', 'search-result-overlay');
+    if (this.router.url.includes('/solr/entity-finder') || this.router.url.includes('solr/finder-results')) {
+      let entityDetail: any = {};
+      entityDetail.entityId = value.propcoId;
+      entityDetail.entityType = this.entityControl.value;
+      openScreenAdvance({ requestType: 'EntityFinderResponse', requestValue: entityDetail });
+      return;
+    }
     if (this.router.url.includes('/agent/')) {
       this.workspaceService.addItemToWorkSpace(value ? value : this.selectedItem);
       return;

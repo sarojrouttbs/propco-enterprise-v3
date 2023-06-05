@@ -1,12 +1,18 @@
 <div id="solr-header">
   <header>
-    <nav class="navbar navbar-default">
+    <nav class="navbar navbar-default" *ngIf="!isEntityFinder">
       <div class="swap-icon-header">
         <img height="35" width="35" src="assets/images/swap.svg" title="Switch back to the old dashboard" (click)="setDefaultHome(false);openHomeCategory('OpenPropcoDashBoard')" alt="swap-image">
       </div>
       <div class="ion-no-padding" class="result-search-grid">
         <app-search-suggestion [pageType]="'solr-resultpage'" [entityControl]="entityControl"
          [searchTerm]="''"></app-search-suggestion>
+      </div>
+    </nav>
+    <nav *ngIf="isEntityFinder">
+      <div>
+        <app-search-suggestion [pageType]="'dashboard'" [entityControl]="entityControl"
+          [searchTerm]="''"></app-search-suggestion>
       </div>
     </nav>
   </header>

@@ -1,18 +1,24 @@
 import { Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { SolrService } from 'src/app/solr/solr.service';
-
+import { Router} from '@angular/router';
+import { OnInit} from '@angular/core';
 declare function openScreen(key: string, value: any): any;
 @Component({
   selector: 'app-solr-header',
   templateUrl: './solr-header.component.html',
   styleUrls: ['./solr-header.component.scss'],
 })
-export class SolrHeaderComponent {
+export class SolrHeaderComponent implements OnInit {
   entityControl = new FormControl(['Property']);
-  constructor(private solrService: SolrService) {
+  constructor(private solrService: SolrService,  private router: Router) {
   }
-
+  isEntityFinder = false;
+  ngOnInit() {
+    if (this.router.url.includes('/solr/finder-results')) {
+      this.isEntityFinder = true;
+    }
+  }
   openHomeCategory(key: string, value = null) {
     openScreen(key, value);
   }

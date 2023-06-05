@@ -82,8 +82,14 @@ export class DashboardPage implements OnInit {
     private modalController: ModalController
   ) {
     this.routeSnapShot = route.snapshot;
-    if (this.router.url) { 
-      if(this.router.url.includes('/solr/search')){
+    if (this.router.url) {      
+      if (this.router.url.includes('/solr/search')) {
+        this.onlySearch = true;
+      } else if (this.router.url.includes('/solr/entity-finder')) {
+        let entityType = this.routeSnapShot.params['entityType'];
+        if (entityType != null && entityType != '' && entityType != undefined) {
+          this.entityControl = new FormControl([entityType]);
+        }
         this.onlySearch = true;
       }
     }
