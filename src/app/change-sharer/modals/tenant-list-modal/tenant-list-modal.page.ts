@@ -40,7 +40,7 @@ export class TenantListModalPage implements OnInit {
   @Input() paramPropertyId: string;
   @Input() paramAgreementId: string;
   @Input() paramMessage: string;
-  @Input() singleTenantOption: string;
+  // @Input() singleTenantOption: string;
   isTableReady: boolean = false;
   DEFAULTS = DEFAULTS;
   tenantCaseId: any;
@@ -48,6 +48,7 @@ export class TenantListModalPage implements OnInit {
   resultsAvailable = null;
   applicantList = [];
   selectedTenants = [];
+  defaultLeads = [];
   isItemAvailable = false;
 
   constructor(
@@ -61,7 +62,7 @@ export class TenantListModalPage implements OnInit {
   async ngOnInit() {
     this.propertyId = this.navParams.get('paramPropertyId');
     this.agreementId = this.navParams.get('paramAgreementId');
-    this.singleTenantOption = this.navParams.get('singleTenantOption');
+    // this.singleTenantOption = this.navParams.get('singleTenantOption');
     this.dtOptions = {
       paging: false,
       pagingType: 'full_numbers',
@@ -84,12 +85,17 @@ export class TenantListModalPage implements OnInit {
           this.laTenantList = this.laTenantList.filter(x => x.agreementId === this.paramAgreementId);
           this.laTenantList = this.laTenantList && this.laTenantList.length ? this.laTenantList[0].tenants : [];
           this.laTenantList.forEach((item) => {
+            this.defaultLeads.push({
+              applicantId: item.tenantId,
+              isLead: item.isLead
+            });
             item.name = item.displayAs;
             item.reference = item?.reference;
             item.entityId = item?.tenantId;
             item.entityType = 'TENANT';
             item.isRowChecked = false;
             if (item.isLead) {
+              item.defaultLead = true;
               item.type = 'Lead Tenant'
             } else {
               item.type = 'Co-Tenant'
@@ -108,7 +114,8 @@ export class TenantListModalPage implements OnInit {
 
   toggleLead(tenant: any, event: any) {
     if (!event.target.checked) {
-      tenant.isLead = event.target.checked;
+      // tenant.isLead = event.target.checked;
+      tenant.isSelected = event.target.checked;
       this.getSelectedTenantList();
       return;
     }
@@ -255,22 +262,10 @@ export class TenantListModalPage implements OnInit {
     this.commonService.showConfirm('Change sharer', 'Are you sure you want to proceed?', '', 'YES', 'NO').then(async response => {
       if (response) {
         if (this.selectedTenants.length) {
-          if (this.singleTenantOption) {
-            const getLeadsList = this.selectedTenants.filter(x => x.isLead);
-            if (getLeadsList.length > 1) {
-              this.commonService.showAlert('Change Sharer', `Only one record can be set as ‘Lead Tenant’`);
-              return;
-            }
-          }
-          const checkAtleastOneLead = this.selectedTenants.filter(x => x.isLead);
-          if (checkAtleastOneLead.length) {
-            const changed = await this.changeSharer(this.agreementId, this.selectedTenants);
+          const changed = await this.changeSharer(this.agreementId, [...this.selectedTenants, ...this.defaultLeads]);
             if (changed) {
               openScreen('CloseDialog');
             }
-          } else {
-            this.commonService.showAlert('Change sharer', 'Please select a lead.');
-          }
         } else {
           this.commonService.showAlert('Change sharer', 'Please select tenant(s) to proceed.')
         }

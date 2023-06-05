@@ -49,13 +49,14 @@
           <th scope="col" style="width:16%;min-width:80px;">Ref</th>
           <th scope="col" style="width:20%">Name</th>
           <th scope="col" style="width:15%">Type</th>
-          <th scope="col" style="width:15%">Lead</th>
+          <!-- <th scope="col" style="width:15%">Lead</th> -->
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let tenant of laTenantList; let i=index;"  class="table-row" style="background-color: transparent;">
           <td>
-            <ion-checkbox [checked]="tenant?.isRowChecked"
+            <ion-checkbox [checked]="tenant?.isRowChecked || tenant?.defaultLead"
+            [disabled]="tenant?.defaultLead"
             (ionChange)="selectTenant(tenant, $event)" 
             color="primary">
           </ion-checkbox>
@@ -63,9 +64,9 @@
           <td>{{tenant?.reference ? tenant?.reference : DEFAULTS.NOT_AVAILABLE}}</td>
           <td>{{tenant?.name ? tenant?.name : DEFAULTS.NOT_AVAILABLE}}</td>  
           <td>{{tenant?.type}}</td>
-          <td>
+          <!-- <td>
             <ion-toggle (ionChange)="toggleLead(tenant, $event)" slot="start" [checked]="tenant.isLead"></ion-toggle>
-          </td>
+          </td> -->
         </tr>
       </tbody>
     </table>
