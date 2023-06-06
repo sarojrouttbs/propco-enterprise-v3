@@ -826,17 +826,17 @@ export class ApplicationDetailsPage implements OnInit {
     if(name == 'case'){
       productType = this.referencingCaseProductList.find((obj) => {
         if (obj.productId === productId) {
-          return obj.productName;
+          return obj;
         }
       });
     }
     else if(name == 'application'){
       productType = this.referencingApplicationProductList.find((obj) => {
         if (obj.productId === productId) {
-          return obj.productName;
+          return obj;
         }
       });
     }
-    return productType;
+    return productType?.productName;
   }
 }
