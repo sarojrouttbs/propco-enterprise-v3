@@ -29,7 +29,7 @@
         style="position: absolute;"></ion-progress-bar>
       <ion-list *ngIf="isItemAvailable" class="solrSuggestionList" [class.solr-dashboard]="pageType === 'dashboard'">
         <ion-item *ngFor="let item of suggestions" class="solrSuggestionListItem">
-          <ng-container [ngTemplateOutlet]="propertySuggestion" *ngIf="item?.entityType === 'PROPERTY'"
+          <ng-container [ngTemplateOutlet]="propertySuggestion" *ngIf="item?.entityType === 'PROPERTY'|| item?.entityType === 'SALES_PROPERTY'"
             [ngTemplateOutletContext]="{item:item}">
           </ng-container>
           <ng-container [ngTemplateOutlet]="landlordSuggestion" *ngIf="item?.entityType === 'LANDLORD'"
@@ -57,9 +57,6 @@
           <ng-container [ngTemplateOutlet]="salesApplicantSuggestion" *ngIf="item?.entityType === 'SALES_APPLICANT'"
             [ngTemplateOutletContext]="{item:item}">
           </ng-container>
-          <ng-container [ngTemplateOutlet]="salesPropertySuggestion" *ngIf="item?.entityType === 'SALES_PROPERTY'"
-            [ngTemplateOutletContext]="{item:item}">
-          </ng-container>
         </ion-item>
       </ion-list>
     </div>
@@ -72,7 +69,7 @@
 </ion-row>
 
 <ng-template #propertySuggestion let-item="item">
-  <div (click)="openHomeCategory('OpenProperty',item)" style="width: 100%">
+  <div (click)="openHomeCategory(item?.entityType === 'PROPERTY'?'OpenProperty':'SalesOpenProperty',item)" style="width: 100%">
     <span>
       <i class="propcoicon no-background propcoicon-property red-icon"></i>
     </span>
@@ -182,19 +179,6 @@
   <div (click)="openHomeCategory('OpenSalesApplicant',item)" style="width:100%">
     <span>
       <i class="propcoicon no-background propcoicon-applicant-sale red-icon"></i>
-    </span>
-    <span>{{officeLookupMap.get(item.office)}}</span>&nbsp;
-    <span>{{item.name}}</span>&nbsp;
-    <span>{{item?.reference?.split(",")[0]}}</span>&nbsp;
-    <span>{{item.address | slice:0:30}}, {{item.postcode}}</span>&nbsp;
-    <span>{{item.mobile}}</span>&nbsp;
-    <span class="text-color-lightgreen">{{item.status}}</span>
-  </div>
-</ng-template>
-<ng-template #salesPropertySuggestion let-item="item">
-  <div (click)="openHomeCategory('OpenSalesProperty',item)" style="width:100%">
-    <span>
-      <i class="propcoicon no-background propcoicon-property red-icon"></i>
     </span>
     <span>{{officeLookupMap.get(item.office)}}</span>&nbsp;
     <span>{{item.name}}</span>&nbsp;
