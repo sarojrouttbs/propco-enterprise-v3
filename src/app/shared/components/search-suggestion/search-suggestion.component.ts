@@ -31,19 +31,14 @@ export class SearchSuggestionComponent implements OnInit {
     searchTerm: '',
     searchTypes: '',
     searchSwitch: 'true',
-  };
-
+  };  
   entityList: string[] = [
     'Property',
     'Landlord',
     'Tenant',
     'Applicant',
     'Agent',
-    'Contractor',
-    'Vendor',
-    'Purchaser',
-    'Sales_Property',
-    'Sales_Applicant'
+    'Contractor'    
   ];
   lookupdata: any;
   officeLookupDetails: any;
@@ -51,6 +46,7 @@ export class SearchSuggestionComponent implements OnInit {
   showLoader: boolean = false;
   propcoIcon='propcoicon-property';
   isEntityFinder =false;
+  isPropcoSalesEnable = false;
   @Input() pageType: string;
   @Input() loaded: string;
   @ViewChild('solrSearchBar') solrSearchBar: any;
@@ -88,6 +84,9 @@ export class SearchSuggestionComponent implements OnInit {
     if (searchTypes.indexOf('TENANT') !== -1) {
       searchTypes.push('COTENANT');
     }
+    if (searchTypes.indexOf('PROPERTY') !== -1 && this.isPropcoSalesEnable ) {
+      searchTypes.push('SALES_PROPERTY');
+    }
     return (
       new HttpParams()
         // .set('limit', this.solrSuggestionConfig.limit)
@@ -109,6 +108,7 @@ export class SearchSuggestionComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.setSolrSalesEntity();
     this.setFinderIcon();
     this.initDashboard();
     this.commonService.dataChanged$.subscribe((data) => {
@@ -256,6 +256,14 @@ export class SearchSuggestionComponent implements OnInit {
   private updateQueryParams() {
     this.solrSearchService.search({ entity: this.entityControl.value, term: this.searchTermControl.value, isSearchResult: false });
   }
+  setSolrSalesEntity() {
+    if (this.commonService.getItem(PROPCO.SALES_MODULE, true) && !this.router.url.includes('/agent/')) {
+      this.entityList.push('Vendor');
+      this.entityList.push('Purchaser');
+      this.entityList.push('Sales_Applicant');
+      this.isPropcoSalesEnable = true;
+    }
+  }
   setFinderIcon() {
     if (this.router.url.includes('/solr/entity-finder') || this.router.url.includes('/solr/finder-results')) {
       this.isEntityFinder = true;
@@ -267,7 +275,7 @@ export class SearchSuggestionComponent implements OnInit {
     }
     if (this.router.url.includes('/Property') || this.router.url.includes('/Sales-Property')) {
       this.propcoIcon = 'propcoicon-property';
-    } else if (this.router.url.includes('/Tenant')) {
+    } else if (this.router.url.includes('/Tenant') || this.router.url.includes('/CoTenant')) {
       this.propcoIcon = 'propcoicon-tenant';
     } else if (this.router.url.includes('/Landlord')) {
       this.propcoIcon = 'propcoicon-landlord';

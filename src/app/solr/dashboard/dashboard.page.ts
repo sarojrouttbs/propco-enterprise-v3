@@ -109,6 +109,7 @@ export class DashboardPage implements OnInit {
     const userData = this.commonService.getItem(PROPCO.USER_DETAILS, true);
     if (accessToken && webKey && userData) {
       this.isCheckForExistingRecordsEnabled = await this.getSystemConfigs(SYSTEM_CONFIG.ENABLE_CHECK_FOR_EXISTING_RECORDS);
+      this.commonService.setItem(PROPCO.SALES_MODULE, await this.getSystemConfigs(SYSTEM_CONFIG.ENABLE_SALES_MODULE));          
       this.setDefaultHome(true);
       this.loggedInUserData = userData;
       this.isSolrTourDone = this.loggedInUserData.isSolrTourDone;
@@ -119,6 +120,7 @@ export class DashboardPage implements OnInit {
     const isAuthSuccess = await this.authenticateSso();
     if (isAuthSuccess) {
       this.isCheckForExistingRecordsEnabled = await this.getSystemConfigs(SYSTEM_CONFIG.ENABLE_CHECK_FOR_EXISTING_RECORDS);
+      this.commonService.setItem(PROPCO.SALES_MODULE, await this.getSystemConfigs(SYSTEM_CONFIG.ENABLE_SALES_MODULE));
       this.setDefaultHome(true);
       this.loggedInUserData = await this.getUserDetailsPvt();
       this.isSolrTourDone = this.loggedInUserData.isSolrTourDone;
@@ -132,7 +134,7 @@ export class DashboardPage implements OnInit {
   private async getSystemConfigs(key: string): Promise<any> {
     return new Promise((resolve) => {
       this.commonService.getSystemConfig(key).subscribe(res => {
-        resolve(res[key] === '1' ? true : false);
+        resolve(res != null && res[key] === '1' ? true : false);
       }, error => {
         resolve(true);
       });

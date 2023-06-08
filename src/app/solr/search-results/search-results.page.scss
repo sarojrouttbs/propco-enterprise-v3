@@ -154,8 +154,7 @@
                 height: 100%;
               }
 
-              &.property-header-panel,
-              &.sales-property-header-panel {
+              &.property-header-panel {
                 .emenities-container {
                   display: grid;
                   justify-content: flex-start;
@@ -231,8 +230,7 @@
               }
             }
 
-            .property-content-panel,
-            .sales-property-content-panel {
+            .property-content-panel {
               display: grid;
               justify-content: start;
               grid-template-columns: 180px 4fr;
