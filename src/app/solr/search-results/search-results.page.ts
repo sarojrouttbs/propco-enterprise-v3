@@ -64,7 +64,7 @@ export class SearchResultsPage implements OnInit {
   vandorCheck = new FormControl();
   purchaserCheck = new FormControl();
   salesApplicantCheck = new FormControl();
-  salesPropertyCheck = new FormControl();
+  
 
   propertyFilter: FormGroup;
   landlordFilter: FormGroup;
@@ -74,7 +74,7 @@ export class SearchResultsPage implements OnInit {
   applicantFilter: FormGroup;
   vendorFilter: FormGroup;
   purchaserFilter: FormGroup;
-  salesPropertyFilter: FormGroup;
+  
   salesApplicantFilter: FormGroup;
   
 
@@ -107,12 +107,10 @@ export class SearchResultsPage implements OnInit {
   purchaserStatuses;
   purchaserStatusesFiltered; 
   salesApplicantStatuses;
-  salesApplicantStatusesFiltered;
-  salesPropertyStatuses;
-  salesPropertyStatusesFiltered;
+  salesApplicantStatusesFiltered; 
   propertyTenures;
   propertyTenureFiltered;
-
+  isPropcoSalesEnable = false;
   refreshType: string;
   isAllselected = false;
   entityList: string[] = [
@@ -121,11 +119,8 @@ export class SearchResultsPage implements OnInit {
     'Tenant',
     'Applicant',
     'Agent',
-    'Contractor',
-    'Vendor',
-    'Purchaser',
-    'Sales_Applicant',
-    'Sales_Property'
+    'Contractor'
+    
   ];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -145,8 +140,7 @@ export class SearchResultsPage implements OnInit {
   contractorSkillFilterCtrl: FormControl = new FormControl();
   vendorStatusFilterCtrl: FormControl = new FormControl();
   purchaserStatusFilterCtrl: FormControl = new FormControl();
-  salesApplicantStatusFilterCtrl: FormControl = new FormControl();
-  salesPropertyStatusFilterCtrl: FormControl = new FormControl();
+  salesApplicantStatusFilterCtrl: FormControl = new FormControl();  
   propertyTenureFilterCtrl: FormControl = new FormControl();
 
   propRentOptions: Options = {
@@ -200,6 +194,7 @@ export class SearchResultsPage implements OnInit {
     if (this.router.url.includes('/solr/finder-results')) {
       this.isEntityFinder = true;
     }
+    this.setSolrSalesEntity();
     this.initResults();
     this.initFilterForm();
     this.multiSearchFilterHandler();
@@ -264,10 +259,7 @@ export class SearchResultsPage implements OnInit {
     });
     this.salesApplicantStatusFilterCtrl.valueChanges.subscribe((src) => {
       this.filterMultiSearch(src, 'saleApplicantStatus');
-    });
-    this.salesPropertyStatusFilterCtrl.valueChanges.subscribe((src) => {
-      this.filterMultiSearch(src, 'salesPropertyStatus');
-    });
+    });    
     this.propertyTenureFilterCtrl.valueChanges.subscribe((src) => {
       this.filterMultiSearch(src, 'propertyTenure');
     });
@@ -429,18 +421,7 @@ export class SearchResultsPage implements OnInit {
         );
         this.salesApplicantStatusesFiltered = tmp;
         break;
-      }
-      case 'salesPropertyStatus': {
-        if (!srchStr) {
-          this.salesPropertyStatusesFiltered = this.salesPropertyStatuses;
-          return;
-        }
-        tmp = this.salesPropertyStatuses.filter(
-          (x) => x.value.toLowerCase().indexOf(srchStr.toLocaleLowerCase()) > -1
-        );
-        this.salesPropertyStatusesFiltered = tmp;
-        break;
-      }
+      }     
       case 'propertyTenure': {
         if (!srchStr) {
           this.propertyTenureFiltered = this.propertyTenures;
@@ -492,7 +473,6 @@ export class SearchResultsPage implements OnInit {
     this.purchaserStatuses = this.purchaserStatusesFiltered =
       data.purchaserStatuses;
     this.salesApplicantStatuses = this.salesApplicantStatusesFiltered = data.applicantStatuses;
-    this.salesPropertyStatuses = this.salesPropertyStatusesFiltered = data.propertyStatuses;
     this.propertyTenures = this.propertyTenureFiltered = data.propertyTenures;
   }
 
@@ -542,10 +522,7 @@ export class SearchResultsPage implements OnInit {
           this.purchaserCheck.setValue(true);
         } else if (res === 'Sales_Applicant') {
           this.salesApplicantCheck.setValue(true);
-        }
-        else if (res === 'Sales_Property') {
-          this.salesPropertyCheck.setValue(true);
-        }
+        }        
       });
     }
   }
@@ -562,16 +539,7 @@ export class SearchResultsPage implements OnInit {
       propertyNegotiator: [[]],
       propertyManager: [[]],
       officeCode: [[]],
-    });
-    this.salesPropertyFilter = this.fb.group({
-      propertyRent: [this.priceKnobValues],
-      numberOfBedroom: [this.bedKnobValues],
-      propertyStyle: [[]],
-      houseType: [[]],
-      status: [[]],
-      officeCode: [[]],
-      propertyTenure: [[]],
-    });
+    });   
     this.landlordFilter = this.fb.group({
       status: [[]],
       officeCode: [[]],
@@ -650,7 +618,6 @@ export class SearchResultsPage implements OnInit {
     this.vandorCheck.setValue(false);
     this.purchaserCheck.setValue(false);
     this.salesApplicantCheck.setValue(false);
-    this.salesPropertyCheck.setValue(false);
   }
 
   getSearchResults(global?: boolean) {   
@@ -701,6 +668,9 @@ export class SearchResultsPage implements OnInit {
       if (params.searchTypes.indexOf('TENANT') > -1) {
         params.searchTypes.push('COTENANT')
       }
+      if (params.searchTypes.indexOf('PROPERTY') > -1 && this.isPropcoSalesEnable) {
+        params.searchTypes.push('SALES_PROPERTY')
+      }
       return params;
     }
     if (this.refreshType === 'ALL') {
@@ -716,18 +686,11 @@ export class SearchResultsPage implements OnInit {
         max: params.propertyFilter.numberOfBedroom[1],
         min: params.propertyFilter.numberOfBedroom[0],
       };
-    }
-    if (this.entityControl.value.indexOf('Sales_Property') !== -1) {
-      params.salesPropertyFilter = Object.assign({}, this.salesPropertyFilter.value);
-      params.salesPropertyFilter.propertyRent = {
-        max: params.salesPropertyFilter.propertyRent[1],
-        min: params.salesPropertyFilter.propertyRent[0],
-      };
-      params.salesPropertyFilter.numberOfBedroom = {
-        max: params.salesPropertyFilter.numberOfBedroom[1],
-        min: params.salesPropertyFilter.numberOfBedroom[0],
-      };
-    }
+      
+      if (params.searchTypes.indexOf('PROPERTY') === -1 && params.searchTypes.indexOf('SALES_PROPERTY') === -1 && this.isPropcoSalesEnable) {
+        params.searchTypes.push('PROPERTY', 'SALES_PROPERTY');
+      }
+    }    
     if (this.entityControl.value.indexOf('Landlord') !== -1) {
       const llFilter = Object.assign(this.landlordFilter.value, {});
 
@@ -897,7 +860,6 @@ export class SearchResultsPage implements OnInit {
     this.vendorFilter.reset();
     this.purchaserFilter.reset();
     this.salesApplicantFilter.reset();
-    this.salesPropertyFilter.reset();
     this.getSearchResults();
   }
 
@@ -911,7 +873,6 @@ export class SearchResultsPage implements OnInit {
     this.agentCheck.setValue(true);
     this.vandorCheck.setValue(true);
     this.purchaserCheck.setValue(true);
-    this.salesPropertyCheck.setValue(true);
     this.salesApplicantCheck.setValue(true);
     this.entityControl.setValue([]);
     this.entityControl.setValue(this.entityList);
@@ -928,7 +889,6 @@ export class SearchResultsPage implements OnInit {
     this.agentCheck.setValue(false);
     this.vandorCheck.setValue(false);
     this.purchaserCheck.setValue(false);
-    this.salesPropertyCheck.setValue(false);
     this.salesApplicantCheck.setValue(false);
     this.entityControl.setValue([]);
     this.commonService.dataChanged({ entity: this.entityControl.value, term: this.solrSearchConfig.searchTerm });
@@ -1003,11 +963,7 @@ export class SearchResultsPage implements OnInit {
           ? tmpArray.push('Sales_Applicant')
           : tmpArray.splice(tmpArray.indexOf('Sales_Applicant'), 1);
         break;
-      case 'sales_property':
-        !this.salesPropertyCheck.value
-          ? tmpArray.push('Sales_Property')
-          : tmpArray.splice(tmpArray.indexOf('Sales_Property'), 1);
-        break; 
+      
     }
     this.entityControl.setValue(tmpArray);
     this.commonService.dataChanged({ entity: this.entityControl.value, term: this.solrSearchConfig.searchTerm });
@@ -1106,5 +1062,13 @@ export class SearchResultsPage implements OnInit {
 
     //Update route with Query Params
     this.location.go(urlTree.toString());
+  }
+  setSolrSalesEntity() {
+    if (this.commonService.getItem(PROPCO.SALES_MODULE, true) && !this.router.url.includes('/agent/')) {
+      this.entityList.push('Vendor');
+      this.entityList.push('Purchaser');
+      this.entityList.push('Sales_Applicant');
+      this.isPropcoSalesEnable = true;
+    }
   }
 }
