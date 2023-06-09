@@ -76,7 +76,7 @@ export class CommonService {
   }
 
   authenticateSsoToken(encodedString: string): Observable<any> {
-    const requestObj = { env: 'saas-cw-uat' };
+    const requestObj = { env: 'saas-uat' };
     return this.httpClient.post(environment.API_BASE_URL + 'authentication/sso/token', requestObj, {
       headers: {
         Authorization: 'Basic ' + encodedString
@@ -84,8 +84,8 @@ export class CommonService {
     });
   }
 
-  getLookup(): Observable<Lookupdata> {
-    return this.httpClient.get<Lookupdata>(environment.API_BASE_URL + 'agents/lookup', { responseType: 'json' });
+  getLookup(params?: HttpParams): Observable<Lookupdata> {
+    return this.httpClient.get<Lookupdata>(environment.API_BASE_URL + 'agents/lookup', { responseType: 'json', params: params });
   }
 
   getTobLookup(): Observable<Lookupdata> {

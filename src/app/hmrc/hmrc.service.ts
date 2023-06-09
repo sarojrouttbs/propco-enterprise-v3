@@ -51,8 +51,12 @@ export class HmrcService {
     return this.httpClient.get(environment.API_BASE_URL + `hmrc/landlords/batch-count`, { params });
   }
 
-  downloadPdf(url: any): Observable<Blob> {
-    return this.httpClient.get(url, { responseType: 'blob' });
+  // downloadPdf(url: any): Observable<Blob> {
+  //   return this.httpClient.get(url, { responseType: 'blob' });
+  // }
+
+  downloadPdf(req: any): Observable<Blob> {
+    return this.httpClient.post(environment.API_BASE_URL + `hmrc/pdf/blob`, req, { responseType: 'blob' },);
   }
 
   getUserBatch(): Observable<any> {
