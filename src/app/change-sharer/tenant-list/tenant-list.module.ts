@@ -4,9 +4,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { TenantListModalPageRoutingModule } from './tenant-list-modal-routing.module';
+import { TenantListPageRoutingModule } from './tenant-list-routing.module';
 
-import { TenantListModalPage } from './tenant-list-modal.page';
+import { TenantListPage } from './tenant-list.page';
 import { DataTablesModule } from 'angular-datatables';
 import { PipesModule } from 'src/app/shared/pipes/pipes.module';
 
@@ -16,10 +16,11 @@ import { PipesModule } from 'src/app/shared/pipes/pipes.module';
     FormsModule,
     IonicModule,
     ReactiveFormsModule,
-    TenantListModalPageRoutingModule,
+    TenantListPageRoutingModule,
     DataTablesModule,
     PipesModule
   ],
-  declarations: [TenantListModalPage]
+  exports: [TenantListPage],
+  declarations: [TenantListPage]
 })
-export class TenantListModalPageModule {}
+export class TenantListPageModule {}
