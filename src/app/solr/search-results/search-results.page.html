@@ -58,6 +58,14 @@
               <ion-item style="--padding-end:0; --inner-padding-end: 0">
                 <ngx-slider color="primary" [options]="propRentOptions" formControlName="propertyRent"></ngx-slider>
               </ion-item>
+            </ion-list>            
+            <ion-list *ngIf="isPropcoSalesEnable" class="list" lines="none">
+              <ion-list-header>
+                <ion-label>Asking Price Range</ion-label>
+              </ion-list-header>
+              <ion-item style="--padding-end:0; --inner-padding-end: 0">
+                <ngx-slider color="primary" [options]="propPriceOptions" formControlName="price"></ngx-slider>
+              </ion-item>
             </ion-list>
             <ion-list class="list" lines="none">
               <ion-list-header>
@@ -135,6 +143,19 @@
                     ></ngx-mat-select-search>
                       </mat-option>
                       <mat-option *ngFor="let item of officeCodesFiltered" [value]="item.index">{{item.value}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </ion-col>
+                <ion-col size="50" *ngIf="isPropcoSalesEnable">
+                  <mat-form-field [floatLabel]="'never'">
+                    <mat-select placeholder="Tenure" formControlName="propertyTenures" multiple>
+                      <mat-option>
+                        <ngx-mat-select-search [formControl]="propertyTenureFilterCtrl"
+                      placeholderLabel="search"
+                      noEntriesFoundLabel="'no matching found'"
+                    ></ngx-mat-select-search>
+                      </mat-option>
+                      <mat-option *ngFor="let item of propertyTenureFiltered" [value]="item.index">{{item.value}}</mat-option>
                     </mat-select>
                   </mat-form-field>
                 </ion-col>
@@ -763,8 +784,12 @@
                   <ion-col size="100" class="ion-no-padding">
                     <div class="emenities-container">
                       <div class="emenities-wrapper">
-                        <p class="ref">Rent&nbsp;
+                        <p class="ref" *ngIf="item?.entityType === 'PROPERTY'">Rent&nbsp;
                           <span class="pricetag">£{{(item?.propertyRent | number: '1.2-2' ) || 0}}</span>
+                          <span class="verticalLine"></span>
+                        </p>
+                        <p class="ref" *ngIf="item?.entityType === 'SALES_PROPERTY'">Asking Price&nbsp;
+                          <span class="pricetag">£{{(item?.price | number: '1.2-2' ) || 0}}</span>
                           <span class="verticalLine"></span>
                         </p>
                       </div>
@@ -826,19 +851,31 @@
                 <ion-text class="header">PropCo ID</ion-text><br />
                 <ion-text class="content">{{item?.propcoId || DEFAULTS.NOT_AVAILABLE}}</ion-text>
               </ion-col>
-              <ion-col size-xl="25" size-lg="33.3" size-md="33.3" size-sm="50" size-xs="100" class="header-content">
+              <ion-col *ngIf="item?.entityType === 'PROPERTY'" size-xl="25" size-lg="33.3" size-md="33.3" size-sm="50" size-xs="100" class="header-content">
                 <ion-text class="header">Tenant Name(s)</ion-text><br />
                 <ion-text class="content">{{item?.propertyTenant || DEFAULTS.NOT_AVAILABLE}}</ion-text>
               </ion-col>
-              <ion-col size-xl="25" size-lg="33.3" size-md="33.3" size-sm="50" size-xs="100" class="header-content">
+              <ion-col *ngIf="item?.entityType === 'PROPERTY'" size-xl="25" size-lg="33.3" size-md="33.3" size-sm="50" size-xs="100" class="header-content">
                 <ion-text class="header">Agreement Dates</ion-text><br />
                 <ion-text class="content">{{item?.propertyAgreementDate || DEFAULTS.NOT_AVAILABLE}}</ion-text>
+              </ion-col>
+              <ion-col *ngIf="item?.entityType === 'SALES_PROPERTY'" size-xl="25" size-lg="33.3" size-md="33.3" size-sm="50" size-xs="100" class="header-content">
+                <ion-text class="header">Tenure</ion-text><br />
+                <ion-text class="content">{{item?.tenure || DEFAULTS.NOT_AVAILABLE}}</ion-text>
+              </ion-col>
+              <ion-col *ngIf="item?.entityType === 'SALES_PROPERTY'" size-xl="25" size-lg="33.3" size-md="33.3" size-sm="50" size-xs="100" class="header-content">
+                <ion-text class="header">Vendor</ion-text><br />
+                <ion-text class="content">{{item?.vendor || DEFAULTS.NOT_AVAILABLE}}</ion-text>
+              </ion-col>
+              <ion-col *ngIf="item?.entityType === 'SALES_PROPERTY'" size-xl="25" size-lg="33.3" size-md="33.3" size-sm="50" size-xs="100" class="header-content">
+                <ion-text class="header">Purchaser</ion-text><br />
+                <ion-text class="content">{{item?.purchaser || DEFAULTS.NOT_AVAILABLE}}</ion-text>
               </ion-col>
               <ion-col size-xl="25" size-lg="33.3" size-md="33.3" size-sm="50" size-xs="100" class="header-content">
                 <ion-text class="header">Type</ion-text><br />
                 <ion-text class="content">{{item?.houseType || DEFAULTS.NOT_AVAILABLE}}</ion-text>
               </ion-col>
-              <ion-col size-xl="25" size-lg="33.3" size-md="33.3" size-sm="50" size-xs="100" class="header-content">
+              <ion-col *ngIf="item?.entityType === 'PROPERTY'" size-xl="25" size-lg="33.3" size-md="33.3" size-sm="50" size-xs="100" class="header-content">
                 <ion-text class="header">Management Type</ion-text><br />
                 <ion-text class="content">{{item?.managementType || DEFAULTS.NOT_AVAILABLE}}</ion-text>
               </ion-col>
@@ -846,13 +883,21 @@
                 <ion-text class="header">Style</ion-text><br />
                 <ion-text class="content">{{item?.propertyStyle || DEFAULTS.NOT_AVAILABLE}}</ion-text>
               </ion-col>
-              <ion-col size-xl="25" size-lg="33.3" size-md="33.3" size-sm="50" size-xs="100" class="header-content">
+              <ion-col *ngIf="item?.entityType === 'PROPERTY'" size-xl="25" size-lg="33.3" size-md="33.3" size-sm="50" size-xs="100" class="header-content">
                 <ion-text class="header">Manager</ion-text><br />
                 <ion-text class="content">{{item?.propertyManager || DEFAULTS.NOT_AVAILABLE}}</ion-text>
               </ion-col>
               <ion-col size-xl="25" size-lg="33.3" size-md="33.3" size-sm="50" size-xs="100" class="header-content">
                 <ion-text class="header">Negotiator</ion-text><br />
                 <ion-text class="content">{{item?.propertyNegotiator || DEFAULTS.NOT_AVAILABLE}}</ion-text>
+              </ion-col>
+              <ion-col *ngIf="item?.entityType === 'SALES_PROPERTY'" size-xl="25" size-lg="33.3" size-md="33.3" size-sm="50" size-xs="100" class="header-content">
+                <ion-text class="header">Furnishing</ion-text><br />
+                <ion-text class="content">{{item?.furnishingType || DEFAULTS.NOT_AVAILABLE}}</ion-text>
+              </ion-col>
+              <ion-col *ngIf="item?.entityType === 'SALES_PROPERTY'" size-xl="25" size-lg="33.3" size-md="33.3" size-sm="50" size-xs="100" class="header-content">
+                <ion-text class="header">Sole Agent</ion-text><br />
+                <ion-text class="content">{{item?.soleAgent || DEFAULTS.NOT_AVAILABLE}}</ion-text>
               </ion-col>
             </ion-row>
           </ion-grid>
