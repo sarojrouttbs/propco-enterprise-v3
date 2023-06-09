@@ -191,6 +191,9 @@ export class SearchResultsPage implements OnInit {
   }
 
   ngOnInit() {
+    this.route.queryParams.subscribe(p => {
+      this.initResults();
+    });
     if (this.router.url.includes('/solr/finder-results')) {
       this.isEntityFinder = true;
     }
