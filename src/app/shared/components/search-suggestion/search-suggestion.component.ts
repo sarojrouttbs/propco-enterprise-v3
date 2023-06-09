@@ -31,21 +31,22 @@ export class SearchSuggestionComponent implements OnInit {
     searchTerm: '',
     searchTypes: '',
     searchSwitch: 'true',
-  };
-
+  };  
   entityList: string[] = [
     'Property',
     'Landlord',
     'Tenant',
     'Applicant',
     'Agent',
-    'Contractor',
-    'Vendor'
+    'Contractor'    
   ];
   lookupdata: any;
   officeLookupDetails: any;
   officeLookupMap = new Map();
   showLoader: boolean = false;
+  propcoIcon='propcoicon-property';
+  isEntityFinder =false;
+  isPropcoSalesEnable = false;
   @Input() pageType: string;
   @Input() loaded: string;
   @ViewChild('solrSearchBar') solrSearchBar: any;
@@ -59,7 +60,7 @@ export class SearchSuggestionComponent implements OnInit {
     private workspaceService: WorkspaceService,
   ) {
   }
-
+  serachResultPage = "";
   getItems(ev: any) {
     this.solrSearchBar.setFocus();
     // Reset items back to all of the items
@@ -83,6 +84,9 @@ export class SearchSuggestionComponent implements OnInit {
     if (searchTypes.indexOf('TENANT') !== -1) {
       searchTypes.push('COTENANT');
     }
+    if (searchTypes.indexOf('PROPERTY') !== -1 && this.isPropcoSalesEnable ) {
+      searchTypes.push('SALES_PROPERTY');
+    }
     return (
       new HttpParams()
         // .set('limit', this.solrSuggestionConfig.limit)
@@ -104,6 +108,8 @@ export class SearchSuggestionComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.setSolrSalesEntity();
+    this.setFinderIcon();
     this.initDashboard();
     this.commonService.dataChanged$.subscribe((data) => {
       this.entityControl.setValue(data.entity);
@@ -153,6 +159,13 @@ export class SearchSuggestionComponent implements OnInit {
   }
 
   openHomeCategory(key: string, value = null) {
+    if (this.router.url.includes('/solr/entity-finder') || this.router.url.includes('solr/finder-results')) {
+      let entityDetail: any = {};
+      entityDetail.entityId = value.propcoId;
+      entityDetail.entityType = this.entityControl.value;
+      openScreenAdvance({ requestType: 'EntityFinderResponse', requestValue: entityDetail });
+      return;
+    }
     if (this.router.url.includes('/agent/')) {
       this.workspaceService.addItemToWorkSpace(value);
       return;
@@ -170,7 +183,18 @@ export class SearchSuggestionComponent implements OnInit {
   }
 
   goToPage() {
-    if (!this.router.url.includes('/solr/search-result') && (this.router.url.includes('/solr/dashboard') || this.router.url.includes('/solr/search'))) {
+    
+    if (this.router.url.includes('/solr/entity-finder') || this.router.url.includes('solr/finder-results')) {
+      this.router.navigate(['/solr/finder-results/'+this.entityControl.value], {
+        queryParams: {
+          searchTerm: this.searchTermControl.value,
+          type: this.entityControl.value,
+        }, replaceUrl: true
+      });
+      this.solrSearchService.search({ entity: this.entityControl.value, term: this.searchTermControl.value, isSearchResult: true });
+      return;
+    }
+    if (!this.router.url.includes('/solr/search-results') && (this.router.url.includes('/solr/dashboard') || this.router.url.includes('/solr/search'))) {
       this.openV2Search();
       return;
     }
@@ -213,7 +237,11 @@ export class SearchSuggestionComponent implements OnInit {
   private getQueryParams() {
     return new Promise((resolve) => {
       this.route.queryParams.subscribe((params) => {
-        const entityParams = params['type'] ? params['type'] : 'Property';
+        let entityType = 'Property';
+        if (this.router.url.includes('/solr/entity-finder') || this.router.url.includes('/solr/finder-results')) {
+          entityType = this.route.snapshot.params['entityType'];                  
+        } 
+        const entityParams = params['type'] ? params['type'] : entityType;
         const types: string[] = Array.isArray(entityParams) ? entityParams : [entityParams];
         this.entityControl.setValue(types);
         this.searchTerm = params['searchTerm'];
@@ -228,5 +256,42 @@ export class SearchSuggestionComponent implements OnInit {
 
   private updateQueryParams() {
     this.solrSearchService.search({ entity: this.entityControl.value, term: this.searchTermControl.value, isSearchResult: false });
+  }
+  setSolrSalesEntity() {
+    if (this.commonService.getItem(PROPCO.SALES_MODULE, true) && !this.router.url.includes('/agent/')) {
+      this.entityList.push('Vendor');
+      this.entityList.push('Purchaser');
+      this.entityList.push('Sales_Applicant');
+      this.isPropcoSalesEnable = true;
+    }
+  }
+  setFinderIcon() {
+    if (this.router.url.includes('/solr/entity-finder') || this.router.url.includes('/solr/finder-results')) {
+      this.isEntityFinder = true;
+      if (this.router.url.includes('/solr/finder-results')) {
+        this.serachResultPage = "main-row";
+      }
+    } else {
+      this.serachResultPage = "";
+    }
+    if (this.router.url.includes('/Property') || this.router.url.includes('/Sales-Property')) {
+      this.propcoIcon = 'propcoicon-property';
+    } else if (this.router.url.includes('/Tenant') || this.router.url.includes('/CoTenant')) {
+      this.propcoIcon = 'propcoicon-tenant';
+    } else if (this.router.url.includes('/Landlord')) {
+      this.propcoIcon = 'propcoicon-landlord';
+    } else if (this.router.url.includes('/Applicant')) {
+      this.propcoIcon = 'propcoicon-applicant-let';
+    } else if (this.router.url.includes('/Contractor')) {
+      this.propcoIcon = 'propcoicon-contractor';
+    } else if (this.router.url.includes('/Agent')) {
+      this.propcoIcon = 'propcoicon-agent';
+    } else if (this.router.url.includes('/Vendor')) {
+      this.propcoIcon = 'propcoicon-vendor';
+    } else if (this.router.url.includes('/Purchaser')) {
+      this.propcoIcon = 'propcoicon-purchaser';
+    } else if (this.router.url.includes('/Sales_Applicant')) {
+      this.propcoIcon = 'propcoicon-applicant-sale';
+    }
   }
 }

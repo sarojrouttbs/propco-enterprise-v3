@@ -1,24 +1,27 @@
-<ion-row
+<ion-row class="{{serachResultPage}}"
   [ngClass]="pageType === 'dashboard' ? 'ion-align-items-center ion-justify-content-center ion-margin-vertical' : 
 (pageType === 'solr-resultpage' ? 'ion-align-items-center main-row ion-justify-content-end ion-margin-vertical' : 'ion-align-items-center main-row agent-main-row ion-margin-vertical')">
-  <ion-col [size]="pageType == 'dashboard'?'12':'22'" class="solrMutiSelect ion-no-padding tour-1">
+  <ion-col *ngIf="!isEntityFinder" [size]="pageType == 'dashboard'?'12':'22'" class="solrMutiSelect ion-no-padding tour-1">
     <mat-form-field appearance="fill">
       <mat-select [formControl]="entityControl" (selectionChange)="onChangeEntity()" multiple
         class="mat-select-red solr-entity-selector ion-text-center">
-        <mat-select-trigger>
-          {{entityControl.value ? entityControl.value[0] : ''}}
+        <mat-select-trigger style="width: 100;">
+          {{entityControl.value ? entityControl.value[0]?.replace('_',' '): ''}}
           <span *ngIf="entityControl.value?.length > 1" class="example-additional-selection">
             +{{entityControl.value.length - 1}}
           </span>
         </mat-select-trigger>
-        <mat-option class="red-text" *ngFor="let topping of entityList" [value]="topping">{{topping}}</mat-option>
+        <mat-option class="red-text"  *ngFor="let topping of entityList" [value]="topping">{{topping?.replace('_',' ')}}</mat-option>
       </mat-select>
     </mat-form-field>
+  </ion-col>
+  <ion-col *ngIf="isEntityFinder" [size]="pageType == 'dashboard'?'3':'4'" class="ion-no-padding tour-3 pointer">
+    <i class="propcoicon no-background {{propcoIcon}} search-Finder "></i>
   </ion-col>
   <ion-col [size]="pageType == 'dashboard'?'68':'70'" style="padding-right: 0;" class="ion-no-padding tour-2">
     <div>
       <ion-searchbar #solrSearchBar [(ngModel)]="searchTerm"
-        [placeholder]="'Start typing to search ' + (entityControl.value.length ? ''+ (entityControl.value.join(', ')) + '':'')"
+        [placeholder]="'Start typing to search ' + (entityControl.value.length ? ''+ (entityControl.value).join(',').replace('_',' ') + '':'')"
         class="searchbarCustom" debounce="500" (ionChange)="getItems($event)" [formControl]="searchTermControl"
         (ionBlur)="hideSuggestion()" (ionFocus)="suggestions.length > 0 ? isItemAvailable = true : false">
       </ion-searchbar>
@@ -26,7 +29,7 @@
         style="position: absolute;"></ion-progress-bar>
       <ion-list *ngIf="isItemAvailable" class="solrSuggestionList" [class.solr-dashboard]="pageType === 'dashboard'">
         <ion-item *ngFor="let item of suggestions" class="solrSuggestionListItem">
-          <ng-container [ngTemplateOutlet]="propertySuggestion" *ngIf="item?.entityType === 'PROPERTY'"
+          <ng-container [ngTemplateOutlet]="propertySuggestion" *ngIf="item?.entityType === 'PROPERTY'|| item?.entityType === 'SALES_PROPERTY'"
             [ngTemplateOutletContext]="{item:item}">
           </ng-container>
           <ng-container [ngTemplateOutlet]="landlordSuggestion" *ngIf="item?.entityType === 'LANDLORD'"
@@ -48,6 +51,12 @@
           <ng-container [ngTemplateOutlet]="vendorSuggestion" *ngIf="item?.entityType === 'VENDOR'"
             [ngTemplateOutletContext]="{item:item}">
           </ng-container>
+          <ng-container [ngTemplateOutlet]="purchaserSuggestion" *ngIf="item?.entityType === 'PURCHASER'"
+            [ngTemplateOutletContext]="{item:item}">
+          </ng-container>
+          <ng-container [ngTemplateOutlet]="salesApplicantSuggestion" *ngIf="item?.entityType === 'SALES_APPLICANT'"
+            [ngTemplateOutletContext]="{item:item}">
+          </ng-container>
         </ion-item>
       </ion-list>
     </div>
@@ -60,7 +69,7 @@
 </ion-row>
 
 <ng-template #propertySuggestion let-item="item">
-  <div (click)="openHomeCategory('OpenProperty',item)" style="width: 100%">
+  <div (click)="openHomeCategory(item?.entityType === 'PROPERTY'?'OpenProperty':'SalesOpenProperty',item)" style="width: 100%">
     <span>
       <i class="propcoicon no-background propcoicon-property red-icon"></i>
     </span>
@@ -144,6 +153,32 @@
   <div (click)="openHomeCategory('OpenVendor',item)" style="width:100%">
     <span>
       <i class="propcoicon no-background propcoicon-vendor red-icon"></i>
+    </span>
+    <span>{{officeLookupMap.get(item.office)}}</span>&nbsp;
+    <span>{{item.name}}</span>&nbsp;
+    <span>{{item?.reference?.split(",")[0]}}</span>&nbsp;
+    <span>{{item.address | slice:0:30}}, {{item.postcode}}</span>&nbsp;
+    <span>{{item.mobile}}</span>&nbsp;
+    <span class="text-color-lightgreen">{{item.status}}</span>
+  </div>
+</ng-template>
+<ng-template #purchaserSuggestion let-item="item">
+  <div (click)="openHomeCategory('OpenPurchaser',item)" style="width:100%">
+    <span>
+      <i class="propcoicon no-background propcoicon-purchaser red-icon"></i>
+    </span>
+    <span>{{officeLookupMap.get(item.office)}}</span>&nbsp;
+    <span>{{item.name}}</span>&nbsp;
+    <span>{{item?.reference?.split(",")[0]}}</span>&nbsp;
+    <span>{{item.address | slice:0:30}}, {{item.postcode}}</span>&nbsp;
+    <span>{{item.mobile}}</span>&nbsp;
+    <span class="text-color-lightgreen">{{item.status}}</span>
+  </div>
+</ng-template>
+<ng-template #salesApplicantSuggestion let-item="item">
+  <div (click)="openHomeCategory('OpenSalesApplicant',item)" style="width:100%">
+    <span>
+      <i class="propcoicon no-background propcoicon-applicant-sale red-icon"></i>
     </span>
     <span>{{officeLookupMap.get(item.office)}}</span>&nbsp;
     <span>{{item.name}}</span>&nbsp;
