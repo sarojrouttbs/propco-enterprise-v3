@@ -7,7 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { ChangeSharerPageRoutingModule } from './change-sharer-routing.module';
 
 import { ChangeSharerPage } from './change-sharer.page';
-import { TenantListModalPageModule } from './modals/tenant-list-modal/tenant-list-modal.module';
+import { TenantListPageModule } from './tenant-list/tenant-list.module';
 
 @NgModule({
   imports: [
@@ -15,7 +15,7 @@ import { TenantListModalPageModule } from './modals/tenant-list-modal/tenant-lis
     FormsModule,
     IonicModule,
     ChangeSharerPageRoutingModule,
-    TenantListModalPageModule
+    TenantListPageModule
   ],
   declarations: [ChangeSharerPage]
 })

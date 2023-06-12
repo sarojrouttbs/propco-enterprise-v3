@@ -6,17 +6,18 @@ import { ReferencingService } from 'src/app/referencing/referencing.service';
 import { HttpParams } from '@angular/common/http';
 import { DEFAULTS, PROPCO, REFERENCING } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
-import { ChangeSharerService } from '../../change-sharer.service';
+import { ChangeSharerService } from '../change-sharer.service';
 import { FormControl } from '@angular/forms';
 import { debounceTime, refCount, switchMap } from 'rxjs/operators';
 declare function openScreen(key: string): any;
 
 @Component({
-  selector: 'app-tenant-list-modal',
-  templateUrl: './tenant-list-modal.page.html',
-  styleUrls: ['./tenant-list-modal.page.scss'],
+  selector: 'app-tenant-list',
+  templateUrl: './tenant-list.page.html',
+  styleUrls: ['./tenant-list.page.scss'],
+  providers: [NavParams]
 })
-export class TenantListModalPage implements OnInit {
+export class TenantListPage implements OnInit {
 
   dtOptions: any = {};
   dtTrigger: Subject<any> = new Subject();
@@ -52,17 +53,14 @@ export class TenantListModalPage implements OnInit {
   isItemAvailable = false;
 
   constructor(
-    private referencingService: ReferencingService,
-    private navParams: NavParams,
     private modalController: ModalController,
     private commonService: CommonService,
     private changeSharerService: ChangeSharerService
   ) { }
 
   async ngOnInit() {
-    this.propertyId = this.navParams.get('paramPropertyId');
-    this.agreementId = this.navParams.get('paramAgreementId');
-    // this.singleTenantOption = this.navParams.get('singleTenantOption');
+    this.propertyId = this.paramPropertyId;
+    this.agreementId = this.paramAgreementId;
     this.dtOptions = {
       paging: false,
       pagingType: 'full_numbers',
@@ -154,15 +152,6 @@ export class TenantListModalPage implements OnInit {
       });
     }
     return tenantList;
-  }
-
-  dismiss() {
-    this.modalController.dismiss({
-      tenantId: this.tenantId,
-      referencingApplicationStatus: this.referencingApplicationStatus,
-      tenantCaseId: this.tenantCaseId,
-      dismissed: true
-    });
   }
 
   cancel() {
