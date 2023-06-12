@@ -151,6 +151,14 @@ export class SearchResultsPage implements OnInit {
     }
   };
 
+  propPriceOptions: Options = {
+    floor: 0,
+    ceil: 5000000,
+    translate: (value: number, label: LabelType): string => {
+      return '£' + value;
+    }
+  };
+
   numberOfBedroomOptions: Options = {
     floor: 0,
     ceil: 20,
@@ -534,6 +542,7 @@ export class SearchResultsPage implements OnInit {
     this.propertyFilter = this.fb.group({
       rentType: 'DEFAULT_RENT',
       propertyRent: [this.priceKnobValues],
+      price: [this.priceKnobValues],
       numberOfBedroom: [this.bedKnobValues],
       managementType: [[]],
       propertyStyle: [[]],
@@ -542,6 +551,7 @@ export class SearchResultsPage implements OnInit {
       propertyNegotiator: [[]],
       propertyManager: [[]],
       officeCode: [[]],
+      propertyTenures: [[]],
     });   
     this.landlordFilter = this.fb.group({
       status: [[]],
@@ -689,9 +699,8 @@ export class SearchResultsPage implements OnInit {
         max: params.propertyFilter.numberOfBedroom[1],
         min: params.propertyFilter.numberOfBedroom[0],
       };
-      
-      if (params.searchTypes.indexOf('PROPERTY') === -1 && params.searchTypes.indexOf('SALES_PROPERTY') === -1 && this.isPropcoSalesEnable) {
-        params.searchTypes.push('PROPERTY', 'SALES_PROPERTY');
+      if (params.searchTypes.indexOf('SALES_PROPERTY') === -1 && this.isPropcoSalesEnable) {        
+        params.searchTypes.push('SALES_PROPERTY');
       }
     }    
     if (this.entityControl.value.indexOf('Landlord') !== -1) {
