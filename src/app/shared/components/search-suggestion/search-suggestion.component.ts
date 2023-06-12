@@ -2,7 +2,7 @@ import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit, Output, SimpleChanges, EventEmitter, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PROPCO } from 'src/app/shared/constants';
+import { PROPCO, SYSTEM_CONFIG } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { SolrService } from '../../../solr/solr.service';
 import { SolrSearchHandlerService } from '../../services/solr-search-handler.service';
@@ -31,25 +31,26 @@ export class SearchSuggestionComponent implements OnInit {
     searchTerm: '',
     searchTypes: '',
     searchSwitch: 'true',
-  };  
+  };
   entityList: string[] = [
     'Property',
     'Landlord',
     'Tenant',
     'Applicant',
     'Agent',
-    'Contractor'    
+    'Contractor'
   ];
   lookupdata: any;
   officeLookupDetails: any;
   officeLookupMap = new Map();
   showLoader: boolean = false;
-  propcoIcon='propcoicon-property';
-  isEntityFinder =false;
+  propcoIcon = 'propcoicon-property';
+  isEntityFinder = false;
   isPropcoSalesEnable = false;
   @Input() pageType: string;
   @Input() loaded: string;
   @ViewChild('solrSearchBar') solrSearchBar: any;
+  isProcpcoSearchEnabled = false;
 
   constructor(
     private solrService: SolrService,
@@ -84,7 +85,7 @@ export class SearchSuggestionComponent implements OnInit {
     if (searchTypes.indexOf('TENANT') !== -1) {
       searchTypes.push('COTENANT');
     }
-    if (searchTypes.indexOf('PROPERTY') !== -1 && this.isPropcoSalesEnable ) {
+    if (searchTypes.indexOf('PROPERTY') !== -1 && this.isPropcoSalesEnable) {
       searchTypes.push('SALES_PROPERTY');
     }
     return (
@@ -107,7 +108,13 @@ export class SearchSuggestionComponent implements OnInit {
     this.getQueryParams();
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    if (this.commonService.getItem('PROPCO_SEARCH_ENABLED') != null) {
+      this.isProcpcoSearchEnabled = this.commonService.getItem('PROPCO_SEARCH_ENABLED');
+    } else {
+      this.isProcpcoSearchEnabled = await this.getSystemConfigs(SYSTEM_CONFIG.PROPCO_SEARCH_URL);
+      this.commonService.setItem('PROPCO_SEARCH_ENABLED', this.isProcpcoSearchEnabled);
+    }
     this.setSolrSalesEntity();
     this.setFinderIcon();
     this.initDashboard();
@@ -173,7 +180,7 @@ export class SearchSuggestionComponent implements OnInit {
     /*Navigate to java fx page (If solr loads inside v2)*/
     openScreen(key, value.propcoId);
   }
-  
+
   openV2Search() {
     /*Navigate to java fx page (If solr loads inside v2)*/
     let searchDetail: any = {};
@@ -183,9 +190,8 @@ export class SearchSuggestionComponent implements OnInit {
   }
 
   goToPage() {
-    
     if (this.router.url.includes('/solr/entity-finder') || this.router.url.includes('solr/finder-results')) {
-      this.router.navigate(['/solr/finder-results/'+this.entityControl.value], {
+      this.router.navigate(['/solr/finder-results/' + this.entityControl.value], {
         queryParams: {
           searchTerm: this.searchTermControl.value,
           type: this.entityControl.value,
@@ -194,10 +200,24 @@ export class SearchSuggestionComponent implements OnInit {
       this.solrSearchService.search({ entity: this.entityControl.value, term: this.searchTermControl.value, isSearchResult: true });
       return;
     }
-    if (!this.router.url.includes('/solr/search-results') && (this.router.url.includes('/solr/dashboard') || this.router.url.includes('/solr/search'))) {
-      this.openV2Search();
-      return;
+
+    if (this.isProcpcoSearchEnabled) {
+      if (!this.router.url.includes('/solr/search-results') && (this.router.url.includes('/solr/dashboard') || this.router.url.includes('/solr/search'))) {
+        this.openV2Search();
+        return;
+      }
     }
+    if (!this.isProcpcoSearchEnabled) {
+      if (this.router.url.includes('/solr/dashboard') || this.router.url.includes('/solr/search')) {
+        this.router.navigate(['/solr/search-results'], {
+          queryParams: {
+            searchTerm: this.searchTermControl.value,
+            type: this.entityControl.value,
+          }, replaceUrl: true
+        });
+      }
+    }
+
     if (this.router.url.includes('/agent/')) {
       this.router.navigate(['/agent/solr/search-results'], {
         queryParams: {
@@ -239,8 +259,8 @@ export class SearchSuggestionComponent implements OnInit {
       this.route.queryParams.subscribe((params) => {
         let entityType = 'Property';
         if (this.router.url.includes('/solr/entity-finder') || this.router.url.includes('/solr/finder-results')) {
-          entityType = this.route.snapshot.params['entityType'];                  
-        } 
+          entityType = this.route.snapshot.params['entityType'];
+        }
         const entityParams = params['type'] ? params['type'] : entityType;
         const types: string[] = Array.isArray(entityParams) ? entityParams : [entityParams];
         this.entityControl.setValue(types);
@@ -293,5 +313,15 @@ export class SearchSuggestionComponent implements OnInit {
     } else if (this.router.url.includes('/Sales_Applicant')) {
       this.propcoIcon = 'propcoicon-applicant-sale';
     }
+  }
+
+  private async getSystemConfigs(key: string): Promise<any> {
+    return new Promise((resolve) => {
+      this.commonService.getSystemConfig(key).subscribe(res => {
+        resolve(res != null && res != '' ? true : false);
+      }, error => {
+        resolve(false);
+      });
+    });
   }
 }
