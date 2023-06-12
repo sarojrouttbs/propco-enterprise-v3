@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { TenantListModalPage } from './tenant-list-modal.page';
+import { TenantListModalPage } from './tenant-list.page';
 
 describe('TenantListModalPage', () => {
   let component: TenantListModalPage;
