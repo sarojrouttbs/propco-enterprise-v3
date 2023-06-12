@@ -318,7 +318,7 @@ export class SearchSuggestionComponent implements OnInit {
   private async getSystemConfigs(key: string): Promise<any> {
     return new Promise((resolve) => {
       this.commonService.getSystemConfig(key).subscribe(res => {
-        resolve(res != null && res != '' ? true : false);
+        resolve(res != null && res[key] != null && res[key] != '' ? true : false);
       }, error => {
         resolve(false);
       });
