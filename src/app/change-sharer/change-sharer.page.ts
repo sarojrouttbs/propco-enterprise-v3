@@ -5,7 +5,7 @@ import { ModalController } from '@ionic/angular';
 import { AgentService } from '../agent/agent.service';
 import { DEFAULT_MESSAGES, SYSTEM_CONFIG } from '../shared/constants';
 import { CommonService } from '../shared/services/common.service';
-import { TenantListModalPage } from './modals/tenant-list-modal/tenant-list-modal.page';
+import { TenantListPage } from './tenant-list/tenant-list.page';
 declare function openScreen(key: string): any;
 @Component({
   selector: 'app-change-sharer',
@@ -30,7 +30,7 @@ export class ChangeSharerPage implements OnInit {
 
   initApp() {
     // this.initApiCall();
-    this.selectTenant();
+    // this.selectTenant();
   }
 
   private async initApiCall() {
@@ -66,7 +66,7 @@ export class ChangeSharerPage implements OnInit {
 
   private async selectTenant(message?: string) {
     const modal = await this.modalController.create({
-      component: TenantListModalPage,
+      component: TenantListPage,
       cssClass: 'modal-container tenant-list la-modal-container',
       backdropDismiss: false,
       componentProps: {
