@@ -109,8 +109,8 @@ export class SearchSuggestionComponent implements OnInit {
   }
 
   async ngOnInit() {
-    if (this.commonService.getItem('PROPCO_SEARCH_ENABLED') != null) {
-      this.isProcpcoSearchEnabled = this.commonService.getItem('PROPCO_SEARCH_ENABLED');
+    if (this.commonService.getItem('PROPCO_SEARCH_ENABLED', true) != null) {
+      this.isProcpcoSearchEnabled = this.commonService.getItem('PROPCO_SEARCH_ENABLED', true);
     } else {
       this.isProcpcoSearchEnabled = await this.getSystemConfigs(SYSTEM_CONFIG.PROPCO_SEARCH_URL);
       this.commonService.setItem('PROPCO_SEARCH_ENABLED', this.isProcpcoSearchEnabled);
