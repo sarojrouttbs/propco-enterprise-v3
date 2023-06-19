@@ -47,6 +47,7 @@ export class SearchSuggestionComponent implements OnInit {
   propcoIcon='propcoicon-property';
   isEntityFinder =false;
   isPropcoSalesEnable = false;
+  serachWidth =68;
   @Input() pageType: string;
   @Input() loaded: string;
   @ViewChild('solrSearchBar') solrSearchBar: any;
@@ -265,7 +266,11 @@ export class SearchSuggestionComponent implements OnInit {
     }
   }
   setFinderIcon() {
+    if (this.router.url.includes('/solr/search')) {
+      this.serachWidth = 80;
+    }
     if (this.router.url.includes('/solr/entity-finder') || this.router.url.includes('/solr/finder-results')) {
+      this.serachWidth = 90;
       this.isEntityFinder = true;
       if (this.router.url.includes('/solr/finder-results')) {
         this.serachResultPage = "main-row";

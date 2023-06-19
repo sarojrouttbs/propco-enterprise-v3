@@ -15,10 +15,10 @@
       </mat-select>
     </mat-form-field>
   </ion-col>
-  <ion-col *ngIf="isEntityFinder" [size]="pageType == 'dashboard'?'3':'4'" class="ion-no-padding tour-3 pointer">
+  <ion-col *ngIf="isEntityFinder" [size]="5" class="ion-no-padding tour-3 pointer">
     <i class="propcoicon no-background {{propcoIcon}} search-Finder "></i>
   </ion-col>
-  <ion-col [size]="pageType == 'dashboard'?'68':'70'" style="padding-right: 0;" class="ion-no-padding tour-2">
+  <ion-col [size]="pageType == 'dashboard'?serachWidth:'70'" style="padding-right: 0;" class="ion-no-padding tour-2">
     <div>
       <ion-searchbar #solrSearchBar [(ngModel)]="searchTerm"
         [placeholder]="'Start typing to search ' + (entityControl.value.length ? ''+ (entityControl.value).join(',').replace('_',' ') + '':'')"
