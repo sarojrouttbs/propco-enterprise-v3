@@ -16,7 +16,7 @@
     </ion-row>
   </ion-grid>  
   <div class="divider"></div>
-  <ion-grid class="ion-no-padding" fixed >
+  <ion-grid class="ion-no-padding" [fixed] = "isFixedGrid" >
     <ion-row class="ion-justify-content-center" *ngIf="!onlySearch">
       <ion-col size="30" class="ion-text-center ion-no-padding">
         <img src="assets/images/solr/propcoLogo.svg" alt="propco-logo"/>
