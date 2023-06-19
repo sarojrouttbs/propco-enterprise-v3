@@ -1261,7 +1261,8 @@ export class DetailsPage {
       additionalInfo: this.faultDetailsForm.get('additionalInfo').value,
       isDraft: false,
       stage: FAULT_STAGES.FAULT_LOGGED,
-      stageAction: FAULT_STAGES_ACTIONS.FAULT_LOGGED
+      stageAction: FAULT_STAGES_ACTIONS.FAULT_LOGGED,
+      createdByType: 'SECUR_USER'
     }
   }
 

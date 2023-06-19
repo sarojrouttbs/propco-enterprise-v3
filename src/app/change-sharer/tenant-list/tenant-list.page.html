@@ -3,7 +3,7 @@
     <ion-title>Select Tenant</ion-title>
   </ion-toolbar>
 </ion-header> -->
-<ion-content id="tenant-list-modal">
+<ion-content id="tenant-list-modal" style="height: 293px;">
   <ion-grid class="search-box-grid">
     <ion-row class="ion-justify-content-end search-row">
       <ion-col size-sm="50" size-xl="50" id="tob-applicant-search">
@@ -69,6 +69,9 @@
     </table>
   </div>
   <div *ngIf="isTableReady && laTenantList.length === 0" style="padding-top: 20px;"> No Record Found</div>
+
+</ion-content>
+<ion-footer>
   <ion-grid>
     <ion-row>
       <ion-col class="ion-text-end">
@@ -77,4 +80,4 @@
       </ion-col>
     </ion-row>
   </ion-grid>
-</ion-content>
+</ion-footer>
