@@ -1,6 +1,8 @@
 ion-content {
   .table-container {
     margin: 20px 10px;
+    height: 176px;
+    overflow-y: scroll;
   }
 
   ion-checkbox {
