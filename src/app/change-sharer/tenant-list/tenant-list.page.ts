@@ -83,16 +83,16 @@ export class TenantListPage implements OnInit {
           this.laTenantList = this.laTenantList.filter(x => x.agreementId === this.paramAgreementId);
           this.laTenantList = this.laTenantList && this.laTenantList.length ? this.laTenantList[0].tenants : [];
           this.laTenantList.forEach((item) => {
-            this.defaultLeads.push({
-              applicantId: item.tenantId,
-              isLead: item.isLead
-            });
             item.name = item.displayAs;
             item.reference = item?.reference;
             item.entityId = item?.tenantId;
             item.entityType = 'TENANT';
             item.isRowChecked = false;
             if (item.isLead) {
+              this.defaultLeads.push({
+                applicantId: item.tenantId,
+                isLead: item.isLead
+              });
               item.defaultLead = true;
               item.type = 'Lead Tenant'
             } else {
