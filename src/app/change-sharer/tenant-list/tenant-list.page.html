@@ -14,6 +14,7 @@
           (ionInput)="onSearch($event)"
           (ionBlur) = "hideSuggestion()"
           [formControl]="searchApplicantControl"
+          (ionChange)="reset($event)"
           (ionFocus) = "applicantList.length > 0 ? isItemAvailable = true : false"
         ></ion-searchbar>
         <ion-list class="applicant-list" *ngIf="isItemAvailable">
