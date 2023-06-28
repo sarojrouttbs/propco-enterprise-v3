@@ -175,6 +175,7 @@ export class TenantListPage implements OnInit {
   private searchApplicant(searchString: string) {
     this.changeSharerService.searchApplicant(searchString).subscribe((res) => {
       if (res && res.data) {
+        this.applicantList = [];
         this.applicantList = res.data;
         this.isItemAvailable = true;
       } else {
@@ -262,5 +263,12 @@ export class TenantListPage implements OnInit {
     });
   }
 
+  reset(ev: any) {
+    const searchText = ev.target.value;
+    if (!searchText || searchText.trim() === '') {
+      this.isItemAvailable = false;
+      this.applicantList = [];
+    }
+  }
 
 }
