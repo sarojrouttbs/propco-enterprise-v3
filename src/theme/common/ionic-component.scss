@@ -1022,3 +1022,17 @@ ion-popover.ion-datepicker-popover-date-time {
     height: 550px;
   }
 }
+
+[popover].popover-viewport {
+  display: initial;
+  position: initial;
+  margin: initial;
+  border: initial;
+  background: initial;
+  padding: initial;
+  width: initial;
+  height: initial;
+  overflow: initial;
+  inset: initial;
+  color: initial;
+}
