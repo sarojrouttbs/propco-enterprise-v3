@@ -228,6 +228,19 @@ export class TenantListPage implements OnInit {
     });
   }
 
+  private updateTenancyTdsCertificate(agreementId: any) {
+    return new Promise((resolve) => {
+      this.changeSharerService.updateTenancyTdsCertificate(agreementId).subscribe(
+        res => {
+          resolve(true);
+        },
+        (error) => {
+          resolve(false);
+        }
+      );
+    });
+  }
+
   private changeSharer(agreementId: any, req: any) {
     return new Promise((resolve) => {
       this.changeSharerService.changeSharer(agreementId, req).subscribe(
@@ -256,6 +269,7 @@ export class TenantListPage implements OnInit {
             if (changed) {
               openScreen('CloseDialog');
             }
+            this.updateTenancyTdsCertificate(this.agreementId);
         } else {
           this.commonService.showAlert('Change sharer', 'Please select tenant(s) to proceed.')
         }
