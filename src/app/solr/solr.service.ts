@@ -51,4 +51,8 @@ export class SolrService {
     );
   }
 
+  getaccessibleOffices(): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `accessible-offices`);
+  }
+
 }
