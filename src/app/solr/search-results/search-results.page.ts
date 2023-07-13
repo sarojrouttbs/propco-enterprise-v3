@@ -64,7 +64,7 @@ export class SearchResultsPage implements OnInit {
   vandorCheck = new FormControl();
   purchaserCheck = new FormControl();
   salesApplicantCheck = new FormControl();
-  
+
 
   propertyFilter: FormGroup;
   landlordFilter: FormGroup;
@@ -74,9 +74,9 @@ export class SearchResultsPage implements OnInit {
   applicantFilter: FormGroup;
   vendorFilter: FormGroup;
   purchaserFilter: FormGroup;
-  
+
   salesApplicantFilter: FormGroup;
-  
+
 
   lookupdata: any;
   managementTypes;
@@ -105,9 +105,9 @@ export class SearchResultsPage implements OnInit {
   vendorStatuses;
   vendorStatusesFiltered;
   purchaserStatuses;
-  purchaserStatusesFiltered; 
+  purchaserStatusesFiltered;
   salesApplicantStatuses;
-  salesApplicantStatusesFiltered; 
+  salesApplicantStatusesFiltered;
   propertyTenures;
   propertyTenureFiltered;
   isPropcoSalesEnable = false;
@@ -120,7 +120,7 @@ export class SearchResultsPage implements OnInit {
     'Applicant',
     'Agent',
     'Contractor'
-    
+
   ];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -140,7 +140,7 @@ export class SearchResultsPage implements OnInit {
   contractorSkillFilterCtrl: FormControl = new FormControl();
   vendorStatusFilterCtrl: FormControl = new FormControl();
   purchaserStatusFilterCtrl: FormControl = new FormControl();
-  salesApplicantStatusFilterCtrl: FormControl = new FormControl();  
+  salesApplicantStatusFilterCtrl: FormControl = new FormControl();
   propertyTenureFilterCtrl: FormControl = new FormControl();
 
   propRentOptions: Options = {
@@ -216,10 +216,11 @@ export class SearchResultsPage implements OnInit {
 
   private async initResults() {
     const solrSearchTerms = JSON.parse(this.commonService.getItem(PROPCO.SOLR_SERACH_TERMS));
-    if(solrSearchTerms) {
+    if (solrSearchTerms) {
       this.pageIndex = solrSearchTerms.pageIndex;
       this.pageSize = solrSearchTerms.pageSize;
     }
+    await this.getaccessibleOffices();
     this.getLookupData();
     await this.getQueryParams();
     this.initFilter();
@@ -270,7 +271,7 @@ export class SearchResultsPage implements OnInit {
     });
     this.salesApplicantStatusFilterCtrl.valueChanges.subscribe((src) => {
       this.filterMultiSearch(src, 'saleApplicantStatus');
-    });    
+    });
     this.propertyTenureFilterCtrl.valueChanges.subscribe((src) => {
       this.filterMultiSearch(src, 'propertyTenure');
     });
@@ -432,7 +433,7 @@ export class SearchResultsPage implements OnInit {
         );
         this.salesApplicantStatusesFiltered = tmp;
         break;
-      }     
+      }
       case 'propertyTenure': {
         if (!srchStr) {
           this.propertyTenureFiltered = this.propertyTenures;
@@ -466,8 +467,8 @@ export class SearchResultsPage implements OnInit {
     this.houseTypes = this.houseTypesFiltered = data.houseTypes;
     this.propertyStatuses = this.propertyStatusesFiltered =
       data.propertyStatuses;
-    this.officeCodes = this.officeCodesFiltered = data.officeCodes;
-    this.setOfficeCodeMap();
+    // this.officeCodes = this.officeCodesFiltered = data.officeCodes;
+    // this.setOfficeCodeMap();
     this.landlordStatuses = this.landlordStatusesFiltered =
       data.landlordStatuses;
     this.vendorStatuses = this.vendorStatusesFiltered =
@@ -487,7 +488,7 @@ export class SearchResultsPage implements OnInit {
     this.propertyTenures = this.propertyTenureFiltered = data.propertyTenures;
   }
 
-  private setOfficeCodeMap() {    
+  private setOfficeCodeMap() {
     this.officeCodes.map((code, index) => {
       this.officeCodesMap.set(code.index, code.value);
     });
@@ -533,7 +534,7 @@ export class SearchResultsPage implements OnInit {
           this.purchaserCheck.setValue(true);
         } else if (res === 'Sales_Applicant') {
           this.salesApplicantCheck.setValue(true);
-        }        
+        }
       });
     }
   }
@@ -552,7 +553,7 @@ export class SearchResultsPage implements OnInit {
       propertyManager: [[]],
       officeCode: [[]],
       propertyTenures: [[]],
-    });   
+    });
     this.landlordFilter = this.fb.group({
       status: [[]],
       officeCode: [[]],
@@ -633,9 +634,9 @@ export class SearchResultsPage implements OnInit {
     this.salesApplicantCheck.setValue(false);
   }
 
-  getSearchResults(global?: boolean) {   
+  getSearchResults(global?: boolean) {
     this.hideMenu('', 'search-result-overlay');
-    if(this.isResetPageIndex) {
+    if (this.isResetPageIndex) {
       this.pageIndex = 0;
       this.isResetPageIndex = false;
     }
@@ -699,10 +700,10 @@ export class SearchResultsPage implements OnInit {
         max: params.propertyFilter.numberOfBedroom[1],
         min: params.propertyFilter.numberOfBedroom[0],
       };
-      if (params.searchTypes.indexOf('SALES_PROPERTY') === -1 && this.isPropcoSalesEnable) {        
+      if (params.searchTypes.indexOf('SALES_PROPERTY') === -1 && this.isPropcoSalesEnable) {
         params.searchTypes.push('SALES_PROPERTY');
       }
-    }    
+    }
     if (this.entityControl.value.indexOf('Landlord') !== -1) {
       const llFilter = Object.assign(this.landlordFilter.value, {});
 
@@ -791,7 +792,7 @@ export class SearchResultsPage implements OnInit {
     }
   }
 
-  openDetails(value?) {    
+  openDetails(value?) {
     this.hideMenu('', 'search-result-overlay');
     if (this.router.url.includes('/solr/entity-finder') || this.router.url.includes('solr/finder-results')) {
       let entityDetail: any = {};
@@ -969,13 +970,13 @@ export class SearchResultsPage implements OnInit {
         !this.purchaserCheck.value
           ? tmpArray.push('Purchaser')
           : tmpArray.splice(tmpArray.indexOf('Purchaser'), 1);
-        break;  
+        break;
       case 'sales_applicant':
         !this.salesApplicantCheck.value
           ? tmpArray.push('Sales_Applicant')
           : tmpArray.splice(tmpArray.indexOf('Sales_Applicant'), 1);
         break;
-      
+
     }
     this.entityControl.setValue(tmpArray);
     this.commonService.dataChanged({ entity: this.entityControl.value, term: this.solrSearchConfig.searchTerm });
@@ -997,7 +998,7 @@ export class SearchResultsPage implements OnInit {
     this.entityControl.setValue(data.entity);
     this.solrSearchConfig.types = this.entityControl.value;
     this.solrSearchConfig.searchTerm = data.term ? data.term : '';
-    if (data.isSearchResult) {      
+    if (data.isSearchResult) {
       this.initResults();
     } else {
       this.initFilter();
@@ -1082,5 +1083,29 @@ export class SearchResultsPage implements OnInit {
       this.entityList.push('Sales_Applicant');
       this.isPropcoSalesEnable = true;
     }
+  }
+
+  getaccessibleOffices() {
+    return new Promise((resolve) => {
+      this.solrService.getaccessibleOffices().subscribe(res => {
+        const accessibleOffice = res && res.data ? res.data : [];
+        if (accessibleOffice.length) {
+          accessibleOffice.map((office) => {
+            office.index = office.officeCode;
+            office.value = office.officeName;
+            delete office.officeId;
+            delete office.officeCode;
+            delete office.officeName;
+            delete office.officeStatus;
+            delete office.officeType;
+          });
+          this.officeCodes = this.officeCodesFiltered = accessibleOffice;
+          this.setOfficeCodeMap();
+          return resolve(accessibleOffice);
+        } else {
+          return resolve(accessibleOffice);
+        }
+      });
+    });
   }
 }

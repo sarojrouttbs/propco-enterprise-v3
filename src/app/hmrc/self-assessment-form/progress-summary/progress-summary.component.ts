@@ -43,6 +43,8 @@ export class ProgressSummaryComponent implements OnInit {
   showCsvBtnLoader = false;
   showSummaryReportBtnLoader = false;
   DEFAULT_MESSAGES = DEFAULT_MESSAGES;
+  pdfUrlByFile: any;
+  pdfUrlByServer: any;
 
   constructor(
     private hmrcService: HmrcService,
@@ -253,7 +255,7 @@ export class ProgressSummaryComponent implements OnInit {
 
   private getPdfBlob() {
     return new Promise((resolve) => {
-      this.hmrcService.downloadPdf(this.PDF_CONFIG.finalUrl).subscribe((res) => {
+      this.hmrcService.downloadPdf({ url: this.PDF_CONFIG.finalUrl }).subscribe((res) => {
         resolve(res ? res : null)
       }, (_error) => {
         this.commonService.showMessage(HMRC_ERROR_MESSAGES.DOWNLOAD_FORM_ERROR, DEFAULT_MESSAGES.errors.SOMETHING_WENT_WRONG, 'error');
