@@ -32,6 +32,12 @@ export class ChangeSharerService {
     );
   }
 
+  updateTenancyTdsCertificate(agreementId: string): Observable<any> {
+    return this.httpClient.put<any>(
+      environment.API_BASE_URL + `agreements/${agreementId}/tds`,{}
+    );
+  }
+
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.log(`${operation} failed: ${error.message}`);
