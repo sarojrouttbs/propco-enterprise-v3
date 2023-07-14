@@ -81,7 +81,7 @@ export class SearchSuggestionComponent implements OnInit {
 
   private prepareSearchParams(searchText: string) {
     let searchTypes = this.transformToUpperCase(this.entityControl.value);
-    if (searchTypes.indexOf('TENANT') !== -1) {
+    if (searchTypes.indexOf('TENANT') !== -1 && !(this.router.url.includes('/solr/entity-finder') || this.router.url.includes('solr/finder-results'))) {
       searchTypes.push('COTENANT');
     }
     if (searchTypes.indexOf('PROPERTY') !== -1 && this.isPropcoSalesEnable) {
@@ -296,9 +296,12 @@ export class SearchSuggestionComponent implements OnInit {
       if (this.router.url.includes('/Property') || this.router.url.includes('/Sales-Property')) {
         this.entityList = new Array();
         this.entityList.push('Property');
-      } else if (this.router.url.includes('/Tenant') || this.router.url.includes('/CoTenant')) {
+      } else if (this.router.url.includes('/Tenant')) {
         this.entityList = new Array();
         this.entityList.push('Tenant');
+      } else if (this.router.url.includes('/CoTenant')) {
+        this.entityList = new Array();
+        this.entityList.push('CoTenant');
       } else if (this.router.url.includes('/Landlord')) {
         this.entityList = new Array();
         this.entityList.push('Landlord');
