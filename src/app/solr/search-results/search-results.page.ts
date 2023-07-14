@@ -797,7 +797,7 @@ export class SearchResultsPage implements OnInit {
     if (this.router.url.includes('/solr/entity-finder') || this.router.url.includes('solr/finder-results')) {
       let entityDetail: any = {};
       entityDetail.entityId = value.propcoId;
-      entityDetail.entityType = this.entityControl.value;
+      entityDetail.type = value.entityType;
       openScreenAdvance({ requestType: 'EntityFinderResponse', requestValue: entityDetail });
       return;
     }
