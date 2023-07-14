@@ -679,7 +679,7 @@ export class SearchResultsPage implements OnInit {
     params.searchTypes = this.transformToUpperCase(this.entityControl.value);
     this.commonService.dataChanged({ entity: this.entityControl.value, term: this.solrSearchConfig.searchTerm });
     if (global) {
-      if (params.searchTypes.indexOf('TENANT') > -1) {
+      if (params.searchTypes.indexOf('TENANT') > -1 && !(this.router.url.includes('/solr/entity-finder') || this.router.url.includes('solr/finder-results'))) {
         params.searchTypes.push('COTENANT')
       }
       if (params.searchTypes.indexOf('PROPERTY') > -1 && this.isPropcoSalesEnable) {
