@@ -484,7 +484,7 @@
         <ion-col size-sm="50" size-md="20" size-xl="25" class="ion-text-end">
           <ion-item id="applicantConfirmedDate">
             <ion-label position="floating">Confirmed On</ion-label>
-            <ion-input value="{{ confirmationForm.controls.applicantConfirmedDate.value | date: DATE_FORMAT.DATE }}">
+            <ion-input [disabled]="applicantConfirmedDateInput" value="{{ confirmationForm.controls.applicantConfirmedDate.value | date: DATE_FORMAT.DATE }}">
             </ion-input>
             <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
             <ion-popover class="ion-datepicker-popover" trigger="applicantConfirmedDate" show-backdrop="false">
@@ -508,7 +508,7 @@
         <ion-col size-sm="50" size-md="20" size-xl="25" class="ion-text-end">
           <ion-item id="landlordConfirmedDate">
             <ion-label position="floating">Confirmed On</ion-label>
-            <ion-input value="{{ confirmationForm.controls.landlordConfirmedDate.value | date: DATE_FORMAT.DATE }}">
+            <ion-input [disabled]="landlordConfirmedDateInput" value="{{ confirmationForm.controls.landlordConfirmedDate.value | date: DATE_FORMAT.DATE }}">
             </ion-input>
             <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
             <ion-popover class="ion-datepicker-popover" trigger="landlordConfirmedDate" show-backdrop="false">

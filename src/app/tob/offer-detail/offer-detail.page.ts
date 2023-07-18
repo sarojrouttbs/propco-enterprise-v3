@@ -67,7 +67,8 @@ export class OfferDetailPage implements OnInit {
   DEFAULTS = DEFAULTS;
   updatedFormValues: any = [];
   DATE_FORMAT = DATE_FORMAT;
-
+  applicantConfirmedDateInput = true;
+  landlordConfirmedDateInput = true;
   constructor(
     private route: ActivatedRoute,
     private commonService: CommonService,
@@ -525,13 +526,13 @@ export class OfferDetailPage implements OnInit {
     requestObj.numberOfAdults = offerFormValues.numberOfAdults;
     requestObj.numberOfChildren = offerFormValues.numberOfChildren;
     requestObj.isApplicantConfirmed = confirmationForm.isApplicantConfirmed;
-    requestObj.applicantConfirmedDate = this.commonService.getFormatedDate(
+    requestObj.applicantConfirmedDate = confirmationForm.applicantConfirmedDate ? this.commonService.getFormatedDate(
       confirmationForm.applicantConfirmedDate
-    );
+    ) : null;
     requestObj.isLandlordConfirmed = confirmationForm.isLandlordConfirmed;
-    requestObj.landlordConfirmedDate = this.commonService.getFormatedDate(
+    requestObj.landlordConfirmedDate = confirmationForm.landlordConfirmedDate ? this.commonService.getFormatedDate(
       confirmationForm.landlordConfirmedDate
-    );
+    ) : null;
     requestObj.sendEmailToLandlord = confirmationForm.sendEmailToLandlord;
     requestObj.comments = offerFormValues.comments;
     requestObj.offerClauses = this.propertyClauses;
@@ -638,9 +639,9 @@ export class OfferDetailPage implements OnInit {
   private initConfirmationForm(): void {
     this.confirmationForm = this.formBuilder.group({
       isApplicantConfirmed: false,
-      applicantConfirmedDate: [{ value: '', disabled: true }],
+      applicantConfirmedDate: '',
       isLandlordConfirmed: false,
-      landlordConfirmedDate: [{ value: '', disabled: true }],
+      landlordConfirmedDate: '',
       sendEmailToApplicant: false,
       sendEmailToLandlord: false,
     });
@@ -669,17 +670,19 @@ export class OfferDetailPage implements OnInit {
           this.confirmationForm.controls.applicantConfirmedDate.setValidators(
             this.setRequired()
           );
-          this.confirmationForm.controls.applicantConfirmedDate.enable();
+          // this.confirmationForm.controls.applicantConfirmedDate.enable();
+          this.applicantConfirmedDateInput = false;
           this.confirmationForm
             .get('applicantConfirmedDate')
-            .setValue(new Date());
+            .setValue(this.commonService.getFormatedDate(new Date()));
         } else {
           this.confirmationForm.controls.applicantConfirmedDate.clearValidators();
           this.confirmationForm
             .get('applicantConfirmedDate')
             .updateValueAndValidity();
-          this.confirmationForm.controls.applicantConfirmedDate.disable();
-          this.confirmationForm.get('applicantConfirmedDate').setValue('');
+          // this.confirmationForm.controls.applicantConfirmedDate.disable();
+          this.applicantConfirmedDateInput = true;
+          this.confirmationForm.get('applicantConfirmedDate').setValue(this.commonService.getFormatedDate(new Date()));
         }
         break;
       case 'landlord':
@@ -687,7 +690,8 @@ export class OfferDetailPage implements OnInit {
           this.confirmationForm.controls.landlordConfirmedDate.setValidators(
             this.setRequired()
           );
-          this.confirmationForm.controls.landlordConfirmedDate.enable();
+          // this.confirmationForm.controls.landlordConfirmedDate.enable();
+          this.landlordConfirmedDateInput = false;
           this.confirmationForm
             .get('landlordConfirmedDate')
             .setValue(new Date());
@@ -696,7 +700,8 @@ export class OfferDetailPage implements OnInit {
           this.confirmationForm
             .get('landlordConfirmedDate')
             .updateValueAndValidity();
-          this.confirmationForm.controls.landlordConfirmedDate.disable();
+          // this.confirmationForm.controls.landlordConfirmedDate.disable();
+          this.landlordConfirmedDateInput = true;
           this.confirmationForm.get('landlordConfirmedDate').setValue('');
         }
         break;
@@ -875,6 +880,11 @@ export class OfferDetailPage implements OnInit {
   private getUpdatedValues() {
     this.updatedFormValues = [];
     this.makeAnOfferForm['_forEachChild']((control, name) => {
+      if (control.dirty) {
+        this.updatedFormValues.push(name);
+      }
+    });
+    this.confirmationForm['_forEachChild']((control, name) => {
       if (control.dirty) {
         this.updatedFormValues.push(name);
       }
