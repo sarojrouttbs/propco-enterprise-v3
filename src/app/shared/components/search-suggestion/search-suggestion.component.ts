@@ -43,9 +43,7 @@ export class SearchSuggestionComponent implements OnInit {
   lookupdata: any;
   officeLookupDetails: any;
   officeLookupMap = new Map();
-  showLoader: boolean = false;
-  propcoIcon = 'propcoicon-property';
-  isEntityFinder = false;
+  showLoader: boolean = false; 
   isPropcoSalesEnable = false;
   serachWidth =68;
   @Input() pageType: string;
@@ -83,7 +81,7 @@ export class SearchSuggestionComponent implements OnInit {
 
   private prepareSearchParams(searchText: string) {
     let searchTypes = this.transformToUpperCase(this.entityControl.value);
-    if (searchTypes.indexOf('TENANT') !== -1) {
+    if (searchTypes.indexOf('TENANT') !== -1 && !(this.router.url.includes('/solr/entity-finder') || this.router.url.includes('solr/finder-results'))) {
       searchTypes.push('COTENANT');
     }
     if (searchTypes.indexOf('PROPERTY') !== -1 && this.isPropcoSalesEnable) {
@@ -170,7 +168,7 @@ export class SearchSuggestionComponent implements OnInit {
     if (this.router.url.includes('/solr/entity-finder') || this.router.url.includes('solr/finder-results')) {
       let entityDetail: any = {};
       entityDetail.entityId = value.propcoId;
-      entityDetail.entityType = this.entityControl.value;
+      entityDetail.type = value.entityType;
       openScreenAdvance({ requestType: 'EntityFinderResponse', requestValue: entityDetail });
       return;
     }
@@ -291,32 +289,51 @@ export class SearchSuggestionComponent implements OnInit {
       this.serachWidth = 80;
     }
     if (this.router.url.includes('/solr/entity-finder') || this.router.url.includes('/solr/finder-results')) {
-      this.serachWidth = 90;
-      this.isEntityFinder = true;
+      this.serachWidth = 80;
       if (this.router.url.includes('/solr/finder-results')) {
         this.serachResultPage = "main-row";
       }
+      if (this.router.url.includes('/Property') || this.router.url.includes('/Sales-Property')) {
+        this.entityList = new Array();
+        this.entityList.push('Property');
+      } else if (this.router.url.includes('/Tenant')) {
+        this.entityList = new Array();
+        this.entityList.push('Tenant');
+      } else if (this.router.url.includes('/CoTenant')) {
+        this.entityList = new Array();
+        this.entityList.push('CoTenant');
+      } else if (this.router.url.includes('/Landlord')) {
+        this.entityList = new Array();
+        this.entityList.push('Landlord');
+      } else if (this.router.url.includes('/Applicant')) {
+        this.entityList = new Array();
+        this.entityList.push('Applicant');
+      } else if (this.router.url.includes('/Contractor')) {
+        this.entityList = new Array();
+        this.entityList.push('Contractor');
+      } else if (this.router.url.includes('/Agent')) {
+        this.entityList = new Array();
+        this.entityList.push('Agent');
+      } else if (this.router.url.includes('/Vendor')) {
+        this.entityList = new Array();
+        this.entityList.push('Vendor');
+      } else if (this.router.url.includes('/Purchaser')) {
+        this.entityList = new Array();
+        this.entityList.push('Purchaser');
+      } else if (this.router.url.includes('/Sales_Applicant')) {
+        this.entityList = new Array();
+        this.entityList.push('Sales_Applicant');
+      } else if (this.router.url.includes('/Sales_Applicant')) {
+        this.entityList = new Array();
+        this.entityList.push('Sales_Applicant');
+      } else if (this.router.url.includes('/Multiple')) {
+        this.setEntity();
+      } else {
+        this.entityControl.setValue(this.entityList);
+      }
+
     } else {
       this.serachResultPage = "";
-    }
-    if (this.router.url.includes('/Property') || this.router.url.includes('/Sales-Property')) {
-      this.propcoIcon = 'propcoicon-property';
-    } else if (this.router.url.includes('/Tenant') || this.router.url.includes('/CoTenant')) {
-      this.propcoIcon = 'propcoicon-tenant';
-    } else if (this.router.url.includes('/Landlord')) {
-      this.propcoIcon = 'propcoicon-landlord';
-    } else if (this.router.url.includes('/Applicant')) {
-      this.propcoIcon = 'propcoicon-applicant-let';
-    } else if (this.router.url.includes('/Contractor')) {
-      this.propcoIcon = 'propcoicon-contractor';
-    } else if (this.router.url.includes('/Agent')) {
-      this.propcoIcon = 'propcoicon-agent';
-    } else if (this.router.url.includes('/Vendor')) {
-      this.propcoIcon = 'propcoicon-vendor';
-    } else if (this.router.url.includes('/Purchaser')) {
-      this.propcoIcon = 'propcoicon-purchaser';
-    } else if (this.router.url.includes('/Sales_Applicant')) {
-      this.propcoIcon = 'propcoicon-applicant-sale';
     }
   }
 
@@ -326,6 +343,20 @@ export class SearchSuggestionComponent implements OnInit {
         resolve(res != null && res[key] != null && res[key] != '' ? true : false);
       }, error => {
         resolve(false);
+      });
+    });
+  }
+
+  private setEntity() {
+    return new Promise((resolve) => {
+      this.route.queryParams.subscribe((params) => {
+        const entityParams = params['type'] ? params['type'] : 'Property';
+        if (Array.isArray(entityParams)) {
+          this.entityList = entityParams;
+        } else {
+          this.entityList = [entityParams];
+        }
+        resolve(true);
       });
     });
   }

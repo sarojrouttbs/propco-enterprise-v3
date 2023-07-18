@@ -1,7 +1,7 @@
 <ion-row class="{{serachResultPage}}"
   [ngClass]="pageType === 'dashboard' ? 'ion-align-items-center ion-justify-content-center ion-margin-vertical' : 
 (pageType === 'solr-resultpage' ? 'ion-align-items-center main-row ion-justify-content-end ion-margin-vertical' : 'ion-align-items-center main-row agent-main-row ion-margin-vertical')">
-  <ion-col *ngIf="!isEntityFinder" [size]="pageType == 'dashboard'?'12':'22'" class="solrMutiSelect ion-no-padding tour-1">
+  <ion-col [size]="pageType == 'dashboard'?'12':'22'" class="solrMutiSelect ion-no-padding tour-1">
     <mat-form-field appearance="fill">
       <mat-select [formControl]="entityControl" (selectionChange)="onChangeEntity()" multiple
         class="mat-select-red solr-entity-selector ion-text-center">
@@ -15,9 +15,7 @@
       </mat-select>
     </mat-form-field>
   </ion-col>
-  <ion-col *ngIf="isEntityFinder" [size]="5" class="ion-no-padding tour-3 pointer">
-    <i class="propcoicon no-background {{propcoIcon}} search-Finder "></i>
-  </ion-col>
+  
   <ion-col [size]="pageType == 'dashboard'?serachWidth:'70'" style="padding-right: 0;" class="ion-no-padding tour-2">
     <div>
       <ion-searchbar #solrSearchBar [(ngModel)]="searchTerm"
