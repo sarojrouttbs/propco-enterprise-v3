@@ -678,6 +678,10 @@ export class SearchResultsPage implements OnInit {
       : '*';
     params.searchTypes = this.transformToUpperCase(this.entityControl.value);
     this.commonService.dataChanged({ entity: this.entityControl.value, term: this.solrSearchConfig.searchTerm });
+    if (this.router.url.includes('/solr/entity-finder/Associate') || this.router.url.includes('solr/finder-results/Associate')) {
+      const llFilter = Object.assign({ type: "Associate" });
+      params.landlordFilter = llFilter;
+    }
     if (global) {
       if (params.searchTypes.indexOf('TENANT') > -1 && !(this.router.url.includes('/solr/entity-finder') || this.router.url.includes('solr/finder-results'))) {
         params.searchTypes.push('COTENANT')
