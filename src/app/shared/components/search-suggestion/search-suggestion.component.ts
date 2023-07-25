@@ -87,6 +87,10 @@ export class SearchSuggestionComponent implements OnInit {
     if (searchTypes.indexOf('PROPERTY') !== -1 && this.isPropcoSalesEnable) {
       searchTypes.push('SALES_PROPERTY');
     }
+    let landlordType = null;
+    if (this.router.url.includes('/solr/entity-finder/Associate') || this.router.url.includes('solr/finder-results/Associate')) {
+      landlordType = "Associate";
+    }
     return (
       new HttpParams()
         // .set('limit', this.solrSuggestionConfig.limit)
@@ -94,6 +98,7 @@ export class SearchSuggestionComponent implements OnInit {
         .set('searchTypes', searchTypes)
         .set('searchSwitch', this.solrSuggestionConfig.searchSwitch)
         .set('hideLoader', 'true')
+        .set('subType', landlordType)
     );
   }
 
@@ -190,7 +195,11 @@ export class SearchSuggestionComponent implements OnInit {
 
   goToPage() {
     if (this.router.url.includes('/solr/entity-finder') || this.router.url.includes('solr/finder-results')) {
-      this.router.navigate(['/solr/finder-results/' + this.entityControl.value], {
+      let type = this.entityControl.value;
+      if (this.router.url.includes('/solr/entity-finder/Associate') || this.router.url.includes('solr/finder-results/Associate')) {
+        type = "Associate";
+      }
+      this.router.navigate(['/solr/finder-results/' + type], {
         queryParams: {
           searchTerm: this.searchTermControl.value,
           type: this.entityControl.value,
@@ -259,6 +268,9 @@ export class SearchSuggestionComponent implements OnInit {
         let entityType = 'Property';
         if (this.router.url.includes('/solr/entity-finder') || this.router.url.includes('/solr/finder-results')) {
           entityType = this.route.snapshot.params['entityType'];
+          if (entityType == 'Associate') {
+            entityType = 'Landlord';
+          }
         }
         const entityParams = params['type'] ? params['type'] : entityType;
         const types: string[] = Array.isArray(entityParams) ? entityParams : [entityParams];
@@ -302,7 +314,7 @@ export class SearchSuggestionComponent implements OnInit {
       } else if (this.router.url.includes('/CoTenant')) {
         this.entityList = new Array();
         this.entityList.push('CoTenant');
-      } else if (this.router.url.includes('/Landlord')) {
+      } else if (this.router.url.includes('/Landlord') || this.router.url.includes('/Associate')) {
         this.entityList = new Array();
         this.entityList.push('Landlord');
       } else if (this.router.url.includes('/Applicant')) {
