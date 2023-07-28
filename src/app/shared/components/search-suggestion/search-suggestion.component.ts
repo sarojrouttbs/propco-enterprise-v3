@@ -87,19 +87,18 @@ export class SearchSuggestionComponent implements OnInit {
     if (searchTypes.indexOf('PROPERTY') !== -1 && this.isPropcoSalesEnable) {
       searchTypes.push('SALES_PROPERTY');
     }
-    let landlordType = null;
-    if (this.router.url.includes('/solr/entity-finder/Associate') || this.router.url.includes('solr/finder-results/Associate')) {
-      landlordType = "Associate";
-    }
-    return (
-      new HttpParams()
+    
+    const params = new HttpParams()
         // .set('limit', this.solrSuggestionConfig.limit)
         .set('searchTerm', searchText)
         .set('searchTypes', searchTypes)
         .set('searchSwitch', this.solrSuggestionConfig.searchSwitch)
-        .set('hideLoader', 'true')
-        .set('subType', landlordType)
-    );
+        .set('hideLoader', 'true');
+
+    if (this.router.url.includes('/solr/entity-finder/Associate') || this.router.url.includes('solr/finder-results/Associate')) {
+      params.set('subType', "Associate");
+    }
+    return params;
   }
 
   private transformToUpperCase(data: any) {
