@@ -1,18 +1,31 @@
-<div class="banner">
-  <div class="ion-text-left">
-    <strong>{{notificationData?.chaseTemplateCode}} {{notificationData?.firstEmailSentAt | date: DATE_FORMAT.DATE_TIME }}</strong>
+<ng-container *ngIf="faultDetails?.isClosed">
+  <div class="banner">
+    <div class="ion-text-left">
+      <strong>{{notificationData?.chaseTemplateCode}} {{notificationData?.firstEmailSentAt | date: DATE_FORMAT.DATE_TIME }}</strong>
+    </div>
+    <h2 class="banner-heading">
+      Repair Closed
+    </h2>
+    <h6 class="banner-title" *ngIf="action">Here’s the action you chose:</h6>
+    <ion-button color="success" class="icon-button" *ngIf="action">
+      {{action}}
+      <ion-icon name="checkmark-circle-outline"></ion-icon>
+    </ion-button>
   </div>
-  <h2 class="banner-heading">
-    Repair Closed
-  </h2>
-  <h6 class="banner-title" *ngIf="action">Here’s the action you chose:</h6>
-  <ion-button color="success" class="icon-button" *ngIf="action">
-    {{action}}
-    <ion-icon name="checkmark-circle-outline"></ion-icon>
-  </ion-button>
-</div>
-<div class="question-answer">
-  <h3> This Repair is closed.</h3>
-  <h5><strong>Reason - </strong>{{faultDetails.closedReason}}.</h5>
-  <div class="border-bottom"></div>
-</div>
+  <div class="question-answer">
+    <h3> This Repair is closed.</h3>
+    <h5><strong>Reason - </strong>{{faultDetails.closedReason}}.</h5>
+    <div class="border-bottom"></div>
+  </div>
+</ng-container>
+<ng-container *ngIf="faultDetails.status == 26">
+  <div class="banner">
+    <h2 class="banner-heading">
+      Repair Self Fixed
+    </h2>
+  </div>
+  <div class="question-answer">
+    <h3> This Repair is self fixed.</h3>
+    <div class="border-bottom"></div>
+  </div>
+</ng-container>
