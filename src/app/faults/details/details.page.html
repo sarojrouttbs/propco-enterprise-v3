@@ -12,7 +12,17 @@
             </ion-select>
           </ion-item>
         </ion-col>
-        <ion-col [size]="faultId? 75 : 100">
+        <ion-col size="25" *ngIf="faultId && faultDetails?.roomType">
+          <ion-item>
+            <ion-label position="floating">Room Type</ion-label>
+            <ion-select interface="popover" formControlName="roomType" [interfaceOptions]="{'cssClass': 'fault-ion-select'}">
+              <ion-select-option [value]="item.index" *ngFor="let item of faultRoomTypes">
+                {{ item.value }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+        <ion-col [size]="faultDetails?.roomType ? 50 : faultId ? 75 : 100">
           <ion-item>
             <ion-label position="floating">Repair description<ion-text class="mandatory">*</ion-text>
             </ion-label>
@@ -20,6 +30,7 @@
           </ion-item>
           <app-validation-message [control]="faultDetailsForm.controls.notes"></app-validation-message>
         </ion-col>
+        
       </ion-row>
     </ion-grid>
   </form>
@@ -371,12 +382,12 @@
 </ng-template>
 
 <ng-template #finalView>
-  <ion-row *ngIf="faultDetails?.isClosed">
+  <ion-row *ngIf="faultDetails?.isClosed || faultDetails?.status == 26">
     <ion-col offset-xl="15" size-xl="70" offset="0" size="100">
       <app-close-fault  [notificationData]="cliNotification" [faultDetails]="faultDetails"></app-close-fault>
     </ion-col>
   </ion-row>
-  <ion-grid class="view-details" *ngIf="!faultDetails?.isClosed">   
+  <ion-grid class="view-details" *ngIf="!faultDetails?.isClosed && faultDetails?.status != 26">   
     <ion-row class="ion-justify-content-between">
       <ion-col size="100">
         <div class="title">Please review case details and Start Progress when you’re ready</div>
@@ -392,6 +403,11 @@
         <ion-text class="header">Urgency Status</ion-text><br />
         <ion-text class="content">
           {{(faultDetailsForm.controls.urgencyStatus.value | lookup: faultUrgencyStatuses) || DEFAULTS.NOT_AVAILABLE}}</ion-text>
+      </ion-col>
+      <ion-col size-xs="100" size-sm="50" class="header-content" *ngIf="faultDetails?.roomType">
+        <ion-text class="header">Room Type</ion-text><br />
+        <ion-text class="content">
+          {{(faultDetailsForm.controls.roomType.value | lookup: faultRoomTypes) || DEFAULTS.NOT_AVAILABLE}}</ion-text>
       </ion-col>
       <ion-col size-xs="100" size-sm="50" class="header-content">
         <ion-text class="header">Title</ion-text><br />
@@ -495,10 +511,12 @@
           [class.error-border]='isCaseDetailSubmit && !faultDetailsForm.valid'>Repair Details</div>
       </ng-template>
       <ng-container *ngTemplateOutlet="caseDetails"></ng-container>
-      <ng-container *ngTemplateOutlet="additionalInfo"></ng-container>
+      <ng-container *ngIf="addtionalInfo && addtionalInfo.length">
+        <ng-container *ngTemplateOutlet="additionalInfo"></ng-container>
+      </ng-container>
       <div class="action-btn-group">
         <ion-button (click)="goTolistPage()" class="cancel-button" [disabled]="saving">Cancel</ion-button>
-        <ion-button class="save-button" (click)="saveForLater()" [disabled]="faultDetails?.isClosed">Save for later<ion-icon *ngIf="saving" name="refresh" class="rotating submit-loader"></ion-icon></ion-button>
+        <ion-button class="save-button" (click)="saveForLater()" [disabled]="faultDetails?.isClosed || faultDetails?.status == 26">Save for later<ion-icon *ngIf="saving" name="refresh" class="rotating submit-loader"></ion-icon></ion-button>
         <ion-button (click)="pageNo = 2" class="next-button" *ngIf="!faultId" [disabled]="saving">Back</ion-button>
         <ion-button (click)="caseTabs.selectedIndex = 1" class="next-button" [disabled]="saving">Next</ion-button>
       </div>
@@ -511,7 +529,7 @@
       <ng-container *ngTemplateOutlet="reportedBy"></ng-container>
       <div class="action-btn-group">
         <ion-button (click)="goTolistPage()" class="cancel-button" [disabled]="saving">Cancel</ion-button>
-        <ion-button class="save-button" (click)="saveForLater()" [disabled]="faultDetails?.isClosed">Save for later<ion-icon *ngIf="saving" name="refresh" class="rotating submit-loader"></ion-icon></ion-button>
+        <ion-button class="save-button" (click)="saveForLater()" [disabled]="faultDetails?.isClosed  || faultDetails?.status == 26">Save for later<ion-icon *ngIf="saving" name="refresh" class="rotating submit-loader"></ion-icon></ion-button>
         <ion-button (click)="caseTabs.selectedIndex = 0" class="next-button"  [disabled]="saving">Back</ion-button>
         <ion-button (click)="caseTabs.selectedIndex = 2" class="next-button"  [disabled]="saving">Next</ion-button>
       </div>
@@ -524,7 +542,7 @@
       <ng-container *ngTemplateOutlet="accessInformation"></ng-container>
       <div class="action-btn-group">
         <ion-button (click)="goTolistPage()" class="cancel-button" [disabled]="saving">Cancel</ion-button>
-        <ion-button class="save-button" (click)="saveForLater()" [disabled]="faultDetails?.isClosed">Save for later<ion-icon *ngIf="saving" name="refresh" class="rotating submit-loader"></ion-icon></ion-button>
+        <ion-button class="save-button" (click)="saveForLater()" [disabled]="faultDetails?.isClosed  || faultDetails?.status == 26">Save for later<ion-icon *ngIf="saving" name="refresh" class="rotating submit-loader"></ion-icon></ion-button>
         <ion-button (click)="caseTabs.selectedIndex = 1" class="next-button" [disabled]="saving">Back</ion-button>
         <ion-button (click)="caseTabs.selectedIndex = 3" class="next-button" [disabled]="saving">Next</ion-button>
       </div>
@@ -537,7 +555,7 @@
       <ng-container *ngTemplateOutlet="media"></ng-container>
       <div class="action-btn-group">
         <ion-button (click)="goTolistPage()" class="cancel-button" [disabled]="saving">Cancel</ion-button>
-        <ion-button class="save-button" (click)="saveForLater()" [disabled]="faultDetails?.isClosed">Save for later<ion-icon *ngIf="saving" name="refresh" class="rotating submit-loader"></ion-icon></ion-button>
+        <ion-button class="save-button" (click)="saveForLater()" [disabled]="faultDetails?.isClosed  || faultDetails?.status == 26">Save for later<ion-icon *ngIf="saving" name="refresh" class="rotating submit-loader"></ion-icon></ion-button>
         <ion-button (click)="caseTabs.selectedIndex = 2" class="next-button" [disabled]="saving">Back</ion-button>
         <ion-button (click)="caseTabs.selectedIndex = 4" class="next-button" [disabled]="saving">Next</ion-button>
       </div>
@@ -549,7 +567,7 @@
       <ng-container *ngTemplateOutlet="faultHistoryTab"></ng-container>
       <div class="action-btn-group">
         <ion-button (click)="goTolistPage()" class="cancel-button" [disabled]="saving">Cancel</ion-button>
-        <ion-button class="save-button" (click)="saveForLater()" [disabled]="faultDetails?.isClosed">Save for later<ion-icon *ngIf="saving" name="refresh" class="rotating submit-loader"></ion-icon></ion-button>
+        <ion-button class="save-button" (click)="saveForLater()" [disabled]="faultDetails?.isClosed  || faultDetails?.status == 26">Save for later<ion-icon *ngIf="saving" name="refresh" class="rotating submit-loader"></ion-icon></ion-button>
         <ion-button (click)="caseTabs.selectedIndex = 3" class="next-button" [disabled]="saving">Back</ion-button>
         <ion-button (click)="caseTabs.selectedIndex = 5" class="next-button" [disabled]="saving">Next</ion-button>
       </div>
@@ -561,16 +579,16 @@
       <ng-container *ngTemplateOutlet="finalView"></ng-container>
       <div class="action-btn-group">
         <ion-button (click)="goTolistPage()" class="cancel-button" [disabled]="saving || submitting || progressing || proceeding">Cancel</ion-button>
-        <ion-button class="save-button" (click)="saveForLater()" [disabled]="submitting || proceeding || faultDetails?.isClosed">Save for later<ion-icon *ngIf="saving" name="refresh" class="rotating submit-loader"></ion-icon></ion-button>
+        <ion-button class="save-button" (click)="saveForLater()" [disabled]="submitting || proceeding || faultDetails?.isClosed || faultDetails?.status == 26">Save for later<ion-icon *ngIf="saving" name="refresh" class="rotating submit-loader"></ion-icon></ion-button>
         <ion-button (click)="caseTabs.selectedIndex = 4" class="next-button" *ngIf="faultId" [disabled]="saving || submitting || progressing || proceeding">Back</ion-button>
         <ion-button (click)="caseTabs.selectedIndex = 3" class="next-button" *ngIf="!faultId" [disabled]="saving || submitting || progressing || proceeding">Back</ion-button>
         <ion-button (click)="goToNextStage()" class="next-button" *ngIf="faultId && faultDetails?.stage !== FAULT_STAGES.FAULT_LOGGED" [disabled]="saving || submitting || progressing || proceeding">Next</ion-button>
         <ion-button class="submit-button" (click)="createAFault()" *ngIf="!faultId || faultDetails?.isDraft" [disabled]="saving">Submit<ion-icon *ngIf="submitting" name="refresh" class="rotating submit-loader"></ion-icon></ion-button>
         <ion-button class="save-button" (click)="startProgress()"
-          *ngIf="faultId && faultDetails?.status == 1 && !faultDetails?.isDraft" [disabled]="saving || faultDetails?.isClosed">Start
+          *ngIf="faultId && faultDetails?.status == 1 && !faultDetails?.isDraft" [disabled]="saving || faultDetails?.isClosed || faultDetails?.status == 26">Start
           Progress<ion-icon *ngIf="submitting" name="refresh" class="rotating submit-loader"></ion-icon></ion-button>
         <ion-button class="save-button" (click)="proceedToNextStage()" *ngIf="faultId && faultDetails?.status != 1" 
-         [disabled]="(cliNotification && (cliNotification.responseReceived == null || cliNotification.responseReceived?.isAccepted == null)) || saving || submitting || faultDetails?.isClosed">
+         [disabled]="(cliNotification && (cliNotification.responseReceived == null || cliNotification.responseReceived?.isAccepted == null)) || saving || submitting || faultDetails?.isClosed || faultDetails?.status == 26">
           Proceed<ion-icon *ngIf="proceeding" name="refresh" class="rotating submit-loader"></ion-icon></ion-button>
         <ion-button class="save-button" (click)="reOpenFault()" *ngIf="faultId && faultDetails?.status == 12" [disabled]="saving || submitting || proceeding">Re-open
         </ion-button>

@@ -36,6 +36,7 @@ declare namespace FaultModels {
     }
 
     export interface IFaultResponse {
+        roomType: number;
         title: string;
         reference: string;
         status: number;

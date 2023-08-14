@@ -70,6 +70,7 @@ export class DetailsPage {
   landlordsOfproperty: any[];
   faultReportedByThirdParty: any[];
   faultStatuses: any[];
+  faultRoomTypes: any[];
   propertyTenants: any[] = [];
   allGuarantors: any[] = [];
   tenantIds: any[] = [];
@@ -211,6 +212,7 @@ export class DetailsPage {
     this.faultCategories = data.faultCategories;
     this.faultUrgencyStatuses = data.faultUrgencyStatuses;
     this.faultStatuses = data.faultStatuses;
+    this.faultRoomTypes = data.faultRoomTypes;
     this.setCategoryMap();
   }
 
@@ -236,7 +238,8 @@ export class DetailsPage {
     this.faultDetailsForm = this.fb.group({
       notes: ['', Validators.required],
       urgencyStatus: [3, Validators.required],
-      additionalInfo: this.fb.array([])
+      additionalInfo: this.fb.array([]),
+      roomType: null,
     });
   }
 
@@ -488,7 +491,8 @@ export class DetailsPage {
 
     this.faultDetailsForm.patchValue({
       urgencyStatus: this.faultDetails.urgencyStatus,
-      notes: this.faultDetails.notes
+      notes: this.faultDetails.notes,
+      roomType: this.faultDetails?.roomType
     });
     this.faultDetails.additionalInfo.map((x) => { this.createAdditionalInfo(x, true) });
     this.accessInfoForm.patchValue({
