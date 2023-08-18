@@ -1888,6 +1888,10 @@ export class ArrangingContractorComponent implements OnInit {
     this.nominalCodes.forEach(code => {
       let heading = code.heading ? code.heading.toUpperCase() : '';
       code.concat = heading + ', ' + code.nominalCode + ', ' + code.description;
+      //create quote form path nominal code
+      if (!this.faultMaintenanceDetails && this.faultDetails.nominalCode === code.nominalCode) {
+        this.raiseQuoteForm.get('nominalCode').setValue(code);
+      }
       //quote
       if (this.faultMaintenanceDetails?.nominalCode && this.faultMaintenanceDetails.nominalCode === code.nominalCode && this.faultMaintenanceDetails.itemType === 4) {
         this.raiseQuoteForm.get('nominalCode').setValue(code);
