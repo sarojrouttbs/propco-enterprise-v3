@@ -109,6 +109,7 @@ export class ApplicationDetailPage implements OnInit {
   webImageUrl: string;
   updateOccupantsInProcess = false;
   applicantQuestions: any = [];
+  defaultMinDate;
 
   constructor(
     private route: ActivatedRoute,
@@ -1308,9 +1309,12 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   setTenancyDetails(details: any) {
+    if(!details.moveInDate) {
+      this.defaultMinDate = this.commonService.getFormatedDate(new Date().toUTCString());
+    }
     this.tenancyDetailForm.patchValue({
-      moveInDate: details.moveInDate,
-      preferredTenancyEndDate: details.preferredTenancyEndDate,
+      moveInDate: details.moveInDate ? this.commonService.getFormatedDate(details.moveInDate) : '',
+      preferredTenancyEndDate: details.preferredTenancyEndDate ? this.commonService.getFormatedDate(details.preferredTenancyEndDate) : '',
       rentDueDay: details.rentDueDay,
       numberOfAdults: details.numberOfAdults,
       numberOfChildren: details.numberOfChildren,

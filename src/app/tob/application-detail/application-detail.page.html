@@ -455,7 +455,7 @@
         <ion-col size-xs="100" size-sm="33.3">
           <ion-item id="dateOfBirth">
             <ion-label position="floating">Date of birth<ion-text class="mandatory"> * </ion-text></ion-label>
-            <ion-input value="{{ applicantDetailsForm.controls.dateOfBirth.value | date: DATE_FORMAT.DATE }}">
+            <ion-input readonly="true" value="{{ applicantDetailsForm.controls.dateOfBirth.value | date: DATE_FORMAT.DATE }}">
             </ion-input>
             <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
             <ion-popover class="ion-datepicker-popover" trigger="dateOfBirth" show-backdrop="false">
@@ -729,7 +729,7 @@
             <ion-col size-xs="100" size-sm="33.3">
               <ion-item id="answer" *ngIf="question.controls['type'].value === 'DATE' && question.controls['toggle'].value">
                 <ion-label position="floating">Date and time</ion-label>
-                <ion-input value="{{ question.controls.answer.value | date: DATE_FORMAT.DATE_TIME }}">
+                <ion-input readonly="true" value="{{ question.controls.answer.value | date: DATE_FORMAT.DATE_TIME }}">
                 </ion-input>
                 <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
                 <ion-popover class="ion-datepicker-popover-date-time" trigger="answer" show-backdrop="false">
@@ -775,7 +775,7 @@
         <ion-col size-xs="100" size-sm="33.3">
           <ion-item id="moveInDate">
             <ion-label position="floating">When would you like to move in?</ion-label>
-            <ion-input value="{{ tenancyDetailForm.controls.moveInDate.value | date: DATE_FORMAT.DATE }}">
+            <ion-input readonly="true" value="{{ tenancyDetailForm.controls.moveInDate.value | date: DATE_FORMAT.DATE }}">
             </ion-input>
             <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
             <ion-popover class="ion-datepicker-popover" trigger="moveInDate" show-backdrop="false">
@@ -791,12 +791,18 @@
         <ion-col size-xs="100" size-sm="33.3">
           <ion-item id="preferredTenancyEndDate">
             <ion-label position="floating">Tenancy end</ion-label>
-            <ion-input value="{{ tenancyDetailForm.controls.preferredTenancyEndDate.value | date: DATE_FORMAT.DATE }}">
+            <ion-input readonly="true" value="{{ tenancyDetailForm.controls.preferredTenancyEndDate.value | date: DATE_FORMAT.DATE }}">
             </ion-input>
             <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
             <ion-popover class="ion-datepicker-popover" trigger="preferredTenancyEndDate" show-backdrop="false">
               <ng-template>
-                <ion-datetime showDefaultButtons="true" presentation="date" formControlName="preferredTenancyEndDate" [min]="tenancyDetailForm.controls.moveInDate.value">
+                <ion-datetime 
+                showDefaultButtons="true" 
+                presentation="date" 
+                formControlName="preferredTenancyEndDate" 
+                [min]="tenancyDetailForm.controls.moveInDate.value ? tenancyDetailForm.controls.moveInDate.value : defaultMinDate"
+                [max]="maxMoveInDate"
+                >
                 </ion-datetime>
               </ng-template>
             </ion-popover>
