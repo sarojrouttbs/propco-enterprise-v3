@@ -381,7 +381,7 @@
                             <ion-item *ngFor="let result of (applicantList | async)?.data" button
                               (click)="getApplicantDetails(result?.entityId, i, true)" button>
                               <span>
-                                <i class="propcoicon no-background propcoicon-contractor"></i>
+                                <i class="propcoicon no-background propcoicon-applicant-let"></i>
                               </span>&nbsp;
                               <label color="dark">{{result.fullName}}&nbsp;
                                 <ion-text color="medium">{{result.address}}</ion-text>&nbsp;
