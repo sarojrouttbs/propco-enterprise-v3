@@ -188,6 +188,7 @@ export class ApplicationDetailPage implements OnInit {
           else {
             this.patchApplicantDetail();
             this.patchApplicantAddressDetail();
+            this.patchTenancyDetail();
           }
         }
         resolve(true);
@@ -211,6 +212,13 @@ export class ApplicationDetailPage implements OnInit {
       guarantor: this.applicantDetail.guarantorType ? true : false,
       guarantorType: this.applicantDetail.guarantorType,
       currentPosition: this.applicantDetail.currentPosition
+    });
+  }
+
+  private patchTenancyDetail(): void {
+    this.tenancyDetailForm.patchValue({
+      numberOfAdults: this.applicantDetail.numberOfAdults,
+      numberOfChildren: this.applicantDetail.numberOfChildren
     });
   }
 
@@ -1309,7 +1317,7 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   setTenancyDetails(details: any) {
-    if(!details.moveInDate) {
+    if (!details.moveInDate) {
       this.defaultMinDate = this.commonService.getFormatedDate(new Date().toUTCString());
     }
     this.tenancyDetailForm.patchValue({
