@@ -198,13 +198,15 @@ export class OfferListPage implements OnInit {
       origDivOverlayTop = baseContainerTop - extraHeight - (divOverlayTopBottomPadding * 2);
     }
 
+    const helperContainer = $(".overlay-skeleton");
+
     divOverlay.css({
       position: 'absolute',
-      top: origDivOverlayTop,
+      top: origDivOverlayTop + 23,
       right: '5px',
-      width: baseContainerWidth,
-      height: origDivOverlayHeight,
-      left: divOverlayLeft,
+      width: helperContainer.outerWidth(true) + 12,
+      height: helperContainer.outerHeight(true),
+      left: helperContainer.position().left,
       paddingTop: divOverlayTopBottomPadding,
       paddingBottom: divOverlayTopBottomPadding
     });
