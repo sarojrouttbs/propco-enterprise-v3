@@ -146,7 +146,7 @@
       </ion-card>
     </div>
     <div style="position: relative;" class="overlay-container" *ngIf="isApplicationListAvailable">
-      <ion-card *ngFor="let item of obsApplicationList | async;" class="ion-padding no-padding-top-bottom">
+      <ion-card *ngFor="let item of obsApplicationList | async;" class="ion-padding no-padding-top-bottom application-details">
         <ion-card-content>
           <ion-grid class="ion-padding">
             <ion-row class="main-row">
@@ -168,7 +168,7 @@
                       </ion-text>
                     </ion-col>
                   </ion-row>
-                  <ion-row class="application-details">
+                  <ion-row class="overlay-skeleton">
                     <ion-col class="no-padding-top col1" size="75">
                       <ion-grid class="no-padding-left">
                         <ion-row>

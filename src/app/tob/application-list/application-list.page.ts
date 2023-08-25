@@ -204,6 +204,8 @@ export class ApplicationListPage implements OnInit {
     const divOverlayHeight = divOverlay.height();
     const divOverlayLeft = baseContainerPosition.left;
 
+    const helperContainer = $(".overlay-skeleton");
+
     let origDivOverlayHeight;
     let origDivOverlayTop;
     let divOverlayTopBottomPadding = 0;
@@ -222,11 +224,11 @@ export class ApplicationListPage implements OnInit {
 
     divOverlay.css({
       position: 'absolute',
-      top: origDivOverlayTop,
+      top: origDivOverlayTop + 23,
       right: '5px',
-      width: baseContainerWidth,
-      height: origDivOverlayHeight,
-      left: divOverlayLeft,
+      width: helperContainer.outerWidth(true) + 12,
+      height: helperContainer.outerHeight(true),
+      left: helperContainer.position().left,
       paddingTop: divOverlayTopBottomPadding,
       paddingBottom: divOverlayTopBottomPadding
     });

@@ -167,7 +167,7 @@
     <!-- skeleton -->
 
     <div style="position: relative;" class="overlay-container" *ngIf="isOffersListAvailable">
-      <ion-card class="ion-padding no-padding-top-bottom" *ngFor="let item of obsOfferList | async; let i = index;" (click)="onOfferClick(item)">
+      <ion-card class="ion-padding no-padding-top-bottom offer-details-row" *ngFor="let item of obsOfferList | async; let i = index;" (click)="onOfferClick(item)">
         <ion-card-content>
           <ion-grid>
             <ion-row class="main-row">
@@ -212,7 +212,7 @@
                       </ion-text>
                     </ion-col>
                   </ion-row>
-                  <ion-row class="offer-details-row">
+                  <ion-row class="overlay-skeleton">
                     <ion-col class="no-padding-top col1" size="75">
                       <ion-grid class="no-padding">
                         <ion-row>

@@ -800,7 +800,7 @@
                 showDefaultButtons="true" 
                 presentation="date" 
                 formControlName="preferredTenancyEndDate" 
-                [min]="tenancyDetailForm.controls.moveInDate.value ? tenancyDetailForm.controls.moveInDate.value : defaultMinDate"
+                [min]="tenancyDetailForm.controls.moveInDate.value ? tenancyDetailForm.controls.moveInDate.value : currentDate"
                 [max]="maxMoveInDate"
                 >
                 </ion-datetime>
