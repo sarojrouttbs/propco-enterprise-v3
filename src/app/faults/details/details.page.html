@@ -47,7 +47,7 @@
                 <ion-item>
                   <ion-label position="floating">Type</ion-label>
 
-                  <ion-select interface="popover" formControlName="label" [interfaceOptions]="{'cssClass': 'select-options-content-wrap fault-ion-select'}" >
+                  <ion-select interface="action-sheet" formControlName="label" [interfaceOptions]="{'cssClass': 'select-options-content-wrap fault-ion-select'}" >
                     <ion-select-option text-wrap [value]="item" *ngFor="let item of addtionalInfo">{{ item }}
                     </ion-select-option>
                   </ion-select>

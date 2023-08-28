@@ -17,6 +17,7 @@
                 <button mat-button matStepperNext class="stepper-next">Next</button>
               </div>
             </mat-step>
+           <ng-container *ngIf="isApplicantDetailsAvailable">
             <mat-step [completed]="applicationDetails?.isSubmitted" [stepControl]="applicantDetailsForm">
               <ng-container *ngTemplateOutlet="applicantDetails"></ng-container>
               <ng-template matStepLabel>Applicant <br/> Details</ng-template>
@@ -103,6 +104,7 @@
               <ng-container *ngTemplateOutlet="payment"></ng-container>
               <ng-template matStepLabel>Holding <br/> Deposit</ng-template>
             </mat-step>
+           </ng-container>
           </mat-horizontal-stepper>
         </ion-col>
       </ion-row>

@@ -120,7 +120,11 @@ export class ApplicationDetailPage implements OnInit {
   ) {
   }
 
-  async ngOnInit() {
+  ngOnInit(): void {
+    this.initForms();
+  }
+
+  async ionViewDidEnter() {
     this.propertyId = this.route.snapshot.paramMap.get('propertyId');
     if (!this.propertyId) {
       this.propertyId = this.route.snapshot.parent.parent.paramMap.get('propertyId');
@@ -129,7 +133,7 @@ export class ApplicationDetailPage implements OnInit {
     if (!this.applicationId) {
       this.applicationId = this.route.snapshot.parent.parent.paramMap.get('applicationId');
     }
-    this.initForms();
+    this.initLookups();
     await this.initApiCalls();
     if (typeof this.applicationId !== 'undefined' && this.applicationId !== null) {
       await this.initViewApiCalls();
@@ -187,7 +191,7 @@ export class ApplicationDetailPage implements OnInit {
           else {
             this.patchApplicantDetail();
             this.patchApplicantAddressDetail();
-            this.patchTenancyDetail();
+            // this.patchTenancyDetail();
           }
         }
         resolve(true);
@@ -231,12 +235,15 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   private async initApiCalls() {
-    this.getLookUpData();
-    this.getTobLookupData();
     let tmpImageObj: any = await this.getSystemOptions(SYSTEM_OPTIONS.WEB_IMAGE_URL);
     this.webImageUrl = tmpImageObj ? tmpImageObj.WEB_IMAGE_URL : '';
     await this.getPropertyDetails(this.propertyId);
     this.initTermsAndConditionData();
+  }
+
+  private initLookups(){
+    this.getLookUpData();
+    this.getTobLookupData();
   }
 
   private initForms() {
@@ -1624,7 +1631,6 @@ export class ApplicationDetailPage implements OnInit {
       this.initBarclayCardPaymentDetails();
       this.hidePaymentForm = false;
       if (response && response.STATUS === '1') {
-        console.log('Payment cancelled');
       } else if (response && response.STATUS === '0') {
         this.commonService.showMessage('Invalid or incomplete request, please try again.', 'Payment Failed', 'error');
       } else {
