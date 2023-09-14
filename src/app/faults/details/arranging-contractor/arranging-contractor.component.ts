@@ -1889,20 +1889,25 @@ export class ArrangingContractorComponent implements OnInit {
       let heading = code.heading ? code.heading.toUpperCase() : '';
       code.concat = heading + ', ' + code.nominalCode + ', ' + code.description;
       //create quote form path nominal code
-      if (!this.faultMaintenanceDetails && this.faultDetails.nominalCode === code.nominalCode) {
-        this.raiseQuoteForm.get('nominalCode').setValue(code);
+      if (this.raiseQuoteForm) {
+        //new quote
+        if (!this.faultMaintenanceDetails && this.faultDetails.nominalCode === code.nominalCode) {
+          this.raiseQuoteForm.get('nominalCode').setValue(code);
+        }
+        //modify quote
+        if (this.faultMaintenanceDetails?.nominalCode && this.faultMaintenanceDetails.nominalCode === code.nominalCode && this.faultMaintenanceDetails.itemType === 4) {
+          this.raiseQuoteForm.get('nominalCode').setValue(code);
+        }
       }
-      //quote
-      if (this.faultMaintenanceDetails?.nominalCode && this.faultMaintenanceDetails.nominalCode === code.nominalCode && this.faultMaintenanceDetails.itemType === 4) {
-        this.raiseQuoteForm.get('nominalCode').setValue(code);
-      }
-      //wo
-      if (this.faultMaintenanceDetails?.nominalCode && this.faultMaintenanceDetails.nominalCode === code.nominalCode && this.faultMaintenanceDetails.itemType === 6) {
-        this.workOrderForm.get('nominalCode').setValue(code);
-      }
-      //canceled quote
-      if (this.faultDetails?.nominalCode && this.faultDetails.nominalCode === code.nominalCode && this.faultDetails?.stageAction === 'PROCEED_WITH_WORKSORDER') {
-        this.workOrderForm.get('nominalCode').setValue(code);
+      if (this.workOrderForm) {
+        //wo
+        if (this.faultMaintenanceDetails?.nominalCode && this.faultMaintenanceDetails.nominalCode === code.nominalCode && this.faultMaintenanceDetails.itemType === 6) {
+          this.workOrderForm.get('nominalCode').setValue(code);
+        }
+        //canceled quote
+        if (this.faultDetails?.nominalCode && this.faultDetails.nominalCode === code.nominalCode && this.faultDetails?.stageAction === 'PROCEED_WITH_WORKSORDER') {
+          this.workOrderForm.get('nominalCode').setValue(code);
+        }
       }
       codes.push(code);
     });
