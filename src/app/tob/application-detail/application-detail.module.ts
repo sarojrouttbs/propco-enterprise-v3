@@ -10,6 +10,7 @@ import { MaterialModule } from 'src/app/material.module';
 import { TemplateFormModule } from 'src/app/worldpay-ownform/template-form/template-form.module';
 import { TermsAndConditionModalPageModule } from 'src/app/shared/modals/terms-and-condition-modal/terms-and-condition-modal.module';
 import { PostcodeDirectiveModule } from 'src/app/shared/directives/postcode-directive.module';
+import { InputMaskDirective } from 'src/app/directives/input-mask.directive';
 
 @NgModule({
   imports: [
@@ -25,6 +26,6 @@ import { PostcodeDirectiveModule } from 'src/app/shared/directives/postcode-dire
     TermsAndConditionModalPageModule,
     PostcodeDirectiveModule
   ],
-  declarations: [ApplicationDetailPage]
+  declarations: [ApplicationDetailPage,InputMaskDirective]
 })
 export class ApplicationDetailPageModule {}

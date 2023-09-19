@@ -1300,7 +1300,7 @@ export class ApplicationDetailPage implements OnInit {
     this.bankDetailsForm.patchValue({
       bankDetails: {
         bankName: bankDetails.bankName ? bankDetails.bankName : '',
-        sortcode: bankDetails.sortcode ? bankDetails.sortcode : '',
+        sortcode: bankDetails.sortcode ? bankDetails.sortcode : '****2:22',
         accountNumber: bankDetails.accountNumber ? bankDetails.accountNumber : '',
         accountName: bankDetails.accountName ? bankDetails.accountName : '',
       }
