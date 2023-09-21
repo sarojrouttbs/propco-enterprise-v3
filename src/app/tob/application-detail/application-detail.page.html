@@ -456,7 +456,7 @@
         </ion-col>
         <ion-col size-xs="100" size-sm="33.3">
           <ion-item id="dateOfBirth">
-            <ion-label position="floating">Date of birth<ion-text class="mandatory"> * </ion-text></ion-label>
+            <ion-label position="floating">Date of birth</ion-label>
             <ion-input readonly="true" value="{{ applicantDetailsForm.controls.dateOfBirth.value | date: DATE_FORMAT.DATE }}">
             </ion-input>
             <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
@@ -689,7 +689,7 @@
         <ion-col size-xs="100" size-sm="33.3">
           <ion-item>
             <ion-label position="floating">Sort code</ion-label>
-            <ion-input type="text" formControlName="sortcode" maxlength="8"></ion-input>
+            <ion-input type="text" formControlName="sortcode"  mask="**:**:**"></ion-input>
           </ion-item>
           <app-validation-message [control]="bankDetailsForm.controls.bankDetails['controls'].sortcode">
           </app-validation-message>

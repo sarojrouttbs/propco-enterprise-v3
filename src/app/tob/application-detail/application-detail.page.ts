@@ -762,7 +762,7 @@ export class ApplicationDetailPage implements OnInit {
       surname: [''],
       email: ['', [ValidationService.emailValidator]],
       mobile: ['', [ValidationService.contactValidator]],
-      dateOfBirth: ['', Validators.required],
+      dateOfBirth: [''],
       occupation: [''],
       hasPets: false,
       petsInfo: ['', { disabled: false }],
