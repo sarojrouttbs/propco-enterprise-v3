@@ -689,7 +689,7 @@
         <ion-col size-xs="100" size-sm="33.3">
           <ion-item>
             <ion-label position="floating">Sort code</ion-label>
-            <ion-input type="text" formControlName="sortcode"  mask="**:**:**"></ion-input>
+            <ion-input type="text" formControlName="sortcode"  maxlength="8" mask="**:**:**"></ion-input>
           </ion-item>
           <app-validation-message [control]="bankDetailsForm.controls.bankDetails['controls'].sortcode">
           </app-validation-message>
