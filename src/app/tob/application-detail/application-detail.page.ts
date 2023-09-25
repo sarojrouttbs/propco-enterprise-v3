@@ -1249,7 +1249,7 @@ export class ApplicationDetailPage implements OnInit {
 
   private saveApplicantDetails() {
     const applicantDetails = this.applicantDetailsForm.value;
-    applicantDetails.dateOfBirth = this.commonService.getFormatedDate(applicantDetails.dateOfBirth);
+    applicantDetails.dateOfBirth = applicantDetails.dateOfBirth ? this.commonService.getFormatedDate(applicantDetails.dateOfBirth) : null;
     if (this.checkFormDirty(this.applicantDetailsForm)) {
       this.updateApplicantDetails();
     }
@@ -1258,7 +1258,7 @@ export class ApplicationDetailPage implements OnInit {
   private saveAddressDetails() {
     const applicantDetails = this.applicantDetailsForm.value;
     applicantDetails.address = this.addressDetailsForm.value.address;
-    applicantDetails.dateOfBirth = this.commonService.getFormatedDate(applicantDetails.dateOfBirth);
+    applicantDetails.dateOfBirth = applicantDetails.dateOfBirth ? this.commonService.getFormatedDate(applicantDetails.dateOfBirth) : null;
     applicantDetails.forwardingAddress = this.addressDetailsForm.value.forwardingAddress;
     if (this.checkFormDirty(this.addressDetailsForm)) {
       this.updateApplicantDetails();
