@@ -899,6 +899,10 @@
                 <ion-text class="header">Sole Agent</ion-text><br />
                 <ion-text class="content">{{item?.soleAgent || DEFAULTS.NOT_AVAILABLE}}</ion-text>
               </ion-col>
+              <ion-col *ngIf="item?.entityType === 'PROPERTY'" size-xl="25" size-lg="33.3" size-md="33.3" size-sm="50" size-xs="100" class="header-content">
+                <ion-text class="header">Key Code</ion-text><br />
+                <ion-text class="content">{{item?.keyCode || DEFAULTS.NOT_AVAILABLE}}</ion-text>
+              </ion-col>
             </ion-row>
           </ion-grid>
         </div>
