@@ -95,6 +95,7 @@ declare namespace ApplicationModels {
         isTermsAndConditionsAccepted: boolean;
         isHoldingDepositPaid: boolean;
         rent: number;
+        deposit: number;
         depositAmount: number;
         isNoDepositScheme: boolean;
         moveInDate: string;

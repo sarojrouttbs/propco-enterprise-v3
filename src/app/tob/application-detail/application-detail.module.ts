@@ -11,6 +11,17 @@ import { TemplateFormModule } from 'src/app/worldpay-ownform/template-form/templ
 import { TermsAndConditionModalPageModule } from 'src/app/shared/modals/terms-and-condition-modal/terms-and-condition-modal.module';
 import { PostcodeDirectiveModule } from 'src/app/shared/directives/postcode-directive.module';
 import { InputMaskDirective } from 'src/app/directives/input-mask.directive';
+import { CurrencyMaskConfig, CurrencyMaskModule, CURRENCY_MASK_CONFIG } from 'ng2-currency-mask';
+
+export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
+  align: "left",
+  allowNegative: false,
+  decimal: ".",
+  precision: 2,
+  prefix: "£ ",
+  suffix: "",
+  thousands: ","
+};
 
 @NgModule({
   imports: [
@@ -24,8 +35,10 @@ import { InputMaskDirective } from 'src/app/directives/input-mask.directive';
     MaterialModule,
     TemplateFormModule,
     TermsAndConditionModalPageModule,
-    PostcodeDirectiveModule
+    PostcodeDirectiveModule,
+    CurrencyMaskModule
   ],
+  providers: [{ provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }],
   declarations: [ApplicationDetailPage,InputMaskDirective]
 })
 export class ApplicationDetailPageModule {}

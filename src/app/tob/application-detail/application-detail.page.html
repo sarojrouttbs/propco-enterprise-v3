@@ -759,18 +759,35 @@
     <ion-grid class="ion-padding">
       <ion-row class="ion-justify-content-start">
         <ion-col size-xs="100" size-sm="33.3" class="header-content">
-          <ion-text class="header">Rent</ion-text><br />
+          <ng-container *ngIf="applicationRentEditable != 1 || !applicationRentEditable">
+            <ion-text class="header">Rent</ion-text><br />
+            <ion-text class="content">
+              {{ applicationDetails?.rent ? (applicationDetails?.rent | currency: "GBP" ) :
+              (propertyDetails?.advertisementRent | currency: "GBP") }}
+            </ion-text>
+          </ng-container>
+          <ng-container *ngIf="applicationRentEditable == 1">
+            <ion-item>
+              <ion-label position="stacked">Rent</ion-label>
+              <input style="border: 0; outline: 0; background: none;width: 100%;" currencyMask type="tel" formControlName="rent"/>
+            </ion-item>
+            <app-validation-message [control]="tenancyDetailForm.controls.rent"></app-validation-message>
+          </ng-container>
+        </ion-col>
+
+        <ion-col size-xs="100" size-sm="33.3" class="header-content">
+          <ion-text class="header">Holding Deposit</ion-text><br />
           <ion-text class="content">
-            {{ applicationDetails?.rent ? (applicationDetails?.rent | currency: "GBP" ) :
-            (propertyDetails?.advertisementRent | currency: "GBP") }}
+            {{ tenancyDetailForm.controls.depositAmount.value ? (tenancyDetailForm.controls.depositAmount.value | currency: "GBP") :
+            (tenancyDetailForm.controls.depositAmount.value | currency: "GBP") }}
           </ion-text>
         </ion-col>
 
         <ion-col size-xs="100" size-sm="33.3" class="header-content">
-          <ion-text class="header">Deposit</ion-text><br />
+          <ion-text class="header">Security Deposit</ion-text><br />
           <ion-text class="content">
-            {{ applicationDetails?.depositAmount ? (applicationDetails?.depositAmount | currency: "GBP") :
-            (propertyDetails?.holdingDeposit | currency: "GBP") }}
+            {{ tenancyDetailForm.controls.deposit.value ? (tenancyDetailForm.controls.deposit.value | currency: "GBP") :
+            (tenancyDetailForm.controls.deposit.value | currency: "GBP") }}
           </ion-text>
         </ion-col>
 

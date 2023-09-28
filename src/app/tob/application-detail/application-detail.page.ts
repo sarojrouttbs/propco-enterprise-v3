@@ -107,8 +107,12 @@ export class ApplicationDetailPage implements OnInit {
   DEFAULTS = DEFAULTS;
   DATE_FORMAT = DATE_FORMAT;
   webImageUrl: string;
+  holdingDepAutoCalWeek: any;
+  depositAutoCalWeeks: any;
+  applicationRentEditable: any;
   updateOccupantsInProcess = false;
   applicantQuestions: any = [];
+  initiaFormlLoaded = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -152,6 +156,16 @@ export class ApplicationDetailPage implements OnInit {
         (error) => {
           resolve(null);
         });
+    });
+  }
+
+  private async getSystemConfigs(key): Promise<any> {
+    return new Promise((resolve) => {
+      this.commonService.getSystemConfig(key).subscribe(res => {
+        resolve(res[key]);
+      }, error => {
+        resolve(true);
+      });
     });
   }
 
@@ -236,12 +250,19 @@ export class ApplicationDetailPage implements OnInit {
 
   private async initApiCalls() {
     let tmpImageObj: any = await this.getSystemOptions(SYSTEM_OPTIONS.WEB_IMAGE_URL);
+    let tmpDepObj: any = await this.getSystemConfigs(SYSTEM_OPTIONS.DEPOSIT_AUTO_CALCULATION_WEEKS);
+    let tmpHdepObj: any = await this.getSystemConfigs(SYSTEM_OPTIONS.HOLDING_DEPOSIT_AUTO_CALCULATION_WEEKS);
+    let tmpRentEditableObj: any = await this.getSystemConfigs(SYSTEM_OPTIONS.TOB_APPLICATION_RENT_EDITABLE);
     this.webImageUrl = tmpImageObj ? tmpImageObj.WEB_IMAGE_URL : '';
+    this.holdingDepAutoCalWeek = tmpHdepObj ? parseInt(tmpHdepObj) : '';
+    this.depositAutoCalWeeks = tmpDepObj ? parseInt(tmpDepObj) : '';
+    this.applicationRentEditable = tmpRentEditableObj ? parseInt(tmpRentEditableObj) : '';
+    this.applicationRentEditable = null;
     await this.getPropertyDetails(this.propertyId);
     this.initTermsAndConditionData();
   }
 
-  private initLookups(){
+  private initLookups() {
     this.getLookUpData();
     this.getTobLookupData();
   }
@@ -632,7 +653,9 @@ export class ApplicationDetailPage implements OnInit {
     requestObj.createdBy = ENTITY_TYPE.AGENT;
     requestObj.propertyId = this.propertyId;
     requestObj.status = APPLICATION_STATUSES.NEW;
-    requestObj.rent = this.propertyDetails?.advertisementRent;
+    requestObj.rent = this.propertyDetails?.rentAmount;
+    requestObj.depositAmount = this.propertyDetails?.holdingDeposit;
+    requestObj.deposit = this.propertyDetails?.deposit;
     requestObj.applicationRestrictions = this.propertyRestrictions;
     requestObj.applicationClauses = this.propertyClauses;
     this._tobService.createApplication(requestObj).subscribe(
@@ -1052,6 +1075,9 @@ export class ApplicationDetailPage implements OnInit {
 
   initTenancyDetailsForm(): void {
     this.tenancyDetailForm = this._formBuilder.group({
+      rent: ['', [Validators.min(1), Validators.required]],
+      depositAmount: ['', Validators.required],
+      deposit: ['', Validators.required],
       moveInDate: ['', Validators.required],
       preferredTenancyEndDate: ['', Validators.required],
       rentDueDay: ['', [Validators.required, Validators.max(31), Validators.min(1)]],
@@ -1066,6 +1092,13 @@ export class ApplicationDetailPage implements OnInit {
       ])
     }
     );
+
+    this.tenancyDetailForm.controls['rent'].valueChanges.pipe(debounceTime(500)).subscribe((res) => {
+      if (this.initiaFormlLoaded) {
+        this.calRent(res);
+      }
+      this.initiaFormlLoaded = true;
+    });
   }
 
   setHouseHoldValue(value: number) {
@@ -1079,15 +1112,18 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   private saveTenancyDetail(): void {
-    this.applicationDetails.moveInDate = this.commonService.getFormatedDate(this.tenancyDetailForm.value.moveInDate);
+    this.applicationDetails.moveInDate = this.tenancyDetailForm.value.moveInDate ? this.commonService.getFormatedDate(this.tenancyDetailForm.value.moveInDate) : null;
     this.applicationDetails.rentingTime = this.tenancyDetailForm.value.rentingTime;
-    this.applicationDetails.preferredTenancyEndDate = this.commonService.getFormatedDate(this.tenancyDetailForm.value.preferredTenancyEndDate);
+    this.applicationDetails.preferredTenancyEndDate = this.tenancyDetailForm.value.preferredTenancyEndDate ? this.commonService.getFormatedDate(this.tenancyDetailForm.value.preferredTenancyEndDate) : null;
     this.applicationDetails.rentDueDay = this.tenancyDetailForm.value.rentDueDay;
     this.applicationDetails.numberOfAdults = this.tenancyDetailForm.value.numberOfAdults;
     this.applicationDetails.numberOfChildren = this.tenancyDetailForm.value.numberOfChildren;
     this.applicationDetails.hasSameHouseholdApplicants = this.tenancyDetailForm.value.hasSameHouseholdApplicants;
     this.applicationDetails.numberOfHouseHolds = this.tenancyDetailForm.value.numberOfHouseHolds;
     this.applicationDetails.isNoDepositScheme = this.tenancyDetailForm.value.isNoDepositScheme;
+    this.applicationDetails.rent = this.tenancyDetailForm.value.rent;
+    this.applicationDetails.depositAmount = this.tenancyDetailForm.value.depositAmount;
+    this.applicationDetails.deposit = this.tenancyDetailForm.value.deposit;
     if (this.checkFormDirty(this.tenancyDetailForm)) {
       this.updateApplicationDetails();
     }
@@ -1107,6 +1143,7 @@ export class ApplicationDetailPage implements OnInit {
     requestObj.isTermsAndConditionsAccepted = this.termsConditionControl;
     requestObj.rent = requestObj.rent ? requestObj.rent : this.propertyDetails.advertisementRent;
     requestObj.depositAmount = requestObj.depositAmount ? requestObj.depositAmount : this.propertyDetails.holdingDeposit;
+    requestObj.deposit = requestObj.deposit ? requestObj.deposit : this.propertyDetails.deposit;
     this._tobService.updateApplicationDetails(requestObj, this.applicationId).subscribe(
       res => {
         if (this.selectionType === APPLICATION_ACTION_TYPE.SAVE_FOR_LATER) {
@@ -1324,6 +1361,9 @@ export class ApplicationDetailPage implements OnInit {
 
   setTenancyDetails(details: any) {
     this.tenancyDetailForm.patchValue({
+      rent: details?.rent ? details?.rent : this.propertyDetails?.rentAmount,
+      depositAmount: details?.depositAmount ? details?.depositAmount : this.propertyDetails?.holdingDeposit,
+      deposit: details?.deposit ? details?.deposit : this.propertyDetails?.deposit,
       moveInDate: details.moveInDate ? this.commonService.getFormatedDate(details.moveInDate) : '',
       preferredTenancyEndDate: details.preferredTenancyEndDate ? this.commonService.getFormatedDate(details.preferredTenancyEndDate) : '',
       rentDueDay: details.rentDueDay,
@@ -1723,5 +1763,20 @@ export class ApplicationDetailPage implements OnInit {
     this.worldPayInternalData.entityType = ENTITY_TYPE.LET_APPLICANT;
     this.worldPayInternalData.entityId = this.applicantId;
     this.worldPayInternalData.amount = this.applicationDetails.depositAmount;
+  }
+
+  private calRent(currentRent) {
+    const rent = parseInt(currentRent);
+    if (rent > 0 && this.propertyDetails.rentFrequency > 0) {
+      switch (this.propertyDetails.frequencyType) {
+        case 3: /**month*/
+          const weeklyRent = ((currentRent * (12 / this.propertyDetails.rentFrequency)) / 52);
+          const depositAmt = weeklyRent * this.depositAutoCalWeeks;
+          const holdingDepAmt = weeklyRent * this.holdingDepAutoCalWeek;
+          this.tenancyDetailForm.controls['depositAmount'].setValue(holdingDepAmt.toFixed(2));
+          this.tenancyDetailForm.controls['deposit'].setValue(depositAmt.toFixed(2));
+          break;
+      }
+    }
   }
 }
