@@ -257,7 +257,6 @@ export class ApplicationDetailPage implements OnInit {
     this.holdingDepAutoCalWeek = tmpHdepObj ? parseInt(tmpHdepObj) : '';
     this.depositAutoCalWeeks = tmpDepObj ? parseInt(tmpDepObj) : '';
     this.applicationRentEditable = tmpRentEditableObj ? parseInt(tmpRentEditableObj) : '';
-    this.applicationRentEditable = null;
     await this.getPropertyDetails(this.propertyId);
     this.initTermsAndConditionData();
   }
