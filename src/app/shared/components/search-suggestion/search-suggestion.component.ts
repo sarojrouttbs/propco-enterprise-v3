@@ -43,11 +43,11 @@ export class SearchSuggestionComponent implements OnInit {
   lookupdata: any;
   officeLookupDetails: any;
   officeLookupMap = new Map();
-  showLoader: boolean = false; 
+  showLoader: boolean = false;
   isPropcoSalesEnable = false;
-  serachWidth =68;
+  serachWidth = 68;
   @Input() pageType: string;
-  @Input() loaded: string;
+  @Input() loaded: any;
   @ViewChild('solrSearchBar') solrSearchBar: any;
   isProcpcoSearchEnabled = false;
 
@@ -87,13 +87,13 @@ export class SearchSuggestionComponent implements OnInit {
     if (searchTypes.indexOf('PROPERTY') !== -1 && this.isPropcoSalesEnable) {
       searchTypes.push('SALES_PROPERTY');
     }
-    
+
     const params = new HttpParams()
-        // .set('limit', this.solrSuggestionConfig.limit)
-        .set('searchTerm', searchText)
-        .set('searchTypes', searchTypes)
-        .set('searchSwitch', this.solrSuggestionConfig.searchSwitch)
-        .set('hideLoader', 'true');
+      // .set('limit', this.solrSuggestionConfig.limit)
+      .set('searchTerm', searchText)
+      .set('searchTypes', searchTypes)
+      .set('searchSwitch', this.solrSuggestionConfig.searchSwitch)
+      .set('hideLoader', 'true');
 
     if (this.router.url.includes('/solr/entity-finder/Associate') || this.router.url.includes('solr/finder-results/Associate')) {
       params.set('subType', "Associate");
@@ -109,6 +109,9 @@ export class SearchSuggestionComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     this.getQueryParams();
+    if(changes.loaded.currentValue){
+      this.focus();
+    }
   }
 
   async ngOnInit() {
@@ -370,5 +373,13 @@ export class SearchSuggestionComponent implements OnInit {
         resolve(true);
       });
     });
+  }
+
+  focus() {
+    setTimeout(() => {
+      if (this.solrSearchBar) {
+        this.solrSearchBar.setFocus();
+      }
+    }, 1000)
   }
 }
