@@ -83,7 +83,7 @@ export class DashboardPage implements OnInit {
     private modalController: ModalController
   ) {
     this.routeSnapShot = route.snapshot;
-    if (this.router.url) {      
+    if (this.router.url) {
       if (this.router.url.includes('/solr/search')) {
         this.onlySearch = true;
       } else if (this.router.url.includes('/solr/entity-finder')) {
@@ -113,7 +113,7 @@ export class DashboardPage implements OnInit {
     const userData = this.commonService.getItem(PROPCO.USER_DETAILS, true);
     if (accessToken && webKey && userData) {
       this.isCheckForExistingRecordsEnabled = await this.getSystemConfigs(SYSTEM_CONFIG.ENABLE_CHECK_FOR_EXISTING_RECORDS);
-      this.commonService.setItem(PROPCO.SALES_MODULE, await this.getSystemConfigs(SYSTEM_CONFIG.ENABLE_SALES_MODULE));          
+      this.commonService.setItem(PROPCO.SALES_MODULE, await this.getSystemConfigs(SYSTEM_CONFIG.ENABLE_SALES_MODULE));
       this.setDefaultHome(true);
       this.loggedInUserData = userData;
       this.isSolrTourDone = this.loggedInUserData.isSolrTourDone;
@@ -126,10 +126,16 @@ export class DashboardPage implements OnInit {
       this.isCheckForExistingRecordsEnabled = await this.getSystemConfigs(SYSTEM_CONFIG.ENABLE_CHECK_FOR_EXISTING_RECORDS);
       this.commonService.setItem(PROPCO.SALES_MODULE, await this.getSystemConfigs(SYSTEM_CONFIG.ENABLE_SALES_MODULE));
       this.setDefaultHome(true);
-      this.loggedInUserData = await this.getUserDetailsPvt();
-      this.isSolrTourDone = this.loggedInUserData.isSolrTourDone;
+      const userDetail = await this.getUserDetailsPvt() as any;
+      if (userDetail) {
+        this.loggedInUserData = userDetail.data[0];
+        this.commonService.setItem(PROPCO.USER_DETAILS, this.loggedInUserData);
+        this.isSolrTourDone = this.loggedInUserData.isSolrTourDone;
+        this.showTourGuide();
+      } else {
+        this.commonService.showMessage('Not able to fetch user details, Please contact support for further assistance.', 'User Details', 'error');
+      }
       this.loaded = true;
-      this.showTourGuide();
     } else {
       this.router.navigate(['/sso-failure-page'], { replaceUrl: true });
     }
@@ -150,10 +156,7 @@ export class DashboardPage implements OnInit {
     return new Promise((resolve) => {
       this.commonService.getUserDetailsPvt(params).subscribe(
         (res) => {
-          if (res) {
-            this.commonService.setItem(PROPCO.USER_DETAILS, res.data[0]);
-            resolve(res ? res.data[0] : null);
-          }
+          resolve(res);
         },
         (error) => {
           resolve(null);
