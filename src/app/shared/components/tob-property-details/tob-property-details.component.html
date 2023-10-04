@@ -30,7 +30,7 @@
               <ion-row>
                 <div class="amount-alignment">
                   <ion-col class="ion-text-start amount">
-                    <h4 class="ion-text-start fs-18 bottom-align">{{ propertyDetails?.advertisementRent | currency:
+                    <h4 class="ion-text-start fs-18 bottom-align">{{ propertyDetails?.rentAmount | currency:
                       'GBP'}}
                       {{ (propertyDetails?.advertisementRentFrequency | lookup: rentFrequencyTypes) }}
                     </h4>
