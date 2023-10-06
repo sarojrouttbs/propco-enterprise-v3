@@ -311,9 +311,13 @@ export class ApplicationDetailPage implements OnInit {
       this.commonService.showMessage('Please provide complete information.', 'Application Details', 'error');
       return;
     }
-    if (!this.termsConditionControl) {
-      this.commonService.showMessage('Please review the terms and conditions.', 'Terms & Conditions', 'error');
-      return;
+    // if (!this.termsConditionControl) {
+    //   this.commonService.showMessage('Please review the terms and conditions.', 'Terms & Conditions', 'error');
+    //   return;
+    // }
+    if (!this.applicationDetails.isTermsAndConditionsAccepted) {
+      await this.updateApplicationDetails();
+      this.applicationDetails.isTermsAndConditionsAccepted = this.termsConditionControl;
     }
     this.saveGuarantorDetails();
     this.onSubmit();
@@ -1139,7 +1143,7 @@ export class ApplicationDetailPage implements OnInit {
     if (requestObj.hasSameHouseholdApplicants) {
       requestObj.numberOfHouseHolds = 1;
     }
-    requestObj.isTermsAndConditionsAccepted = this.termsConditionControl;
+    requestObj.isTermsAndConditionsAccepted = true;
     requestObj.rent = requestObj.rent ? requestObj.rent : this.propertyDetails.advertisementRent;
     requestObj.depositAmount = requestObj.depositAmount ? requestObj.depositAmount : this.propertyDetails.holdingDeposit;
     requestObj.deposit = requestObj.deposit ? requestObj.deposit : this.propertyDetails.deposit;

@@ -116,7 +116,7 @@ export class SearchSuggestionComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     this.getQueryParams();
-    if (changes.loaded.currentValue) {
+    if (changes.loaded && changes.loaded.currentValue) {
       this.focus();
     }
   }
