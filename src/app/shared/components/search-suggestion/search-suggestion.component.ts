@@ -2,7 +2,7 @@ import { HttpParams } from '@angular/common/http';
 import { Component, Input, OnInit, Output, SimpleChanges, EventEmitter, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PROPCO, SYSTEM_CONFIG } from 'src/app/shared/constants';
+import { PROPCO, SOLR_CONFIG, SYSTEM_CONFIG } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { SolrService } from '../../../solr/solr.service';
 import { SolrSearchHandlerService } from '../../services/solr-search-handler.service';
@@ -22,6 +22,7 @@ export class SearchSuggestionComponent implements OnInit {
   }
   isItemAvailable = false;
   suggestions = [];
+  historySuggestions = [];
   @Input() entityControl: FormControl;
   @Input() isAuthSuccess: boolean;
   @Output() searchClickEvent = new EventEmitter();
@@ -50,7 +51,8 @@ export class SearchSuggestionComponent implements OnInit {
   @Input() loaded: any;
   @ViewChild('solrSearchBar') solrSearchBar: any;
   isProcpcoSearchEnabled = false;
-
+  solrConfig = SOLR_CONFIG;
+  historyItemAvailable = false;
   constructor(
     private solrService: SolrService,
     private commonService: CommonService,
@@ -61,18 +63,23 @@ export class SearchSuggestionComponent implements OnInit {
   ) {
   }
   serachResultPage = "";
-  getItems(ev: any) {
-    this.solrSearchBar.setFocus();
+  getItems(ev: any, searchFromHistory = false) {
+    if (!searchFromHistory) {
+      this.solrSearchBar.setFocus();
+    }
     // Reset items back to all of the items
     this.initializeItems();
 
     // set val to the value of the searchbar
-    const searchText = ev.target.value;
+    const searchText = !searchFromHistory ? ev.target.value : ev;
     this.updateQueryParams();
-
     // if the value is an empty string don't filter the items
     if (searchText && searchText.trim() !== '' && searchText.length > 3) {
       this.showLoader = true;
+      this.historyItemAvailable = false;
+      if (!searchFromHistory) {
+        this.addItemsToHistorySg(searchText);
+      }
       this.getSuggestions(this.prepareSearchParams(searchText));
     } else {
       this.isItemAvailable = false;
@@ -109,7 +116,7 @@ export class SearchSuggestionComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     this.getQueryParams();
-    if(changes.loaded.currentValue){
+    if (changes.loaded.currentValue) {
       this.focus();
     }
   }
@@ -261,6 +268,7 @@ export class SearchSuggestionComponent implements OnInit {
   hideSuggestion() {
     setTimeout(() => {
       this.isItemAvailable = false;
+      this.historyItemAvailable = false;
     }, 200);
   }
 
@@ -381,5 +389,53 @@ export class SearchSuggestionComponent implements OnInit {
         this.solrSearchBar.setFocus();
       }
     }, 1000)
+  }
+
+  showHistoryItem(ev: any) {
+    const searchText = ev.target.value;
+    const history = this.commonService.getItem('history', true);
+    if (history && history.length) {
+      if (searchText == '' && searchText.length < 3) {
+        this.isItemAvailable = false;
+        this.historyItemAvailable = true;
+        this.historySuggestions = history;
+      }
+    }
+  }
+
+  private addItemsToHistorySg(item: string) {
+    let history = this.fetchHistorySuggestion() || [];
+    if (history && item && item != '') {
+      history.unshift(item);
+      this.commonService.setItem('history', history);
+      this.historySuggestions = this.fetchHistorySuggestion();
+    } else {
+      if (item && item != '') {
+        history.unshift(item);
+        this.commonService.setItem('history', history);
+        this.historySuggestions = this.fetchHistorySuggestion();
+      }
+    }
+  }
+
+  private fetchHistorySuggestion() {
+    return (this.commonService.getItem('history', true) || []);
+  }
+
+  onFocus() {
+    if (this.suggestions.length) {
+      this.isItemAvailable = true;
+      this.historyItemAvailable = false;
+    } else {
+      this.isItemAvailable = false;
+    }
+  }
+
+  searchFromHistory(item: any) {
+    this.historyItemAvailable = false;
+    if (item) {
+      this.searchTerm = item;
+      this.searchTermControl.setValue(item);
+    }
   }
 }
