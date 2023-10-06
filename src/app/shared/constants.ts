@@ -879,3 +879,7 @@ export const STRIPE_ELEMENT_CONFIG = {
     secret_key: ''
   }
 }
+
+export const SOLR_CONFIG = {
+  enableHistory:true
+}

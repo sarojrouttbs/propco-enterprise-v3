@@ -21,11 +21,11 @@
       <ion-searchbar #solrSearchBar [(ngModel)]="searchTerm"
         [placeholder]="'Start typing to search ' + (entityControl.value.length ? ''+ (entityControl.value).join(',').replace('_',' ') + '':'')"
         class="searchbarCustom" debounce="500" (ionChange)="getItems($event)" [formControl]="searchTermControl"
-        (ionBlur)="hideSuggestion()" (ionFocus)="suggestions.length > 0 ? isItemAvailable = true : false">
+        (ionBlur)="hideSuggestion()" (click)="showHistoryItem($event)" (ionFocus)="onFocus()">
       </ion-searchbar>
       <ion-progress-bar color="danger" [type]="'indeterminate'" *ngIf="showLoader"
         style="position: absolute;"></ion-progress-bar>
-      <ion-list *ngIf="isItemAvailable" class="solrSuggestionList" [class.solr-dashboard]="pageType === 'dashboard'">
+      <ion-list *ngIf="isItemAvailable && !historyItemAvailable" class="solrSuggestionList" [class.solr-dashboard]="pageType === 'dashboard'">
         <ion-item *ngFor="let item of suggestions" class="solrSuggestionListItem">
           <ng-container [ngTemplateOutlet]="propertySuggestion" *ngIf="item?.entityType === 'PROPERTY'|| item?.entityType === 'SALES_PROPERTY'"
             [ngTemplateOutletContext]="{item:item}">
@@ -55,6 +55,13 @@
           <ng-container [ngTemplateOutlet]="salesApplicantSuggestion" *ngIf="item?.entityType === 'SALES_APPLICANT'"
             [ngTemplateOutletContext]="{item:item}">
           </ng-container>
+        </ion-item>
+      </ion-list>
+      <ion-list *ngIf="historyItemAvailable && !isItemAvailable && solrConfig.enableHistory" class="solrHistSuggestionList">
+        <ion-item style="padding-left: 1%;" *ngFor="let item of historySuggestions | slice:0:10;" class="solrHistSuggestionListItem">
+          <div  (click)="searchFromHistory(item)" style="width: 100%;">
+            {{item}}
+          </div>
         </ion-item>
       </ion-list>
     </div>
