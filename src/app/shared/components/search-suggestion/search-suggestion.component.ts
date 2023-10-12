@@ -63,7 +63,7 @@ export class SearchSuggestionComponent implements OnInit {
   ) {
   }
   serachResultPage = "";
-  getItems(ev: any, searchFromHistory = false) { console.log('s')
+  getItems(ev: any, searchFromHistory = false) {
     if (!searchFromHistory) {
       this.solrSearchBar.setFocus();
     }
