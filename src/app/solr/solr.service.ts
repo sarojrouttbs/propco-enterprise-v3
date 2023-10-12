@@ -55,4 +55,17 @@ export class SolrService {
     return this.httpClient.get(environment.API_BASE_URL + `accessible-offices`);
   }
 
+  saveHistoryInMongo(body: object): Observable<any> {
+    const params = new HttpParams().set('hideLoader', 'true');
+    return this.httpClient.post(
+      environment.API_BASE_URL + `entities/save-history`,
+      body,
+      { params }
+    );
+  }
+
+  getSearchHistory(): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `entities/solr-search-history`);
+  }
+
 }

@@ -59,8 +59,11 @@
       </ion-list>
       <ion-list *ngIf="historyItemAvailable && !isItemAvailable && solrConfig.enableHistory" class="solrHistSuggestionList">
         <ion-item style="padding-left: 1%;" *ngFor="let item of historySuggestions | slice:0:10;" class="solrHistSuggestionListItem">
-          <div  (click)="searchFromHistory(item)" style="width: 100%;">
-            {{item}}
+          <div  class="history-container" (click)="searchFromHistory(item)">
+            <span class="history-icon">
+              <ion-icon name="time-outline"></ion-icon>
+            </span>
+            <span class="history-text">{{item}}</span>
           </div>
         </ion-item>
       </ion-list>

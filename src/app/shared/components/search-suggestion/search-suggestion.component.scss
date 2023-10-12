@@ -99,13 +99,29 @@ i.search-Finder {
     .solrHistSuggestionListItem {
         color: var(--ion-text-color);
         cursor: pointer;
-        @include set-text-style(14px, 48px);
+        font-size: 14px;
+        line-height: 30px;
         overflow: hidden;
         padding: 0 2px;
-        height: 48px;
+        height: 30px;
         margin: 0;
         white-space: nowrap;
         text-overflow: ellipsis;
+        display: flex;
+        font-style: italic;
+
+        .history-container {
+        width: 100%;  display: flex;
+        justify-content: flex-start;
+        align-items: center;font-family: inherit;
+        .history-icon {
+            margin: 4px 6px 0 0px;
+        }
+        .history-text {
+            font-size: 16px;
+            word-break: break-word;
+        }
+        }
 
         i.propcoicon {
             display: inline-table;
