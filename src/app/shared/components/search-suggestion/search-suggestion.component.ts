@@ -77,9 +77,6 @@ export class SearchSuggestionComponent implements OnInit {
     if (searchText && searchText.trim() !== '' && searchText.length > 3) {
       this.showLoader = true;
       this.historyItemAvailable = false;
-      if (!searchFromHistory) {
-        this.addItemsToHistorySg(searchText);
-      }
       this.getSuggestions(this.prepareSearchParams(searchText));
     } else {
       this.isItemAvailable = false;
@@ -122,6 +119,7 @@ export class SearchSuggestionComponent implements OnInit {
   }
 
   async ngOnInit() {
+    await this.getSearchHistory();
     if (this.commonService.getItem('PROPCO_SEARCH_ENABLED', true) != null) {
       this.isProcpcoSearchEnabled = this.commonService.getItem('PROPCO_SEARCH_ENABLED', true);
     } else {
@@ -134,6 +132,30 @@ export class SearchSuggestionComponent implements OnInit {
     this.commonService.dataChanged$.subscribe((data) => {
       this.entityControl.setValue(data.entity);
       this.searchTermControl.setValue(data.term);
+    });
+  }
+
+  private getSearchHistory() {
+    return new Promise((resolve) => {
+      this.solrService.getSearchHistory().subscribe(res => {
+        if (res) {
+          this.commonService.removeItem('history');
+          this.commonService.setItem('history', res.searchHistory);
+          resolve(true);
+        }
+      }, error => {
+        resolve(false);
+      });
+    });
+  }
+
+  private updateSearchHistory(data: any) {
+    return new Promise((resolve) => {
+      this.solrService.saveHistoryInMongo(data).subscribe(res => {
+        resolve(true);
+      }, error => {
+        resolve(false);
+      });
     });
   }
 
@@ -179,6 +201,7 @@ export class SearchSuggestionComponent implements OnInit {
   }
 
   openHomeCategory(key: string, value = null) {
+    this.addItemsToHistorySg(this.searchTermControl.value);
     if (this.router.url.includes('/solr/entity-finder') || this.router.url.includes('solr/finder-results')) {
       let entityDetail: any = {};
       entityDetail.entityId = value.propcoId;
@@ -203,6 +226,7 @@ export class SearchSuggestionComponent implements OnInit {
   }
 
   goToPage() {
+    this.addItemsToHistorySg(this.searchTermControl.value);
     if (this.router.url.includes('/solr/entity-finder') || this.router.url.includes('solr/finder-results')) {
       let type = this.entityControl.value;
       if (this.router.url.includes('/solr/entity-finder/Associate') || this.router.url.includes('solr/finder-results/Associate')) {
@@ -406,16 +430,23 @@ export class SearchSuggestionComponent implements OnInit {
   private addItemsToHistorySg(item: string) {
     let history = this.fetchHistorySuggestion() || [];
     if (history && item && item != '') {
-      history.unshift(item);
-      this.commonService.setItem('history', history);
-      this.historySuggestions = this.fetchHistorySuggestion();
+      if (history.indexOf(item.toLocaleLowerCase()) == -1) {
+        history.unshift(item.toLocaleLowerCase());
+        this.commonService.setItem('history', history);
+        this.historySuggestions = this.fetchHistorySuggestion();
+      }
     } else {
       if (item && item != '') {
-        history.unshift(item);
+        history.unshift(item.toLocaleLowerCase());
         this.commonService.setItem('history', history);
         this.historySuggestions = this.fetchHistorySuggestion();
       }
     }
+    this.addItemToDb(history);
+  }
+
+  private addItemToDb(data: any) {
+    this.updateSearchHistory(data);
   }
 
   private fetchHistorySuggestion() {
