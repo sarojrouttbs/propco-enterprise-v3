@@ -73,6 +73,9 @@ export class SearchSuggestionComponent implements OnInit {
     // set val to the value of the searchbar
     const searchText = !searchFromHistory ? ev.target.value : ev;
     this.updateQueryParams();
+    if(searchText == '') {
+      this.historyItemAvailable = true;
+    }
     // if the value is an empty string don't filter the items
     if (searchText && searchText.trim() !== '' && searchText.length > 3) {
       this.showLoader = true;
