@@ -64,6 +64,7 @@ declare namespace OfferModels {
         surname: string;
         title: string;
         username: string;
+        isReferencingRequired: boolean
     }
 
     export interface ILookupResponse {
