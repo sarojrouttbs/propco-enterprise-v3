@@ -162,7 +162,7 @@ export class ApplicationDetailPage implements OnInit {
   private async getSystemConfigs(key): Promise<any> {
     return new Promise((resolve) => {
       this.commonService.getSystemConfig(key).subscribe(res => {
-        resolve(res[key]);
+        resolve(res ? res[key] : null);
       }, error => {
         resolve(true);
       });
@@ -228,7 +228,8 @@ export class ApplicationDetailPage implements OnInit {
       petsInfo: this.applicantDetail.petsInfo,
       guarantor: this.applicantDetail.guarantorType ? true : false,
       guarantorType: this.applicantDetail.guarantorType,
-      currentPosition: this.applicantDetail.currentPosition
+      currentPosition: this.applicantDetail.currentPosition,
+      isReferencingRequired: this.applicantDetail.isReferencingRequired
     });
   }
 
@@ -794,7 +795,8 @@ export class ApplicationDetailPage implements OnInit {
       petsInfo: ['', { disabled: false }],
       guarantor: false,
       guarantorType: ['', { disabled: false }],
-      currentPosition: ''
+      currentPosition: '',
+      isReferencingRequired: false
     });
   }
 
@@ -827,7 +829,8 @@ export class ApplicationDetailPage implements OnInit {
       isAdded: false,
       isDeleted: false,
       title: '',
-      applicantId: ''
+      applicantId: '',
+      isReferencingRequired: false
     }
     ));
   }
@@ -846,7 +849,8 @@ export class ApplicationDetailPage implements OnInit {
       isAdded: true,
       isDeleted: false,
       title: control.value.title,
-      applicantId: ''
+      applicantId: '',
+      isReferencingRequired: control.value.isReferencingRequired
     }
     ));
     coApplicants.removeAt(index);
@@ -868,7 +872,8 @@ export class ApplicationDetailPage implements OnInit {
       isAdded: true,
       isDeleted: false,
       title: response.title,
-      applicantId: response.applicantId
+      applicantId: response.applicantId,
+      isReferencingRequired: false
     }
     ));
     coApplicants.removeAt(index);
@@ -898,7 +903,8 @@ export class ApplicationDetailPage implements OnInit {
             isAdded: true,
             isDeleted: false,
             title: element.title,
-            applicantId: element.applicantId
+            applicantId: element.applicantId,
+            isReferencingRequired: element.isReferencingRequired
           }));
         }
       });

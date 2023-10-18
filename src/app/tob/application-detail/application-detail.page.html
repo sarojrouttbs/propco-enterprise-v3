@@ -252,14 +252,17 @@
             <ion-col size="15">
               <ion-text>Surname</ion-text>
             </ion-col>
-            <ion-col size="20">
+            <ion-col size="12">
               <ion-text>Mobile</ion-text>
             </ion-col>
-            <ion-col size="22">
+            <ion-col size="14">
               <ion-text>Email Address</ion-text>
             </ion-col>
             <ion-col size="8">
               <ion-text>Lead</ion-text>
+            </ion-col>
+            <ion-col size="15">
+              <ion-text>Referencing Required</ion-text>
             </ion-col>
             <ion-col size="10">
               <ion-text>Remove</ion-text>
@@ -289,12 +292,12 @@
                             {{ item.controls['surname'].value}}
                           </ion-text>
                         </ion-col>
-                        <ion-col size="20">
+                        <ion-col size="12">
                           <ion-text>
                             {{item.controls['mobile'].value || DEFAULTS.NOT_AVAILABLE}}
                           </ion-text>
                         </ion-col>
-                        <ion-col size="22">
+                        <ion-col size="14">
                           <ion-text>
                             {{item.controls['email'].value}}
                           </ion-text>
@@ -304,6 +307,12 @@
                             (click)="onLeadSelection(item); $event.stopPropagation();"
                             [checked]="item.controls['isLead'].value"
                             [disabled]="isStudentProperty || updateOccupantsInProcess || item.controls['isLead'].value  || !item.controls['applicationApplicantId'].value && !applicationDetails?.isSubmitted"
+                            color="primary"></ion-checkbox>
+                        </ion-col>
+                        <ion-col size="15">
+                          <ion-checkbox class="ml-15" style="opacity: unset;" formControlName="isReferencingRequired"
+                            [checked]="item.controls['isReferencingRequired'].value"
+                            [disabled]="applicationDetails?.isSubmitted"
                             color="primary"></ion-checkbox>
                         </ion-col>
                         <ion-col size="10">
