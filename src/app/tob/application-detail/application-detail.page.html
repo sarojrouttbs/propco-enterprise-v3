@@ -312,6 +312,7 @@
                         <ion-col size="15">
                           <ion-checkbox class="ml-15" style="opacity: unset;" formControlName="isReferencingRequired"
                             [checked]="item.controls['isReferencingRequired'].value"
+                            (ionChange)="updateApplicantById(item,item.controls['isReferencingRequired'].value);"
                             [disabled]="applicationDetails?.isSubmitted"
                             color="primary"></ion-checkbox>
                         </ion-col>
