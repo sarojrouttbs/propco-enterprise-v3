@@ -118,7 +118,7 @@ export class TobService {
     return this.httpClient.get(environment.API_BASE_URL + `applicants/${applicantId}`);
   }
 
-  updateApplicantDetails(applicantId: string, body: OfferModels.IApplicantDetails): Observable<any> {
+  updateApplicantDetails(applicantId: string, body: any): Observable<any> {
     return this.httpClient.put(environment.API_BASE_URL + `applicants/${applicantId}`, body);
   }
 
@@ -245,6 +245,12 @@ export class TobService {
 
   proposeTenancy(paymentDetails, propertyId): Observable<any> {
     return this.httpClient.post<any>(environment.API_BASE_URL + `properties/${propertyId}/propose-tenancy`, paymentDetails).pipe(
+      catchError(this.handleError<any>(''))
+    );
+  }
+
+  applicantionApplicantLinkageExisting(data, applicationId): Observable<any> {
+    return this.httpClient.post<any>(environment.API_BASE_URL + `applications/${applicationId}/applicants/linkage`, data).pipe(
       catchError(this.handleError<any>(''))
     );
   }

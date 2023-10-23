@@ -5,7 +5,7 @@ import { PROPCO, APPLICATION_STATUSES, APPLICATION_ACTION_TYPE, ENTITY_TYPE, PAY
 import { CommonService } from 'src/app/shared/services/common.service';
 import { TobService } from '../tob.service';
 import { switchMap, debounceTime, delay } from 'rxjs/operators';
-import { forkJoin, Observable } from 'rxjs';
+import { forkJoin, Observable, of } from 'rxjs';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { ValidationService } from 'src/app/shared/services/validation.service';
 import { ModalController } from '@ionic/angular';
@@ -14,7 +14,6 @@ import { environment } from 'src/environments/environment';
 import { SimpleModalPage } from 'src/app/shared/modals/simple-modal/simple-modal.page';
 import * as CryptoJS from 'crypto-js/crypto-js';
 import { HttpParams } from '@angular/common/http';
-
 @Component({
   selector: 'app-application-detail',
   templateUrl: './application-detail.page.html',
@@ -499,6 +498,7 @@ export class ApplicationDetailPage implements OnInit {
       }
       let newApplicationApplicants = [];
       let deletedApplicants = [];
+      let existingApplicantList = [];
       const coApplicantList = this.occupantForm.controls['coApplicants'].value;
       if (coApplicantList.length) {
         coApplicantList.map((occupant) => {
@@ -509,7 +509,8 @@ export class ApplicationDetailPage implements OnInit {
             }
             if (occupant.applicantId) {
               /**Link the existing occupants with the application : via search*/
-              apiObservableArray.push(this._tobService.linkApplicantToApplication(this.applicationId, occupant, occupant.applicantId).pipe(delay(500)));
+              // apiObservableArray.push(this._tobService.linkApplicantToApplication(this.applicationId, occupant, occupant.applicantId).pipe(delay(500)));
+              existingApplicantList.push(occupant);
             }
           }
           /**Check for deleted occupant*/
@@ -519,6 +520,11 @@ export class ApplicationDetailPage implements OnInit {
         });
         if (newApplicationApplicants.length) {
           apiObservableArray.push(this._tobService.addApplicantToApplication(this.prepareOccupantData(newApplicationApplicants), this.applicationId));
+        }
+        if(existingApplicantList.length) {
+          this._tobService.applicantionApplicantLinkageExisting(this.prepareExistingOccupantData(existingApplicantList),this.applicationId).subscribe((res)=>{
+            
+          });
         }
         if (deletedApplicants.length) {
           apiObservableArray.push(this._tobService.removeApplicant(this.prepareDeletedOccupantData(deletedApplicants), this.applicationId));
@@ -533,6 +539,13 @@ export class ApplicationDetailPage implements OnInit {
       applicationApplicants: newApplicationApplicants,
       createdBy: 'AGENT',
       createdById: ''
+    };
+  }
+
+  private prepareExistingOccupantData(existingApplicants: any[]) {
+    return {
+      applicationApplicants: existingApplicants,
+      createdBy : "AGENT"
     };
   }
 
@@ -564,6 +577,16 @@ export class ApplicationDetailPage implements OnInit {
         item.controls['isLead'].setValue(false);
       }
     });
+  }
+
+  updateApplicantById(item: FormGroup,value) {
+    if (item.controls['applicationApplicantId'].value) {
+      const updateApplicantData = {
+        isReferencingRequired :  value
+      };
+      this._tobService.updateApplicantDetails(this.applicantId, updateApplicantData).subscribe(res => {
+      });
+    }
   }
 
   private async getApplicantCoApplicants(applicantId: string) {
@@ -873,7 +896,7 @@ export class ApplicationDetailPage implements OnInit {
       isDeleted: false,
       title: response.title,
       applicantId: response.applicantId,
-      isReferencingRequired: false
+      isReferencingRequired: response?.isReferencingRequired
     }
     ));
     coApplicants.removeAt(index);
