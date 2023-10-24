@@ -12,6 +12,7 @@ import { TermsAndConditionModalPageModule } from 'src/app/shared/modals/terms-an
 import { PostcodeDirectiveModule } from 'src/app/shared/directives/postcode-directive.module';
 import { InputMaskDirective } from 'src/app/directives/input-mask.directive';
 import { CurrencyMaskConfig, CurrencyMaskModule, CURRENCY_MASK_CONFIG } from 'ng2-currency-mask';
+import { StripeElementPageModule } from 'src/app/stripe-element/stripe-element.module';
 
 export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
   align: "left",
@@ -36,7 +37,8 @@ export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
     TemplateFormModule,
     TermsAndConditionModalPageModule,
     PostcodeDirectiveModule,
-    CurrencyMaskModule
+    CurrencyMaskModule,
+    StripeElementPageModule
   ],
   providers: [{ provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }],
   declarations: [ApplicationDetailPage,InputMaskDirective]

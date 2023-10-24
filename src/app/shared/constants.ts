@@ -618,6 +618,54 @@ export const PAYMENT_CONFIG = {
     PSPID: 'RAMAN123',
     SHA_IN_PASS: 'B+gbQ;RyjJBFM!i8bZQV4%WQei;2=x%S',
   },
+  STRIPE_ELEMENT: {
+    TEST: {
+      frontEndConfig: {
+        publishableKey: "pk_test_51MAbP2IXDb8tSMRBgPquMx4ACRSyQp4LHL7UgDBtDAAHGVsC4RjHoc4ZGh4SgXTu1KO7mxieV2cXyhnNrVw4rE7a00H1qxdhUT",
+        appearance: {
+          theme: "stripe",
+          labels: "floating"
+            },
+            elementOptions: {
+              locale: "en-GB"
+            },
+            stripeIntentOptions: {
+              currency: "GBP",
+              payment_method_types: ["card"],
+              country: "GB"
+            },
+            stripeBrandInfo: {
+              website: "https://stripe.com/"
+            }
+        },
+        nodeConfig: {
+          secret_key: "sk_test_51MAbP2IXDb8tSMRBrz0pfzNZ9XzgrIqquidcnFLUZJ91L8vweaGfoF2U7XookrNHZzBLPBdMupGPc3nsH8fojqDh00BiSo2nIM"
+        }
+    },
+    PROD: {
+      frontEndConfig: {
+        publishableKey: "pk_test_51MAbP2IXDb8tSMRBgPquMx4ACRSyQp4LHL7UgDBtDAAHGVsC4RjHoc4ZGh4SgXTu1KO7mxieV2cXyhnNrVw4rE7a00H1qxdhUT",
+        appearance: {
+          theme: "stripe",
+          labels: "floating"
+            },
+            elementOptions: {
+              locale: "en-GB"
+            },
+            stripeIntentOptions: {
+              currency: "GBP",
+              payment_method_types: ["card"],
+              country: "GB"
+            },
+            stripeBrandInfo: {
+              website: "https://stripe.com/"
+            }
+        },
+        nodeConfig: {
+            "secret_key": "sk_test_51MAbP2IXDb8tSMRBrz0pfzNZ9XzgrIqquidcnFLUZJ91L8vweaGfoF2U7XookrNHZzBLPBdMupGPc3nsH8fojqDh00BiSo2nIM"
+        }
+    }
+}
 };
 
 export const APPLICATION_ENTITIES = {

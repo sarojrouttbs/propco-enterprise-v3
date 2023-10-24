@@ -29,6 +29,7 @@ export class StripeElementPage implements OnInit {
   @Input() defaultPaymentResponseData: any;
   @Output() onCancelStripeElement = new EventEmitter();
   @Output() onSuccessStripeElement = new EventEmitter();
+  @Input() paymentScope;
   enablePayButton: boolean = false;
   isStripeElementsValid: boolean = false;
   /**End*/

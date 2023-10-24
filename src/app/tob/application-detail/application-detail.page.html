@@ -1446,4 +1446,31 @@
     </div>
     <!--payment method 3 ends -->
   </ng-container>
+
+  <ng-container *ngIf="PAYMENT_METHOD === 'STRIPE_ELEMENT'">
+    <ion-grid class="ion-padding"  id="payment-detail">
+      <ion-row  class="ion-justify-content-between" *ngIf="!showStripeElementForm">
+        <ion-col size="100" class="ion-text-center">
+          <h2 class="payment-heading" *ngIf="!applicationDetails?.isHoldingDepositPaid">Holding Deposit: {{ applicationDetails?.depositAmount | currency:'GBP'}}</h2>
+          <h2 class="payment-heading" *ngIf="applicationDetails?.isHoldingDepositPaid">Holding deposit for this application has already been paid</h2>
+        </ion-col>
+      </ion-row>
+      <ion-row *ngIf="stripeElementPaymentDone" class="ion-text-center">
+        <ion-col size="100">
+          <h2>Payment</h2>
+        </ion-col>
+        <ion-col size="100">
+          <h3>Your payment has been done!</h3>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+   <div class="stripe-container" *ngIf="showStripeElementForm && !stripeElementPaymentDone">
+    <app-stripe-element [paymentConfig]="stripeConfigurations" [data]="stripeElementData" [paymentScope]="'general'" (onCancelStripeElement)="_handleErrorStripeElement($event)" (onSuccessStripeElement)="_handleSuccessStripeElement($event)"></app-stripe-element>
+   </div>
+   <div style="padding:10px 4px;" *ngIf="!showStripeElementForm" style="display: flex; justify-content: center;">
+    <ion-button color="danger" [hidden]="showWorldpayIframe" (click)=onCancel()>Cancel</ion-button>&nbsp;
+    <ion-button type="submit" [disabled]="!applicationDetails?.depositAmount" [hidden]="showWorldpayIframe" (click)="enableStripeElementForm()" *ngIf="!isStudentProperty && !applicationDetails?.isHoldingDepositPaid">
+      Pay</ion-button>
+  </div>
+  </ng-container>
 </ng-template>
