@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, isDevMode } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PROPCO, APPLICATION_STATUSES, APPLICATION_ACTION_TYPE, ENTITY_TYPE, PAYMENT_TYPES, PAYMENT_CONFIG, APPLICATION_ENTITIES, DEFAULTS, DATE_FORMAT, SYSTEM_OPTIONS } from 'src/app/shared/constants';
@@ -112,6 +112,12 @@ export class ApplicationDetailPage implements OnInit {
   updateOccupantsInProcess = false;
   applicantQuestions: any = [];
   initiaFormlLoaded = false;
+  /**Stripe Payment*/
+  stripeElementData: any;
+  showStripeElementForm = false;
+  stripeElementPaymentDone = false;
+  stripeConfigurations = environment.PAYMENT_PROD ? PAYMENT_CONFIG.STRIPE_ELEMENT.PROD : PAYMENT_CONFIG.STRIPE_ELEMENT.TEST
+  /***ends */
 
   constructor(
     private route: ActivatedRoute,
@@ -521,9 +527,9 @@ export class ApplicationDetailPage implements OnInit {
         if (newApplicationApplicants.length) {
           apiObservableArray.push(this._tobService.addApplicantToApplication(this.prepareOccupantData(newApplicationApplicants), this.applicationId));
         }
-        if(existingApplicantList.length) {
-          this._tobService.applicantionApplicantLinkageExisting(this.prepareExistingOccupantData(existingApplicantList),this.applicationId).subscribe((res)=>{
-            
+        if (existingApplicantList.length) {
+          this._tobService.applicantionApplicantLinkageExisting(this.prepareExistingOccupantData(existingApplicantList), this.applicationId).subscribe((res) => {
+
           });
         }
         if (deletedApplicants.length) {
@@ -545,7 +551,7 @@ export class ApplicationDetailPage implements OnInit {
   private prepareExistingOccupantData(existingApplicants: any[]) {
     return {
       applicationApplicants: existingApplicants,
-      createdBy : "AGENT"
+      createdBy: "AGENT"
     };
   }
 
@@ -579,10 +585,10 @@ export class ApplicationDetailPage implements OnInit {
     });
   }
 
-  updateApplicantById(item: FormGroup,value) {
+  updateApplicantById(item: FormGroup, value) {
     if (item.controls['applicationApplicantId'].value) {
       const updateApplicantData = {
-        isReferencingRequired :  value
+        isReferencingRequired: value
       };
       this._tobService.updateApplicantDetails(item.controls['applicantId'].value, updateApplicantData).subscribe(res => {
       });
@@ -1662,6 +1668,9 @@ export class ApplicationDetailPage implements OnInit {
       case PAYMENT_TYPES.BARCLAYCARD_REDIRECT:
         this.initBarclayCardPaymentDetails();
         break;
+      case PAYMENT_TYPES.STRIPE_ELEMENT:
+        this.prepareStripeElementData();
+        break;
     }
   }
 
@@ -1710,6 +1719,8 @@ export class ApplicationDetailPage implements OnInit {
       }
     }
   }
+
+
 
   processPayment(transactionId, depositAmountPaid) {
     this.commonService.showLoader();
@@ -1810,5 +1821,57 @@ export class ApplicationDetailPage implements OnInit {
           break;
       }
     }
+  }
+
+
+  /** Stripe Payment */
+  private prepareStripeElementData() {
+    let paymentConfig = this.PAYMENT_PROD ? PAYMENT_CONFIG.STRIPE_ELEMENT.PROD : PAYMENT_CONFIG.STRIPE_ELEMENT.TEST;
+    let date = new Date().toLocaleDateString().replace(/\//g, '');
+    date = date.slice(0, 5) + date.slice(7);
+    this.stripeElementData = {
+      intentData: {
+        amount: this.applicationDetails?.depositAmount * 100, //https://stripe.com/docs/currencies#zero-decimal
+        stripeIntentOptions: {
+          currency: paymentConfig.frontEndConfig.stripeIntentOptions.currency,
+          payment_method_types: paymentConfig.frontEndConfig.stripeIntentOptions.payment_method_types,
+          description: this.propertyDetails?.reference
+            + ' - ' + this.addressDetailsForm.controls.address['controls'].addressLine1.value
+            + ', ' + this.addressDetailsForm.controls.address['controls'].postcode.value,
+          metadata: {
+            cartId: `WEB${this.propertyDetails?.landlordBankShortName ? this.propertyDetails?.landlordBankShortName : ''}${date}`,
+            applicationId: this.applicationId
+          }
+        }
+      },
+      method: environment.PAYMENT_METHOD,
+        env: environment.PAYMENT_PROD ? 'PROD' : 'TEST',
+        billingAddress: {
+          email: this.applicantDetailsForm.controls['email'].value,
+          line1: this.addressDetailsForm.controls.address['controls'].addressLine1.value,
+          line2: this.addressDetailsForm.controls.address['controls'].addressLine2.value,
+          postal_code: this.addressDetailsForm.controls.address['controls'].postcode.value,
+          city: this.addressDetailsForm.controls.address['controls'].town.value,
+          state: this.addressDetailsForm.controls.address['controls'].county.value
+        }
+    }
+  }
+
+  async enableStripeElementForm() {
+    this.showStripeElementForm = true;
+  }
+
+  _handleErrorStripeElement(response: any) {
+    if (response.type === 'cancelled') {
+      this.showStripeElementForm = false;
+    }
+  }
+  stripeIntentResponse:any;
+  _handleSuccessStripeElement(response: any) {
+    this.stripeElementPaymentDone = true;
+    setTimeout(() => {
+      this.stripeIntentResponse = response
+      this.processPayment(response.id, this.applicationDetails.depositAmount);
+    }, 1000);
   }
 }

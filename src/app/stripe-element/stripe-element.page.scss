@@ -1,6 +1,8 @@
 .stripe-container{
-    // margin: 0 24% 12px;
     max-height: 525px;
-    // height: 469px;
-    // overflow-y: auto;
+}
+
+.stripe-container-general{
+    max-height: 431px;
+    overflow: scroll;
 }
