@@ -584,7 +584,7 @@ export class ApplicationDetailPage implements OnInit {
       const updateApplicantData = {
         isReferencingRequired :  value
       };
-      this._tobService.updateApplicantDetails(this.applicantId, updateApplicantData).subscribe(res => {
+      this._tobService.updateApplicantDetails(item.controls['applicantId'].value, updateApplicantData).subscribe(res => {
       });
     }
   }
