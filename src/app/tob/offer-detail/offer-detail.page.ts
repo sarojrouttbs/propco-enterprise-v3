@@ -8,6 +8,7 @@ import {
   PROPCO,
   DEFAULTS,
   DATE_FORMAT,
+  SYSTEM_OPTIONS,
 } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { TobService } from '../tob.service';
@@ -69,6 +70,7 @@ export class OfferDetailPage implements OnInit {
   DATE_FORMAT = DATE_FORMAT;
   applicantConfirmedDateInput = true;
   landlordConfirmedDateInput = true;
+  webImageUrl: string;
   constructor(
     private route: ActivatedRoute,
     private commonService: CommonService,
@@ -182,9 +184,11 @@ export class OfferDetailPage implements OnInit {
     this.initConfirmationForm();
   }
 
-  private initCreateApiCalls() {
+  private async initCreateApiCalls() {
     this.getLookUpData();
     this.getTobLookupData();
+    let tmpImageObj: any = await this.getSystemOptions(SYSTEM_OPTIONS.WEB_IMAGE_URL);
+    this.webImageUrl = tmpImageObj ? tmpImageObj.WEB_IMAGE_URL : '';
     this.getPropertyDetails(this.propertyId);
     this.getPropertyClauses(this.propertyId);
     this.getPropertyRestrictions(this.propertyId);
@@ -195,6 +199,8 @@ export class OfferDetailPage implements OnInit {
   async initViewApiCalls() {
     this.getLookUpData();
     this.getTobLookupData();
+    let tmpImageObj: any = await this.getSystemOptions(SYSTEM_OPTIONS.WEB_IMAGE_URL);
+    this.webImageUrl = tmpImageObj ? tmpImageObj.WEB_IMAGE_URL : '';
     await this.getOfferDetails(this.offerId);
     await this.getPropertyDetails(this.offerDetails.propertyId);
     await this.getApplicantDetails(this.offerDetails.applicantId);
@@ -254,6 +260,7 @@ export class OfferDetailPage implements OnInit {
       (res) => {
         this.propertyDetails = res.data;
         this.propertyDetails.propertyImageUrl = this.commonService.getHeadMediaUrl(res.data.media || []);
+        this.propertyDetails.webImageUrl = this.webImageUrl;
         this.getNoDeposit();
         if (!this.offerId) {
           this.makeAnOfferForm.patchValue({
@@ -888,6 +895,18 @@ export class OfferDetailPage implements OnInit {
       if (control.dirty) {
         this.updatedFormValues.push(name);
       }
+    });
+  }
+
+  private getSystemOptions(key: string) {
+    return new Promise((resolve) => {
+      this.commonService.getSystemOptions(key).subscribe(
+        (res) => {
+          resolve(res);
+        },
+        (error) => {
+          resolve(null);
+        });
     });
   }
 }
