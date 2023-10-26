@@ -33,6 +33,15 @@ ion-card {
             right: 20px;
         }
     }
+    .show-more {
+        text-decoration: underline;
+        font-weight: bold;
+        font-style: italic;
+        font-size: 13px;
+    }
+    .show-more:hover {
+        cursor: pointer;
+    }
 }
 
 .amount-alignment {

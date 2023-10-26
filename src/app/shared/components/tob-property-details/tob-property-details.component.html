@@ -21,10 +21,12 @@
                 </ion-text>
               </ion-row>
               <ion-row class="description">
-                <ion-text class="fs-16">
-                  {{ propertyDetails?.fullDescription?.length > 500 ? ((propertyDetails?.fullDescription | slice :
-                  0:500) +
-                  '...') : propertyDetails?.fullDescription }} <br>
+                <ion-text class="fs-16" *ngIf="propertyDetails?.fullDescription?.length > 500">
+                  {{propertyDetails?.fullDescription | slice : 0:minWordLimit}}
+                  <span class="show-more" (click)="minWordLimit = 8000" *ngIf="minWordLimit != 8000 && propertyDetails?.fullDescription?.length > 500">Show more</span>
+                </ion-text>
+                <ion-text class="fs-16" *ngIf="propertyDetails?.fullDescription?.length <= 500">
+                  {{propertyDetails?.fullDescription}}
                 </ion-text>
               </ion-row>
               <ion-row>
