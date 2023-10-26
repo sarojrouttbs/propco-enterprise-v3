@@ -11,5 +11,6 @@ export class TobPropertyDetailsComponent {
   @Input() propertyDetails;
   @Input() rentFrequencyTypes;
   @Input() isTobPropertyCardReady;
+  minWordLimit = 500;
   constructor(public commonService: CommonService) { }
 }
