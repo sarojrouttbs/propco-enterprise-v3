@@ -538,7 +538,7 @@
 <ng-template #applicantAddress>
   <form [formGroup]="addressDetailsForm" id="addressDetailsForm">
     <ion-grid class="ion-padding">
-      <ion-row class="ion-justify-content-center" formGroupName="address">
+      <ion-row formGroupName="address" [ngClass]="showApplicantAddress ? 'ion-justify-content-center':''">
         <ion-col size-xs="100" size-sm="33.3">
           <ion-item>
             <ion-label position="floating"> Postcode <ion-text class="mandatory">*</ion-text>
@@ -554,30 +554,6 @@
         </ion-col>
         <ion-col size-xs="100" size-sm="33.3">
           <ion-item>
-            <ion-label position="floating"> Address 1 <ion-text class="mandatory">*</ion-text>
-            </ion-label>
-            <ion-input type="text" formControlName="addressLine1"></ion-input>
-          </ion-item>
-          <app-validation-message [control]="addressDetailsForm.controls.address['controls'].addressLine1">
-          </app-validation-message>
-        </ion-col>
-        <ion-col size-xs="100" size-sm="16.5">
-          <ion-item>
-            <ion-label position="floating">Locality</ion-label>
-            <ion-input type="text" formControlName="locality"></ion-input>
-          </ion-item>
-        </ion-col>
-        <ion-col size-xs="100" size-sm="16.5">
-          <ion-item>
-            <ion-label position="floating">Town <ion-text class="mandatory">*</ion-text>
-            </ion-label>
-            <ion-input type="text" formControlName="town"></ion-input>
-          </ion-item>
-          <app-validation-message [control]="addressDetailsForm.controls.address['controls'].town">
-          </app-validation-message>
-        </ion-col>
-        <ion-col size-xs="100" size-sm="33.3">
-          <ion-item>
             <ion-label position="floating">Select address</ion-label>
             <ion-select interface="popover" [interfaceOptions]="addressPopoverOptions" formControlName="addressdetails"
               (ionChange)="getAddressDetails(selectedAddress.value, 'personal')" [disabled]="!addressList"
@@ -587,24 +563,50 @@
             </ion-select>
           </ion-item>
         </ion-col>
-        <ion-col size-xs="100" size-sm="33.3">
-          <ion-item>
-            <ion-label position="floating">Address 2</ion-label>
-            <ion-input type="text" formControlName="addressLine2"></ion-input>
-          </ion-item>
-        </ion-col>
-        <ion-col size-xs="100" size-sm="16.5">
-          <ion-item>
-            <ion-label position="floating">County</ion-label>
-            <ion-input type="text" formControlName="county"></ion-input>
-          </ion-item>
-        </ion-col>
-        <ion-col size-xs="100" size-sm="16.5">
-          <ion-item>
-            <ion-label position="floating">Country</ion-label>
-            <ion-input type="text" formControlName="country"></ion-input>
-          </ion-item>
-        </ion-col>
+        <ng-container *ngIf="showApplicantAddress">
+          <ion-col size-xs="100" size-sm="33.3">
+            <ion-item>
+              <ion-label position="floating"> Address 1 <ion-text class="mandatory">*</ion-text>
+              </ion-label>
+              <ion-input type="text" formControlName="addressLine1"></ion-input>
+            </ion-item>
+            <app-validation-message [control]="addressDetailsForm.controls.address['controls'].addressLine1">
+            </app-validation-message>
+          </ion-col>
+          <ion-col size-xs="100" size-sm="16.5">
+            <ion-item>
+              <ion-label position="floating">Locality</ion-label>
+              <ion-input type="text" formControlName="locality"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col size-xs="100" size-sm="16.5">
+            <ion-item>
+              <ion-label position="floating">Town <ion-text class="mandatory">*</ion-text>
+              </ion-label>
+              <ion-input type="text" formControlName="town"></ion-input>
+            </ion-item>
+            <app-validation-message [control]="addressDetailsForm.controls.address['controls'].town">
+            </app-validation-message>
+          </ion-col>
+          <ion-col size-xs="100" size-sm="33.3">
+            <ion-item>
+              <ion-label position="floating">Address 2</ion-label>
+              <ion-input type="text" formControlName="addressLine2"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col size-xs="100" size-sm="16.5">
+            <ion-item>
+              <ion-label position="floating">County</ion-label>
+              <ion-input type="text" formControlName="county"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col size-xs="100" size-sm="16.5">
+            <ion-item>
+              <ion-label position="floating">Country</ion-label>
+              <ion-input type="text" formControlName="country"></ion-input>
+            </ion-item>
+          </ion-col>
+        </ng-container>
       </ion-row>
 
       <ng-container *ngIf="isStudentProperty">
@@ -1025,31 +1027,6 @@
           </ion-col>
           <ion-col size-xs="100" size-sm="33.3">
             <ion-item>
-              <ion-label position="floating"> Address 1 <ion-text *ngIf="isStudentProperty" class="mandatory">*
-                </ion-text>
-              </ion-label>
-              <ion-input type="text" formControlName="addressLine1"></ion-input>
-            </ion-item>
-            <app-validation-message [control]="guarantorForm.controls.address['controls'].addressLine1">
-            </app-validation-message>
-          </ion-col>
-          <ion-col size-xs="100" size-sm="16.5">
-            <ion-item>
-              <ion-label position="floating">Locality</ion-label>
-              <ion-input type="text" formControlName="locality"></ion-input>
-            </ion-item>
-          </ion-col>
-          <ion-col size-xs="100" size-sm="16.5">
-            <ion-item>
-              <ion-label position="floating">Town <ion-text *ngIf="isStudentProperty" class="mandatory">*</ion-text>
-              </ion-label>
-              <ion-input type="text" formControlName="town"></ion-input>
-            </ion-item>
-            <app-validation-message [control]="guarantorForm.controls.address['controls'].town">
-            </app-validation-message>
-          </ion-col>
-          <ion-col size-xs="100" size-sm="33.3">
-            <ion-item>
               <ion-label position="floating">Select address</ion-label>
               <ion-select interface="popover" [interfaceOptions]="addressPopoverOptions" formControlName="addressdetails"
                 (ionChange)="getAddressDetails(selectedGuarantorAddress.value, 'guarantor')"
@@ -1060,24 +1037,51 @@
               </ion-select>
             </ion-item>
           </ion-col>
-          <ion-col size-xs="100" size-sm="33.3">
-            <ion-item>
-              <ion-label position="floating">Address 2</ion-label>
-              <ion-input type="text" formControlName="addressLine2"></ion-input>
-            </ion-item>
-          </ion-col>
-          <ion-col size-xs="100" size-sm="16.5">
-            <ion-item>
-              <ion-label position="floating">County</ion-label>
-              <ion-input type="text" formControlName="county"></ion-input>
-            </ion-item>
-          </ion-col>
-          <ion-col size-xs="100" size-sm="16.5">
-            <ion-item>
-              <ion-label position="floating">Country</ion-label>
-              <ion-input type="text" formControlName="country"></ion-input>
-            </ion-item>
-          </ion-col>
+          <ng-container *ngIf="showGuarantorAddress">
+            <ion-col size-xs="100" size-sm="33.3">
+              <ion-item>
+                <ion-label position="floating"> Address 1 <ion-text *ngIf="isStudentProperty" class="mandatory">*
+                  </ion-text>
+                </ion-label>
+                <ion-input type="text" formControlName="addressLine1"></ion-input>
+              </ion-item>
+              <app-validation-message [control]="guarantorForm.controls.address['controls'].addressLine1">
+              </app-validation-message>
+            </ion-col>
+            <ion-col size-xs="100" size-sm="16.5">
+              <ion-item>
+                <ion-label position="floating">Locality</ion-label>
+                <ion-input type="text" formControlName="locality"></ion-input>
+              </ion-item>
+            </ion-col>
+            <ion-col size-xs="100" size-sm="16.5">
+              <ion-item>
+                <ion-label position="floating">Town <ion-text *ngIf="isStudentProperty" class="mandatory">*</ion-text>
+                </ion-label>
+                <ion-input type="text" formControlName="town"></ion-input>
+              </ion-item>
+              <app-validation-message [control]="guarantorForm.controls.address['controls'].town">
+              </app-validation-message>
+            </ion-col>
+            <ion-col size-xs="100" size-sm="33.3">
+              <ion-item>
+                <ion-label position="floating">Address 2</ion-label>
+                <ion-input type="text" formControlName="addressLine2"></ion-input>
+              </ion-item>
+            </ion-col>
+            <ion-col size-xs="100" size-sm="16.5">
+              <ion-item>
+                <ion-label position="floating">County</ion-label>
+                <ion-input type="text" formControlName="county"></ion-input>
+              </ion-item>
+            </ion-col>
+            <ion-col size-xs="100" size-sm="16.5">
+              <ion-item>
+                <ion-label position="floating">Country</ion-label>
+                <ion-input type="text" formControlName="country"></ion-input>
+              </ion-item>
+            </ion-col>
+          </ng-container>
         </ng-container>
       </ion-row>
     </ion-grid>

@@ -118,6 +118,9 @@ export class ApplicationDetailPage implements OnInit {
   stripeElementPaymentDone = false;
   stripeConfigurations = environment.PAYMENT_PROD ? PAYMENT_CONFIG.STRIPE_ELEMENT.PROD : PAYMENT_CONFIG.STRIPE_ELEMENT.TEST
   /***ends */
+  showApplicantAddress = false;
+  showCorrespondAddress = false;
+  showGuarantorAddress = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -1053,6 +1056,15 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   getAddressDetails(addressId: string, addressType: string) {
+    if(addressType == 'personal') {
+      this.showApplicantAddress = true;
+    }
+    if(addressType == 'correspondence-address') {
+      this.showCorrespondAddress = true;
+    }
+    if(addressType == 'guarantor') {
+      this.showGuarantorAddress = true;
+    }
     if (!addressId || '') {
       return;
     }
@@ -1294,6 +1306,9 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   private patchApplicantAddressDetail() {
+    if (this.applicantDetail.address.postcode) {
+      this.showApplicantAddress = true;
+    }
     this.addressDetailsForm.patchValue({
       address: {
         postcode: this.applicantDetail.address.postcode,
@@ -1307,6 +1322,9 @@ export class ApplicationDetailPage implements OnInit {
       }
     });
     if (this.isStudentProperty) {
+      if (this.applicantDetail.forwardingAddress.postcode) {
+        this.showCorrespondAddress = true;
+      }
       this.addressDetailsForm.patchValue({
         forwardingAddress: {
           postcode: this.applicantDetail.forwardingAddress.postcode,
@@ -1491,6 +1509,9 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   private setGuarantorDetails(details: any): void {
+    if(details.guarantorId) {
+      this.showGuarantorAddress = true;
+    }
     this.guarantorForm.patchValue({
       guarantorId: details.guarantorId,
       title: details.title,
@@ -1845,15 +1866,15 @@ export class ApplicationDetailPage implements OnInit {
         }
       },
       method: environment.PAYMENT_METHOD,
-        env: environment.PAYMENT_PROD ? 'PROD' : 'TEST',
-        billingAddress: {
-          email: this.applicantDetailsForm.controls['email'].value,
-          line1: this.addressDetailsForm.controls.address['controls'].addressLine1.value,
-          line2: this.addressDetailsForm.controls.address['controls'].addressLine2.value,
-          postal_code: this.addressDetailsForm.controls.address['controls'].postcode.value,
-          city: this.addressDetailsForm.controls.address['controls'].town.value,
-          state: this.addressDetailsForm.controls.address['controls'].county.value
-        }
+      env: environment.PAYMENT_PROD ? 'PROD' : 'TEST',
+      billingAddress: {
+        email: this.applicantDetailsForm.controls['email'].value,
+        line1: this.addressDetailsForm.controls.address['controls'].addressLine1.value,
+        line2: this.addressDetailsForm.controls.address['controls'].addressLine2.value,
+        postal_code: this.addressDetailsForm.controls.address['controls'].postcode.value,
+        city: this.addressDetailsForm.controls.address['controls'].town.value,
+        state: this.addressDetailsForm.controls.address['controls'].county.value
+      }
     }
   }
 
@@ -1866,7 +1887,7 @@ export class ApplicationDetailPage implements OnInit {
       this.showStripeElementForm = false;
     }
   }
-  stripeIntentResponse:any;
+  stripeIntentResponse: any;
   _handleSuccessStripeElement(response: any) {
     this.stripeElementPaymentDone = true;
     setTimeout(() => {
