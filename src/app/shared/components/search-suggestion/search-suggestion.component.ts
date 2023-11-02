@@ -53,6 +53,7 @@ export class SearchSuggestionComponent implements OnInit {
   isProcpcoSearchEnabled = false;
   solrConfig = SOLR_CONFIG;
   historyItemAvailable = false;
+  userAccessDetails = null;
   constructor(
     private solrService: SolrService,
     private commonService: CommonService,
@@ -73,7 +74,7 @@ export class SearchSuggestionComponent implements OnInit {
     // set val to the value of the searchbar
     const searchText = !searchFromHistory ? ev.target.value : ev;
     this.updateQueryParams();
-    if(searchText == '') {
+    if (searchText == '') {
       this.historyItemAvailable = true;
     }
     // if the value is an empty string don't filter the items
@@ -122,6 +123,7 @@ export class SearchSuggestionComponent implements OnInit {
   }
 
   async ngOnInit() {
+    await this.getUserAccess();
     await this.getSearchHistory();
     if (this.commonService.getItem('PROPCO_SEARCH_ENABLED', true) != null) {
       this.isProcpcoSearchEnabled = this.commonService.getItem('PROPCO_SEARCH_ENABLED', true);
@@ -144,6 +146,28 @@ export class SearchSuggestionComponent implements OnInit {
         if (res) {
           this.commonService.removeItem('history');
           this.commonService.setItem('history', res.searchHistory);
+          resolve(true);
+        }
+      }, error => {
+        resolve(false);
+      });
+    });
+  }
+
+  private getUserAccess() {
+    return new Promise((resolve) => {
+      this.solrService.getUserAccessDetails().subscribe(res => {
+        if (res) {
+          this.userAccessDetails = res ? res.data[0] : null;
+          if(this.userAccessDetails && this.userAccessDetails?.hideAgentAccount) {
+            this.entityList = [
+              'Property',
+              'Landlord',
+              'Tenant',
+              'Applicant',
+              'Contractor'
+            ]
+          }
           resolve(true);
         }
       }, error => {

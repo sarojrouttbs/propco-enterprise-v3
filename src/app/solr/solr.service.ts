@@ -68,4 +68,8 @@ export class SolrService {
     return this.httpClient.get(environment.API_BASE_URL + `entities/solr-search-history`);
   }
 
+  getUserAccessDetails(): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `pvt/users`);
+  }
+
 }
