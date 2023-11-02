@@ -70,7 +70,7 @@ export class OfferListPage implements OnInit {
     private commonService: CommonService,
     private tobService: TobService,
     private formBuilder: FormBuilder
-    ) {
+  ) {
     this.getTobLookupData();
     this.getLookUpData();
   }
@@ -169,7 +169,7 @@ export class OfferListPage implements OnInit {
   }
 
   showMenu(event: any, id: any, data: any, className: any, isCard?: any, isOffer?: any) {
-    if(isOffer)
+    if (isOffer)
       this.selectedOfferRow = data;
     else
       this.selectedNotesRow = data;
@@ -199,17 +199,30 @@ export class OfferListPage implements OnInit {
     }
 
     const helperContainer = $(".overlay-skeleton");
+    if (id != 'offer-notes-overlay') {
+      divOverlay.css({
+        position: 'absolute',
+        top: origDivOverlayTop + 23,
+        right: '5px',
+        width: helperContainer.outerWidth(true) + 12,
+        height: helperContainer.outerHeight(true),
+        left: helperContainer.position().left,
+        paddingTop: divOverlayTopBottomPadding,
+        paddingBottom: divOverlayTopBottomPadding
+      });
+    } else {
+      divOverlay.css({
+        position: 'absolute',
+        top: origDivOverlayTop,
+        right: '5px',
+        width: baseContainerWidth,
+        height: origDivOverlayHeight,
+        left: divOverlayLeft,
+        paddingTop: divOverlayTopBottomPadding,
+        paddingBottom: divOverlayTopBottomPadding
+      });
+    }
 
-    divOverlay.css({
-      position: 'absolute',
-      top: origDivOverlayTop + 23,
-      right: '5px',
-      width: helperContainer.outerWidth(true) + 12,
-      height: helperContainer.outerHeight(true),
-      left: helperContainer.position().left,
-      paddingTop: divOverlayTopBottomPadding,
-      paddingBottom: divOverlayTopBottomPadding
-    });
 
     divOverlay.delay(200).slideDown('fast');
     event.stopPropagation();
