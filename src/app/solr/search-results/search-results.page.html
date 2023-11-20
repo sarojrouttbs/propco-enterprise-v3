@@ -856,6 +856,10 @@
                 <ion-text class="content">{{item?.propertyTenant || DEFAULTS.NOT_AVAILABLE}}</ion-text>
               </ion-col>
               <ion-col *ngIf="item?.entityType === 'PROPERTY'" size-xl="25" size-lg="33.3" size-md="33.3" size-sm="50" size-xs="100" class="header-content">
+                <ion-text class="header">Landlord Name(s)</ion-text><br />
+                <ion-text class="content">{{item?.propertyLandlord || DEFAULTS.NOT_AVAILABLE}}</ion-text>
+              </ion-col>
+              <ion-col *ngIf="item?.entityType === 'PROPERTY'" size-xl="25" size-lg="33.3" size-md="33.3" size-sm="50" size-xs="100" class="header-content">
                 <ion-text class="header">Agreement Dates</ion-text><br />
                 <ion-text class="content">{{item?.propertyAgreementDate || DEFAULTS.NOT_AVAILABLE}}</ion-text>
               </ion-col>
