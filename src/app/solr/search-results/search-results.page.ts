@@ -676,7 +676,7 @@ export class SearchResultsPage implements OnInit {
     params.searchTerm = this.solrSearchConfig.searchTerm
       ? this.solrSearchConfig.searchTerm
       : '*';
-    params.searchTypes = this.transformToUpperCase(this.entityControl.value);
+    params.searchTypes = this.transformToUpperCase(this.filterOutErrors());
     this.commonService.dataChanged({ entity: this.entityControl.value, term: this.solrSearchConfig.searchTerm });
     if (this.router.url.includes('/solr/entity-finder/Associate') || this.router.url.includes('solr/finder-results/Associate')) {
       const llFilter = Object.assign({ type: "Associate" });
@@ -1006,6 +1006,18 @@ export class SearchResultsPage implements OnInit {
       this.initResults();
     } else {
       this.initFilter();
+    }
+  }
+
+  private filterOutErrors() {
+    let entities = this.entityControl.value;
+    if(entities) {
+      entities = entities.filter((res)=>{
+        if(res !== " "){
+          return res;
+        }
+      });
+      return entities;
     }
   }
 

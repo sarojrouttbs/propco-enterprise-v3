@@ -72,7 +72,7 @@ export class DashboardPage implements OnInit {
   isCheckForExistingRecordsEnabled = false;
   onlySearch = false;
   isFixedGrid = true;
-
+  pageType = 'dashboard';
 
   constructor(
     private solrService: SolrService,
@@ -87,6 +87,7 @@ export class DashboardPage implements OnInit {
       if (this.router.url.includes('/solr/search')) {
         this.onlySearch = true;
       } else if (this.router.url.includes('/solr/entity-finder')) {
+        this.pageType = 'finder';
         let entityType = this.routeSnapShot.params['entityType'];
         if (entityType != null && entityType != '' && entityType != undefined) {
           this.entityControl = new FormControl([entityType]);

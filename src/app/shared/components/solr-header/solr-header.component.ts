@@ -14,9 +14,11 @@ export class SolrHeaderComponent implements OnInit {
   constructor(private solrService: SolrService,  private router: Router) {
   }
   isEntityFinder = false;
+  pageType = '';
   ngOnInit() {
     if (this.router.url.includes('/solr/finder-results')) {
       this.isEntityFinder = true;
+      this.pageType = 'finder-results';
     }
   }
   openHomeCategory(key: string, value = null) {
