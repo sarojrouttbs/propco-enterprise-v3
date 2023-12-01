@@ -54,6 +54,7 @@ export class SearchSuggestionComponent implements OnInit {
   solrConfig = SOLR_CONFIG;
   historyItemAvailable = false;
   userAccessDetails = null;
+  isEntityFinder = false;
   constructor(
     private solrService: SolrService,
     private commonService: CommonService,
@@ -159,7 +160,7 @@ export class SearchSuggestionComponent implements OnInit {
       this.solrService.getUserAccessDetails().subscribe(res => {
         if (res) {
           this.userAccessDetails = res ? res.data[0] : null;
-          if(this.userAccessDetails && this.userAccessDetails?.hideAgentAccount) {
+          if (this.userAccessDetails && this.userAccessDetails?.hideAgentAccount) {
             this.entityList = [
               'Property',
               'Landlord',
@@ -252,7 +253,8 @@ export class SearchSuggestionComponent implements OnInit {
     openScreenAdvance({ requestType: 'OpenSearchResult', requestValue: searchDetail });
   }
 
-  goToPage() {
+  goToPage() 
+  {
     this.addItemsToHistorySg(this.searchTermControl.value);
     if (this.router.url.includes('/solr/entity-finder') || this.router.url.includes('solr/finder-results')) {
       let type = this.entityControl.value;
@@ -343,8 +345,47 @@ export class SearchSuggestionComponent implements OnInit {
   }
 
   onChangeEntity() {
+    if (this.pageType !== 'finder' && this.pageType !== 'finder-results') {
+      console.log('onChangeEntity');
+      this.unSelectAllOption();
+    }
     this.updateQueryParams();
   }
+
+  onClickOnAll(selected = null) {
+    if (this.pageType !== 'finder' && this.pageType !== 'finder-results') {
+      this.checkIfUserSelcetedAll(selected);
+    }
+    this.updateQueryParams();
+  }
+
+  private checkIfUserSelcetedAll(selected = null) {
+    if (this.entityControl.value) {
+      let entityList = this.entityControl.value;
+      if (entityList.indexOf(' ') > -1) {
+        let selectAllList = [' '];
+        const merged = [...this.entityList,...selectAllList];
+        this.entityControl.setValue(merged);
+      }
+      if (selected == false) {
+        this.entityControl.setValue([]);
+      }
+    }
+  }
+
+  private unSelectAllOption() {
+    if (this.entityControl.value) {
+      let entityList = this.entityControl.value;
+      let index = entityList.indexOf(' ');
+      if (index > -1) {
+        entityList.splice(index,1);
+        this.entityControl.setValue(entityList);
+        console.log(this.entityControl.value);
+      }
+    }
+  }
+
+
 
   private updateQueryParams() {
     this.solrSearchService.search({ entity: this.entityControl.value, term: this.searchTermControl.value, isSearchResult: false });

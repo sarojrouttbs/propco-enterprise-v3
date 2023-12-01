@@ -1,9 +1,9 @@
 <ion-row class="{{serachResultPage}}"
-  [ngClass]="pageType === 'dashboard' ? 'ion-align-items-center ion-justify-content-center ion-margin-vertical' : 
+  [ngClass]="pageType === 'dashboard' || pageType === 'finder' || pageType === 'finder-results' ? 'ion-align-items-center ion-justify-content-center ion-margin-vertical' : 
 (pageType === 'solr-resultpage' ? 'ion-align-items-center main-row ion-justify-content-end ion-margin-vertical' : 'ion-align-items-center main-row agent-main-row ion-margin-vertical')">
-  <ion-col [size]="pageType == 'dashboard'?'12':'22'" class="solrMutiSelect ion-no-padding tour-1">
+  <ion-col [size]="pageType == 'dashboard' || pageType === 'finder' || pageType === 'finder-results' ?'12':'22'" class="solrMutiSelect ion-no-padding tour-1">
     <mat-form-field appearance="fill">
-      <mat-select [formControl]="entityControl" (selectionChange)="onChangeEntity()" multiple
+      <mat-select [formControl]="entityControl" multiple
         class="mat-select-red solr-entity-selector ion-text-center">
         <mat-select-trigger style="width: 100;">
           {{entityControl.value ? entityControl.value[0]?.replace('_',' '): ''}}
@@ -11,7 +11,8 @@
             +{{entityControl.value.length - 1}}
           </span>
         </mat-select-trigger>
-        <mat-option class="red-text"  *ngFor="let topping of entityList" [value]="topping">{{topping?.replace('_',' ')}}</mat-option>
+        <mat-option *ngIf="pageType !== 'finder' && pageType !== 'finder-results'" class="red-text" [value]="' '" #matOption (click)="onClickOnAll(matOption.selected);$event.stopPropagation();">Select All</mat-option>
+        <mat-option (click)="onChangeEntity()" class="red-text"  *ngFor="let topping of entityList" [value]="topping">{{topping?.replace('_',' ')}}</mat-option>
       </mat-select>
     </mat-form-field>
   </ion-col>

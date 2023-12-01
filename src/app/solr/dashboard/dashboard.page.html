@@ -28,7 +28,7 @@
         <ion-skeleton-text class="welcome-skeleton" animated *ngIf="!loaded"></ion-skeleton-text>
       </ion-col>
     </ion-row>
-    <app-search-suggestion [isAuthSuccess]="isAuthSuccess" [entityControl]="entityControl" [pageType]="'dashboard'" *ngIf="loaded" [loaded]="loaded"></app-search-suggestion>    
+    <app-search-suggestion [isAuthSuccess]="isAuthSuccess" [entityControl]="entityControl" [pageType]="pageType" *ngIf="loaded" [loaded]="loaded"></app-search-suggestion>    
     <ng-container *ngIf="!onlySearch">
       <ion-skeleton-text class="searchbar-skeleton" animated *ngIf="!loaded"></ion-skeleton-text>
      
