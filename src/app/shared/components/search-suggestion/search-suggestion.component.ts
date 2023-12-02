@@ -256,7 +256,8 @@ export class SearchSuggestionComponent implements OnInit {
     openScreenAdvance({ requestType: 'OpenSearchResult', requestValue: searchDetail });
   }
 
-  goToPage() {
+  goToPage() 
+  {
     this.addItemsToHistorySg(this.searchTermControl.value);
     if (this.router.url.includes('/solr/entity-finder') || this.router.url.includes('solr/finder-results')) {
       let type = this.entityControl.value;
