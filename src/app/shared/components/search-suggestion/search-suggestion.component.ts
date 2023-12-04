@@ -256,8 +256,7 @@ export class SearchSuggestionComponent implements OnInit {
     openScreenAdvance({ requestType: 'OpenSearchResult', requestValue: searchDetail });
   }
 
-  goToPage() 
-  {
+  goToPage() {
     this.addItemsToHistorySg(this.searchTermControl.value);
     if (this.router.url.includes('/solr/entity-finder') || this.router.url.includes('solr/finder-results')) {
       let type = this.entityControl.value;
@@ -502,6 +501,8 @@ export class SearchSuggestionComponent implements OnInit {
     if (history && item && item != '') {
       if (history.indexOf(item.toLocaleLowerCase()) == -1) {
         history.unshift(item.toLocaleLowerCase());
+        this.commonService.removeItem('history');
+        history = history.slice(0, 10);
         this.commonService.setItem('history', history);
         this.historySuggestions = this.fetchHistorySuggestion();
       }
