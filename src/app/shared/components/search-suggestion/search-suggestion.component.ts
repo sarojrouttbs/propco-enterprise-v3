@@ -100,7 +100,7 @@ export class SearchSuggestionComponent implements OnInit {
     const params = new HttpParams()
       // .set('limit', this.solrSuggestionConfig.limit)
       .set('searchTerm', searchText)
-      .set('searchTypes', searchTypes)
+      .set('searchTypes', this.filterOutErrors(searchTypes))
       .set('searchSwitch', this.solrSuggestionConfig.searchSwitch)
       .set('hideLoader', 'true');
 
@@ -144,8 +144,8 @@ export class SearchSuggestionComponent implements OnInit {
   private getSearchHistory() {
     return new Promise((resolve) => {
       this.solrService.getSearchHistory().subscribe(res => {
+        this.commonService.removeItem('history');
         if (res) {
-          this.commonService.removeItem('history');
           this.commonService.setItem('history', res.searchHistory);
           resolve(true);
         }
@@ -178,13 +178,16 @@ export class SearchSuggestionComponent implements OnInit {
   }
 
   private updateSearchHistory(data: any) {
-    return new Promise((resolve) => {
-      this.solrService.saveHistoryInMongo(data).subscribe(res => {
-        resolve(true);
-      }, error => {
-        resolve(false);
+    if (data) {
+      const pickTop10Items = data.slice(0, 10);
+      return new Promise((resolve) => {
+        this.solrService.saveHistoryInMongo(pickTop10Items).subscribe(res => {
+          resolve(true);
+        }, error => {
+          resolve(false);
+        });
       });
-    });
+    }
   }
 
   private initDashboard() {
@@ -346,7 +349,6 @@ export class SearchSuggestionComponent implements OnInit {
 
   onChangeEntity() {
     if (this.pageType !== 'finder' && this.pageType !== 'finder-results') {
-      console.log('onChangeEntity');
       this.unSelectAllOption();
     }
     this.updateQueryParams();
@@ -364,7 +366,7 @@ export class SearchSuggestionComponent implements OnInit {
       let entityList = this.entityControl.value;
       if (entityList.indexOf(' ') > -1) {
         let selectAllList = [' '];
-        const merged = [...this.entityList,...selectAllList];
+        const merged = [...this.entityList, ...selectAllList];
         this.entityControl.setValue(merged);
       }
       if (selected == false) {
@@ -378,7 +380,7 @@ export class SearchSuggestionComponent implements OnInit {
       let entityList = this.entityControl.value;
       let index = entityList.indexOf(' ');
       if (index > -1) {
-        entityList.splice(index,1);
+        entityList.splice(index, 1);
         this.entityControl.setValue(entityList);
         console.log(this.entityControl.value);
       }
@@ -535,6 +537,17 @@ export class SearchSuggestionComponent implements OnInit {
     if (item) {
       this.searchTerm = item;
       this.searchTermControl.setValue(item);
+    }
+  }
+
+  private filterOutErrors(rawValue: any) {
+    if (rawValue) {
+      rawValue = rawValue.filter((res) => {
+        if (res !== " ") {
+          return res;
+        }
+      });
+      return rawValue;
     }
   }
 }
