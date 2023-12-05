@@ -254,4 +254,8 @@ export class TobService {
       catchError(this.handleError<any>(''))
     );
   }
+
+  getAgreementTypeLookup(): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `lookup/agreement-types`);
+  }
 }

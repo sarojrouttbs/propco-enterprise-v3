@@ -121,6 +121,7 @@ export class ApplicationDetailPage implements OnInit {
   showApplicantAddress = false;
   showCorrespondAddress = false;
   showGuarantorAddress = false;
+  agreementTypesLookup;
 
   constructor(
     private route: ActivatedRoute,
@@ -267,6 +268,7 @@ export class ApplicationDetailPage implements OnInit {
     this.depositAutoCalWeeks = tmpDepObj ? parseInt(tmpDepObj) : '';
     this.applicationRentEditable = tmpRentEditableObj ? parseInt(tmpRentEditableObj) : '';
     await this.getPropertyDetails(this.propertyId);
+    await this.getAgreementTypeLookup();
     this.initTermsAndConditionData();
   }
 
@@ -616,6 +618,20 @@ export class ApplicationDetailPage implements OnInit {
     return new Promise((resolve, reject) => {
       this._tobService.getApplicationDetails(applicationId).subscribe(
         res => {
+          resolve(res);
+        },
+        error => {
+          reject(undefined);
+        }
+      );
+    });
+  }
+
+  private getAgreementTypeLookup() {
+    return new Promise((resolve, reject) => {
+      this._tobService.getAgreementTypeLookup().subscribe(
+        res => {
+          this.agreementTypesLookup = res;
           resolve(res);
         },
         error => {
@@ -1056,13 +1072,13 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   getAddressDetails(addressId: string, addressType: string) {
-    if(addressType == 'personal') {
+    if (addressType == 'personal') {
       this.showApplicantAddress = true;
     }
-    if(addressType == 'correspondence-address') {
+    if (addressType == 'correspondence-address') {
       this.showCorrespondAddress = true;
     }
-    if(addressType == 'guarantor') {
+    if (addressType == 'guarantor') {
       this.showGuarantorAddress = true;
     }
     if (!addressId || '') {
@@ -1135,7 +1151,8 @@ export class ApplicationDetailPage implements OnInit {
       numberOfChildren: ['', Validators.required],
       hasSameHouseholdApplicants: [false, Validators.required],
       numberOfHouseHolds: [{ value: '', disabled: false }, Validators.required],
-      isNoDepositScheme: ['']
+      isNoDepositScheme: [''],
+      agreementType: null
     }, {
       validator: Validators.compose([
         ValidationService.dateLessThan('moveInDate', 'preferredTenancyEndDate')
@@ -1174,6 +1191,7 @@ export class ApplicationDetailPage implements OnInit {
     this.applicationDetails.rent = this.tenancyDetailForm.value.rent;
     this.applicationDetails.depositAmount = this.tenancyDetailForm.value.depositAmount;
     this.applicationDetails.deposit = this.tenancyDetailForm.value.deposit;
+    this.applicationDetails.agreementType = this.tenancyDetailForm.value.agreementType;
     if (this.checkFormDirty(this.tenancyDetailForm)) {
       this.updateApplicationDetails();
     }
@@ -1427,7 +1445,8 @@ export class ApplicationDetailPage implements OnInit {
       numberOfChildren: details.numberOfChildren,
       hasSameHouseholdApplicants: details.hasSameHouseholdApplicants,
       numberOfHouseHolds: details.numberOfHouseHolds,
-      isNoDepositScheme: details.isNoDepositScheme
+      isNoDepositScheme: details.isNoDepositScheme,
+      agreementType: details?.agreementType
     });
     if (this.isStudentProperty) {
       this.tenancyDetailForm.patchValue({
@@ -1509,7 +1528,7 @@ export class ApplicationDetailPage implements OnInit {
   }
 
   private setGuarantorDetails(details: any): void {
-    if(details.guarantorId) {
+    if (details.guarantorId) {
       this.showGuarantorAddress = true;
     }
     this.guarantorForm.patchValue({
@@ -1894,5 +1913,40 @@ export class ApplicationDetailPage implements OnInit {
       this.stripeIntentResponse = response
       this.processPayment(response.id, this.applicationDetails.depositAmount);
     }, 1000);
+  }
+
+  _calculateEndDate() {
+    const tenancyDetailFormVal = this.tenancyDetailForm.value;
+    if (!tenancyDetailFormVal.agreementType && !tenancyDetailFormVal.moveInDate) {
+      return;
+    }
+    const selectedAgreementTypeObj = this.agreementTypesLookup.filter(x => x.agreementTypeId == tenancyDetailFormVal.agreementType)[0];
+    let newEndDate;
+    let moveInDate = new Date(tenancyDetailFormVal.moveInDate);
+    switch (selectedAgreementTypeObj.durationType) {
+      case 1:
+        newEndDate = new Date(moveInDate.setDate(moveInDate.getDate() + selectedAgreementTypeObj.duration));
+        break;
+      case 2:
+        newEndDate = new Date(moveInDate.setDate(moveInDate.getDate() + selectedAgreementTypeObj.duration * 7));
+        break;
+      case 3:
+        newEndDate = new Date(moveInDate.setMonth(moveInDate.getMonth() + selectedAgreementTypeObj.duration));
+        break;
+      case 4:
+        newEndDate = new Date(moveInDate.setMonth(moveInDate.getMonth() + selectedAgreementTypeObj.duration * 3));
+        break;
+      case 5:
+        newEndDate = new Date(moveInDate.setFullYear(moveInDate.getFullYear() + selectedAgreementTypeObj.duration));
+        break;
+      case 6:
+        console.log('NA');
+      default:
+        console.log('no default')
+    }
+    if (selectedAgreementTypeObj.isLessOneDay) {
+      newEndDate = new Date(newEndDate.setDate(newEndDate.getDate() - 1));
+    }
+    this.tenancyDetailForm.controls['preferredTenancyEndDate'].setValue(this.commonService.getFormatedDate(newEndDate));
   }
 }
