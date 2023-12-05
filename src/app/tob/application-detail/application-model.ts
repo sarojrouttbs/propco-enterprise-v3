@@ -122,6 +122,7 @@ declare namespace ApplicationModels {
         createdById: string;
         submittedById?: any;
         leadApplicantItemtype: string;
+        agreementType?: any;
     }
 
     export interface ICoApplicants {

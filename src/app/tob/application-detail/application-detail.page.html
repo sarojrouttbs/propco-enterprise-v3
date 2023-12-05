@@ -804,6 +804,19 @@
         </ion-col>
 
         <ion-col size-xs="100" size-sm="33.3">
+          <ion-item>
+            <ion-label position="floating">Agreement Type
+            </ion-label>
+            <ion-select interface="popover" formControlName="agreementType"
+              (ionChange)="_calculateEndDate()" #agreementType>
+              <ion-select-option [value]="item?.agreementTypeId" *ngFor="let item of agreementTypesLookup">{{item?.name}}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+          <app-validation-message [control]="tenancyDetailForm.controls.agreementType"></app-validation-message>
+        </ion-col>
+
+        <ion-col size-xs="100" size-sm="33.3">
           <ion-item id="moveInDate">
             <ion-label position="floating">When would you like to move in?</ion-label>
             <ion-input readonly="true" value="{{ tenancyDetailForm.controls.moveInDate.value | date: DATE_FORMAT.DATE }}">
@@ -811,7 +824,7 @@
             <ion-icon name="calendar-outline" slot="end" class="ion-date-item-icon"></ion-icon>
             <ion-popover class="ion-datepicker-popover" trigger="moveInDate" show-backdrop="false">
               <ng-template>
-                <ion-datetime showDefaultButtons="true" presentation="date" formControlName="moveInDate" [max]="maxMoveInDate" [min]="currentDate">
+                <ion-datetime (ionChange)="_calculateEndDate()" showDefaultButtons="true" presentation="date" formControlName="moveInDate" [max]="maxMoveInDate" [min]="currentDate">
                 </ion-datetime>
               </ng-template>
             </ion-popover>
