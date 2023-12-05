@@ -1152,7 +1152,7 @@ export class ApplicationDetailPage implements OnInit {
       hasSameHouseholdApplicants: [false, Validators.required],
       numberOfHouseHolds: [{ value: '', disabled: false }, Validators.required],
       isNoDepositScheme: [''],
-      agreementType: null
+      agreementType: [null, Validators.required]
     }, {
       validator: Validators.compose([
         ValidationService.dateLessThan('moveInDate', 'preferredTenancyEndDate')
