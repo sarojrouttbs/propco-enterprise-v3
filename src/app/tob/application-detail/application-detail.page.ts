@@ -532,13 +532,22 @@ export class ApplicationDetailPage implements OnInit {
         if (newApplicationApplicants.length) {
           apiObservableArray.push(this._tobService.addApplicantToApplication(this.prepareOccupantData(newApplicationApplicants), this.applicationId));
         }
-        if (existingApplicantList.length) {
-          this._tobService.applicantionApplicantLinkageExisting(this.prepareExistingOccupantData(existingApplicantList), this.applicationId).subscribe((res) => {
 
-          });
-        }
         if (deletedApplicants.length) {
           apiObservableArray.push(this._tobService.removeApplicant(this.prepareDeletedOccupantData(deletedApplicants), this.applicationId));
+        }
+
+        if (existingApplicantList.length) {
+          this._tobService.applicantionApplicantLinkageExisting(this.prepareExistingOccupantData(existingApplicantList), this.applicationId).subscribe(async (res)=>{
+            if (apiObservableArray.length == 0) {
+              const applicants = await this.getApplicationApplicants(this.applicationId) as ApplicationModels.ICoApplicants;
+              await this.setApplicationApplicants(applicants);
+              await this.setLeadApplicantDetails();
+              if (this.selectionType === APPLICATION_ACTION_TYPE.SAVE_FOR_LATER) {
+                this.onSave();
+              }
+            }
+          });
         }
       }
     }
