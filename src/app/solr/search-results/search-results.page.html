@@ -693,14 +693,7 @@
             </div>
             <div class="result-wrapper">{{length}} result(s) found</div>
             <div>
-              <mat-paginator #paginator
-                [length]="length"
-                [pageSize]="pageSize"
-                [pageIndex]="pageIndex"
-                [showFirstLastButtons]="true"
-                [pageSizeOptions]="[10, 20, 30, 100]"
-                (page)="pageEvent = handlePage($event);">
-              </mat-paginator>
+              <ng-container [ngTemplateOutlet]="pagginator"></ng-container>
             </div>
           </div>
         </ng-container>
@@ -761,6 +754,13 @@
           <ion-button color="success" (click)="$event.stopPropagation();openDetails()">View</ion-button>
           <i (click)="hideMenu($event,'search-result-overlay')" class="propcoicon propcoicon-actions-on action-btn"></i>
         </div>
+      </div>
+      <div *ngIf="!showSkeleton">
+        <ng-container *ngIf="length > 0">
+          <div style="float: right;">
+            <ng-container [ngTemplateOutlet]="pagginator"></ng-container>
+          </div>
+        </ng-container>
       </div>
     </mat-drawer-content>
   </mat-drawer-container>
@@ -1625,6 +1625,17 @@
       </ion-card-content>
     </mat-expansion-panel>
   </mat-accordion>
+</ng-template>
+
+<ng-template #pagginator>
+  <mat-paginator #paginator
+              [length]="length"
+              [pageSize]="pageSize"
+              [pageIndex]="pageIndex"
+              [showFirstLastButtons]="true"
+              [pageSizeOptions]="[10, 20, 30, 100]"
+              (page)="pageEvent = handlePage($event);">
+            </mat-paginator>
 </ng-template>
 
 <!--List view ends-->
