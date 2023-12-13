@@ -23,7 +23,7 @@ import { Location } from '@angular/common';
 })
 export class SearchResultsPage implements OnInit {
 
-  public pageSize = 10;
+  public pageSize = 20;
   showFiller = true;
   step = 0;
   selectedItem: any;
@@ -600,24 +600,30 @@ export class SearchResultsPage implements OnInit {
 
   private customizePaginator(): void {
     setTimeout(() => {
-      const lastBtn = this.el.nativeElement.querySelector(
+      const lastBtn = this.el.nativeElement.querySelectorAll(
         '.mat-paginator-navigation-last'
       );
       if (lastBtn) {
-        lastBtn.innerHTML = 'Last';
+        lastBtn.forEach((last)=>{
+          last.innerHTML = 'Last';
+        });
       }
-      const firstBtn = this.el.nativeElement.querySelector(
+      const firstBtn = this.el.nativeElement.querySelectorAll(
         '.mat-paginator-navigation-first'
       );
       if (firstBtn) {
-        firstBtn.innerHTML = 'First';
+        firstBtn.forEach((first)=>{
+          first.innerHTML = 'First';
+        });
       }
 
-      const perPage = this.el.nativeElement.querySelector(
+      const perPage = this.el.nativeElement.querySelectorAll(
         '.mat-paginator-page-size-label'
       );
       if (perPage) {
-        perPage.innerHTML = 'Per page';
+        perPage.forEach((per)=>{
+          per.innerHTML = 'Per page';
+        });
       }
     }, 100);
   }
