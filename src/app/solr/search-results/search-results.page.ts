@@ -689,7 +689,7 @@ export class SearchResultsPage implements OnInit {
       params.landlordFilter = llFilter;
     }
     if (global) {
-      if (params.searchTypes.indexOf('TENANT') > -1 && !(this.router.url.includes('/solr/entity-finder') || this.router.url.includes('solr/finder-results'))) {
+      if (params.searchTypes.indexOf('TENANT') > -1) {
         params.searchTypes.push('COTENANT')
       }
       if (params.searchTypes.indexOf('PROPERTY') > -1 && this.isPropcoSalesEnable) {

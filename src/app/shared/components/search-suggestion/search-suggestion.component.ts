@@ -90,7 +90,7 @@ export class SearchSuggestionComponent implements OnInit {
 
   private prepareSearchParams(searchText: string) {
     let searchTypes = this.transformToUpperCase(this.entityControl.value);
-    if (searchTypes.indexOf('TENANT') !== -1 && !(this.router.url.includes('/solr/entity-finder') || this.router.url.includes('solr/finder-results'))) {
+    if (searchTypes.indexOf('TENANT') !== -1) {
       searchTypes.push('COTENANT');
     }
     if (searchTypes.indexOf('PROPERTY') !== -1 && this.isPropcoSalesEnable) {
