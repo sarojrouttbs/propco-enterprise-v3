@@ -128,7 +128,7 @@ export class DashboardPage implements OnInit {
       paging: true,
       pagingType: 'full_numbers',
       serverSide: true,
-      processing: true,
+      processing: false,
       searching: false,
       ordering: false,
       pageLength: 5,
