@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root',
 })
 export class SolrService {
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient) { }
 
   entityGetSuggestion(params: HttpParams): Observable<any> {
     return this.httpClient.get(
@@ -47,7 +47,7 @@ export class SolrService {
     return this.httpClient.put(
       environment.API_BASE_URL + `user`,
       body,
-      {params}
+      { params }
     );
   }
 
@@ -70,6 +70,14 @@ export class SolrService {
 
   getUserAccessDetails(): Observable<any> {
     return this.httpClient.get(environment.API_BASE_URL + `pvt/users`);
+  }
+  
+  fetchLabel(id: any, lookup: any) {
+    let label;
+    if (id && lookup) {
+      label = lookup.filter(x => x.index == id)[0]?.value;
+      return label;
+    }
   }
 
 }

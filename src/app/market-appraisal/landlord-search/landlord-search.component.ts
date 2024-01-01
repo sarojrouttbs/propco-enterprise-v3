@@ -36,6 +36,11 @@ export class LandlordSearchComponent implements OnInit {
   officeLookup: any;
   propertyStatuses: any;
   lookupdata: any;
+  landlordStatuses: any;
+  agentStatuses: any;
+  applicantStatuses: any;
+  contractorStatuses: any;
+  tenantStatuses: any;
 
   constructor(private marketAppraisalService: MarketAppraisalService,
     private solrService: SolrService,
@@ -134,7 +139,7 @@ export class LandlordSearchComponent implements OnInit {
         }
       );
     });
-    
+
   }
 
   private getLandlordProperties(landlordId) {
@@ -155,7 +160,7 @@ export class LandlordSearchComponent implements OnInit {
         }
       );
     });
-    
+
   }
 
   private getSuggestions(params: HttpParams) {
@@ -166,11 +171,65 @@ export class LandlordSearchComponent implements OnInit {
       if (this.type === MARKET_APPRAISAL.property_type) {
         this.propertySuggestion = res ? res : [];
         if (this.propertySuggestion.length > 0) {
+          this.propertySuggestion.forEach((r) => {
+            if(r?.statusId){
+              switch (r.entityType) {
+                case 'PROPERTY':
+                  r.status = this.solrService.fetchLabel(r.statusId, this.propertyStatuses);
+                  break;
+                case 'LANDLORD':
+                  r.status = this.solrService.fetchLabel(r.statusId, this.landlordStatuses);
+                  break;
+                case 'COTENANT':
+                  r.status = this.solrService.fetchLabel(r.statusId, this.tenantStatuses);
+                  break;
+                case 'TENANT':
+                  r.status = this.solrService.fetchLabel(r.statusId, this.tenantStatuses);
+                  break;
+                case 'APPLICANT':
+                  r.status = this.solrService.fetchLabel(r.statusId, this.applicantStatuses);
+                  break;
+                case 'AGENT':
+                  r.status = this.solrService.fetchLabel(r.statusId, this.agentStatuses);
+                  break;
+                case 'CONTRACTOR':
+                  r.status = this.solrService.fetchLabel(r.statusId, this.contractorStatuses);
+                  break;
+              }
+            }
+          });
           this.isPropertyItemAvailable = true;
         }
       } else {
         this.suggestions = res ? res : [];
         if (this.suggestions.length > 0) {
+          this.suggestions.forEach((r) => {
+            if(r?.statusId){
+              switch (r.entityType) {
+                case 'PROPERTY':
+                  r.status = this.solrService.fetchLabel(r.statusId, this.propertyStatuses);
+                  break;
+                case 'LANDLORD':
+                  r.status = this.solrService.fetchLabel(r.statusId, this.landlordStatuses);
+                  break;
+                case 'COTENANT':
+                  r.status = this.solrService.fetchLabel(r.statusId, this.tenantStatuses);
+                  break;
+                case 'TENANT':
+                  r.status = this.solrService.fetchLabel(r.statusId, this.tenantStatuses);
+                  break;
+                case 'APPLICANT':
+                  r.status = this.solrService.fetchLabel(r.statusId, this.applicantStatuses);
+                  break;
+                case 'AGENT':
+                  r.status = this.solrService.fetchLabel(r.statusId, this.agentStatuses);
+                  break;
+                case 'CONTRACTOR':
+                  r.status = this.solrService.fetchLabel(r.statusId, this.contractorStatuses);
+                  break;
+              }
+            }
+          });
           this.isItemAvailable = true;
         }
       }
@@ -219,5 +278,10 @@ export class LandlordSearchComponent implements OnInit {
   private setLookupData(data) {
     this.officeLookup = data.officeCodes;
     this.propertyStatuses = data.propertyStatuses;
+    this.landlordStatuses = data.landlordStatuses;
+    this.tenantStatuses = data.tenantStatuses;
+    this.applicantStatuses = data.applicantStatuses;
+    this.contractorStatuses = data.contractorStatuses;
+    this.agentStatuses = data.agentStatuses;
   }
 }

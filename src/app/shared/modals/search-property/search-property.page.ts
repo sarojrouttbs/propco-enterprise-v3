@@ -32,6 +32,12 @@ export class SearchPropertyPage {
   solrSelectedItemPropcoId = null;
   value;
   cardType;
+  propertyStatuses: any;
+  landlordStatuses: any;
+  agentStatuses: any;
+  applicantStatuses: any;
+  contractorStatuses: any;
+  tenantStatuses: any;
 
   constructor(
     private navParams: NavParams,
@@ -78,6 +84,33 @@ export class SearchPropertyPage {
       response.subscribe(res => {
         this.isNotFound = res ? false : true;
         this.filteredProperty = res && res.length > 0 ? res : [];
+        this.filteredProperty.forEach((r) => {
+          if(r?.statusId) {
+            switch (r.entityType) {
+              case 'PROPERTY':
+                r.status = this.solrService.fetchLabel(r.statusId, this.propertyStatuses);
+                break;
+              case 'LANDLORD':
+                r.status = this.solrService.fetchLabel(r.statusId, this.landlordStatuses);
+                break;
+              case 'COTENANT':
+                r.status = this.solrService.fetchLabel(r.statusId, this.tenantStatuses);
+                break;
+              case 'TENANT':
+                r.status = this.solrService.fetchLabel(r.statusId, this.tenantStatuses);
+                break;
+              case 'APPLICANT':
+                r.status = this.solrService.fetchLabel(r.statusId, this.applicantStatuses);
+                break;
+              case 'AGENT':
+                r.status = this.solrService.fetchLabel(r.statusId, this.agentStatuses);
+                break;
+              case 'CONTRACTOR':
+                r.status = this.solrService.fetchLabel(r.statusId, this.contractorStatuses);
+                break;
+            }
+          }
+        });
       },
         error => {
           console.log(error);
@@ -143,6 +176,12 @@ export class SearchPropertyPage {
   }
   private setLookupData(data) {
     this.setOfficeLookupMap(data.officeCodes);
+    this.propertyStatuses = data.propertyStatuses;
+    this.landlordStatuses = data.landlordStatuses;
+    this.tenantStatuses = data.tenantStatuses;
+    this.applicantStatuses = data.applicantStatuses;
+    this.contractorStatuses = data.contractorStatuses;
+    this.agentStatuses = data.agentStatuses;
   }
 
   private setOfficeLookupMap(data) {
