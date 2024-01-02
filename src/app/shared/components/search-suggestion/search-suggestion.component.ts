@@ -55,6 +55,12 @@ export class SearchSuggestionComponent implements OnInit {
   historyItemAvailable = false;
   userAccessDetails = null;
   isEntityFinder = false;
+  propertyStatuses: any;
+  landlordStatuses: any;
+  agentStatuses: any;
+  applicantStatuses: any;
+  contractorStatuses: any;
+  tenantStatuses: any;
   constructor(
     private solrService: SolrService,
     private commonService: CommonService,
@@ -148,6 +154,8 @@ export class SearchSuggestionComponent implements OnInit {
         if (res) {
           this.commonService.setItem('history', res.searchHistory);
           resolve(true);
+        } else {
+          resolve(false);
         }
       }, error => {
         resolve(false);
@@ -210,6 +218,12 @@ export class SearchSuggestionComponent implements OnInit {
 
   private setLookupData(data) {
     this.setOfficeLookupMap(data.officeCodes);
+    this.propertyStatuses = data.propertyStatuses;
+    this.landlordStatuses = data.landlordStatuses;
+    this.tenantStatuses = data.tenantStatuses;
+    this.applicantStatuses = data.applicantStatuses;
+    this.contractorStatuses = data.contractorStatuses;
+    this.agentStatuses = data.agentStatuses;
   }
 
   private setOfficeLookupMap(data) {
@@ -226,6 +240,39 @@ export class SearchSuggestionComponent implements OnInit {
       this.suggestions = res ? res : [];
       if (this.suggestions.length > 0) {
         this.isItemAvailable = true;
+        this.suggestions.forEach((r) => {
+          if (r?.statusId) {
+            switch (r.entityType) {
+              case 'PROPERTY':
+                r.status = this.solrService.fetchLabel(r.statusId, this.propertyStatuses);
+                break;
+              case 'SALES_PROPERTY':
+                r.status = this.solrService.fetchLabel(r.statusId, this.propertyStatuses);
+                break;
+              case 'LANDLORD':
+                r.status = this.solrService.fetchLabel(r.statusId, this.landlordStatuses);
+                break;
+              case 'COTENANT':
+                r.status = this.solrService.fetchLabel(r.statusId, this.tenantStatuses);
+                break;
+              case 'TENANT':
+                r.status = this.solrService.fetchLabel(r.statusId, this.tenantStatuses);
+                break;
+              case 'APPLICANT':
+                r.status = this.solrService.fetchLabel(r.statusId, this.applicantStatuses);
+                break;
+              case 'SALES_APPLICANT':
+                r.status = this.solrService.fetchLabel(r.statusId, this.applicantStatuses);
+                break;
+              case 'AGENT':
+                r.status = this.solrService.fetchLabel(r.statusId, this.agentStatuses);
+                break;
+              case 'CONTRACTOR':
+                r.status = this.solrService.fetchLabel(r.statusId, this.contractorStatuses);
+                break;
+            }
+          }
+        });
       }
       this.showLoader = false;
     });
