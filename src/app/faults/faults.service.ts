@@ -70,7 +70,7 @@ export class FaultsService {
       .set('page', '1')
       .set('text', text)
       .set('types', 'CONTRACTOR')
-      .set('con.status', 'Active');
+      .set('con.status', '1');
 
     if(skillSet){
       params.set('con.ocp', skillSet)
