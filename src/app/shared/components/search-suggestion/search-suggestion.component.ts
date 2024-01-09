@@ -546,7 +546,17 @@ export class SearchSuggestionComponent implements OnInit {
   private addItemsToHistorySg(item: string) {
     let history = this.fetchHistorySuggestion() || [];
     if (history && item && item != '') {
+      // check if the new search keyword already present
       if (history.indexOf(item.toLocaleLowerCase()) == -1) {
+        // if not present then insert it to history
+        history.unshift(item.toLocaleLowerCase());
+        this.commonService.removeItem('history');
+        history = history.slice(0, 10);
+        this.commonService.setItem('history', history);
+        this.historySuggestions = this.fetchHistorySuggestion();
+      } else {
+        // if present then delete the old one and insert the new one to top
+        history.splice(history.indexOf(item.toLocaleLowerCase()), 1);
         history.unshift(item.toLocaleLowerCase());
         this.commonService.removeItem('history');
         history = history.slice(0, 10);
@@ -554,6 +564,7 @@ export class SearchSuggestionComponent implements OnInit {
         this.historySuggestions = this.fetchHistorySuggestion();
       }
     } else {
+      // if history not present
       if (item && item != '') {
         history.unshift(item.toLocaleLowerCase());
         this.commonService.setItem('history', history);
