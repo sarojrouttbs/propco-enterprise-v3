@@ -184,6 +184,7 @@ export class ApplicationListPage implements OnInit {
         colorName = 'tertiary';
         break;
       case 2:
+      case 9:
         colorName = 'success';
         break;
       case 3:
