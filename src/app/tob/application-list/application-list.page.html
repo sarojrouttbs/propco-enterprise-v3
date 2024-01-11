@@ -222,7 +222,7 @@
         </ion-card-content>
       </ion-card>
       <div id="tob-application-overlay" class="overlay-class">
-        <ion-button color="success" *ngIf="selectedApplicationRow?.isSubmitted && (selectedApplicationRow?.status != 1 && selectedApplicationRow?.status != 2)" (click)="acceptApplication()">Accept</ion-button>
+        <ion-button color="success" *ngIf="selectedApplicationRow?.isSubmitted && (selectedApplicationRow?.status != 1 && selectedApplicationRow?.status != 2 && selectedApplicationRow?.status != 9)" (click)="acceptApplication()">Accept</ion-button>
         <ion-button color="danger" *ngIf="selectedApplicationRow?.isSubmitted && selectedApplicationRow?.status != 1 && selectedApplicationRow?.status != 3" (click)="rejectApplication()">Reject</ion-button>
         <ng-container *ngIf="propertyType != 'Student'">
           <ion-button *ngIf="selectedApplicationRow?.isSubmitted && selectedApplicationRow?.status == 2" (click)="holdApplication()">Hold</ion-button>
