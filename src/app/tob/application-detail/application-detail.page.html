@@ -674,7 +674,7 @@
             </ion-row>
           </ion-grid>
           <ion-grid class="ion-padding">
-            <ion-row formGroupName="address" [ngClass]="item.controls.address['controls'].addressdetails.value && (item.controls.address['controls'].addressLine1.value || item.controls.address['controls'].postcode.value || item.controls.address['controls'].county.value) || item.controls.address['controls'].country.value ? 'ion-justify-content-center':''">
+            <ion-row formGroupName="address" [ngClass]="item.controls.address['controls'].addressdetails.value || (item.controls.address['controls'].addressLine1.value || item.controls.address['controls'].postcode.value || item.controls.address['controls'].county.value) || item.controls.address['controls'].country.value ? 'ion-justify-content-center':''">
               <ion-col size-xs="100" size-sm="33.3">
                 <ion-item>
                   <ion-label position="floating"> Postcode <ion-text class="mandatory">*</ion-text>
@@ -699,7 +699,8 @@
                   </ion-select>
                 </ion-item>
               </ion-col>
-              <ng-container *ngIf="item.controls.address['controls'].addressdetails.value && (item.controls.address['controls'].addressLine1.value || item.controls.address['controls'].postcode.value || item.controls.address['controls'].county.value) || item.controls.address['controls'].country.value">
+              {{item.controls.address['controls'].value | json}}
+              <ng-container *ngIf="item.controls.address['controls'].addressdetails.value || (item.controls.address['controls'].addressLine1.value || item.controls.address['controls'].postcode.value || item.controls.address['controls'].county.value) || item.controls.address['controls'].country.value">
                 <ion-col size-xs="100" size-sm="33.3">
                   <ion-item>
                     <ion-label position="floating"> Address 1 <ion-text class="mandatory">*</ion-text>
