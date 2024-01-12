@@ -14,6 +14,7 @@ import { environment } from 'src/environments/environment';
 import { SimpleModalPage } from 'src/app/shared/modals/simple-modal/simple-modal.page';
 import * as CryptoJS from 'crypto-js/crypto-js';
 import { HttpParams } from '@angular/common/http';
+import { ApplicationDetailsHelper } from './helper-application-details';
 @Component({
   selector: 'app-application-detail',
   templateUrl: './application-detail.page.html',
@@ -25,7 +26,7 @@ import { HttpParams } from '@angular/common/http';
     }
   ]
 })
-export class ApplicationDetailPage implements OnInit {
+export class ApplicationDetailPage extends ApplicationDetailsHelper implements OnInit {
   lookupdata: any;
   tobLookupData: any;
   howLong = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30];
@@ -126,11 +127,12 @@ export class ApplicationDetailPage implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private commonService: CommonService,
-    private _formBuilder: FormBuilder,
+    public _formBuilder: FormBuilder,
     private _tobService: TobService,
     private router: Router,
     private modalController: ModalController
   ) {
+    super(_formBuilder);
   }
 
   ngOnInit(): void {
@@ -336,17 +338,28 @@ export class ApplicationDetailPage implements OnInit {
 
   private checkFormsValidity() {
     return new Promise((resolve) => {
-      const applicantDetails = this.applicantDetailsForm.valid;
+      var groupValidity = true;
+      const groupApplicantDetailsFormArray: any = this.groupApplicantDetailsForm.get('list') as FormArray;
+      console.log(groupApplicantDetailsFormArray)
+      groupApplicantDetailsFormArray.controls.forEach((group:FormGroup) => {
+        console.log(group)
+        if((group.controls['applicantId'].value == this.applicantDetailSelectorControl.value) && !group.valid) {
+          groupValidity = false;
+        }
+      });
+      // const applicantDetails = this.applicantDetailsForm.valid;
       const bankDetails = this.bankDetailsForm.valid;
-      const address = this.addressDetailsForm.valid;
+      // const address = this.addressDetailsForm.valid;
       const tenancyDetails = this.tenancyDetailForm.valid;
       const guarantorDetails = this.guarantorForm.valid;
-      if (applicantDetails && tenancyDetails && guarantorDetails && bankDetails && address) {
+      if (tenancyDetails && guarantorDetails && bankDetails && groupValidity) {
         return resolve(true);
       }
       return resolve(false);
     });
   }
+
+
 
   private async onSubmit() {
     const response = await this.commonService.showConfirm('Application', 'Do you want to submit the application?');
@@ -408,6 +421,7 @@ export class ApplicationDetailPage implements OnInit {
 
   private savePreviousStep(event: any) {
     if (this.isStudentProperty || this.applicationDetails.isSubmitted) {
+      this.setAppDetDropDown();
       return;
     }
     const previouslySelectedIndex = event.previouslySelectedIndex;
@@ -419,6 +433,7 @@ export class ApplicationDetailPage implements OnInit {
       case 0:
         if (!this.applicationDetails.isSubmitted)
           this.saveApplicantsToApplication();
+        this.setAppDetDropDown();
         break;
       case 1:
         if (!this.applicationDetails.isSubmitted && this.applicantId)
@@ -481,6 +496,8 @@ export class ApplicationDetailPage implements OnInit {
     const apiObservableArray = await this.getModifiedOccupantList();
     if (!apiObservableArray.length) {
       this.updateOccupantsInProcess = false;
+      this.setLeadDetails();
+      this.setAppDetDropDown();
     }
     setTimeout(() => {
       forkJoin(apiObservableArray).subscribe(async (response: any[]) => {
@@ -490,6 +507,8 @@ export class ApplicationDetailPage implements OnInit {
         const applicants = await this.getApplicationApplicants(this.applicationId) as ApplicationModels.ICoApplicants;
         await this.setApplicationApplicants(applicants);
         await this.setLeadApplicantDetails();
+        this.setLeadDetails();
+        this.setAppDetDropDown();
         if (this.selectionType === APPLICATION_ACTION_TYPE.SAVE_FOR_LATER) {
           this.onSave();
         }
@@ -538,7 +557,7 @@ export class ApplicationDetailPage implements OnInit {
         }
 
         if (existingApplicantList.length) {
-          this._tobService.applicantionApplicantLinkageExisting(this.prepareExistingOccupantData(existingApplicantList), this.applicationId).subscribe(async (res)=>{
+          this._tobService.applicantionApplicantLinkageExisting(this.prepareExistingOccupantData(existingApplicantList), this.applicationId).subscribe(async (res) => {
             if (apiObservableArray.length == 0) {
               const applicants = await this.getApplicationApplicants(this.applicationId) as ApplicationModels.ICoApplicants;
               await this.setApplicationApplicants(applicants);
@@ -1080,7 +1099,7 @@ export class ApplicationDetailPage implements OnInit {
     );
   }
 
-  getAddressDetails(addressId: string, addressType: string) {
+  getAddressDetails(addressId: string, addressType: string,item) {
     if (addressType == 'personal') {
       this.showApplicantAddress = true;
     }
@@ -1096,7 +1115,7 @@ export class ApplicationDetailPage implements OnInit {
     this.commonService.getPostcodeAddressDetails(addressId).subscribe(
       res => {
         if (res && res.line1) {
-          this.setAddressDetails(addressType, res);
+          this.setAddressDetails(addressType, res,item);
         }
       },
       error => {
@@ -1108,31 +1127,31 @@ export class ApplicationDetailPage implements OnInit {
     );
   }
 
-  setAddressDetails(addressType: string, res: any) {
+  setAddressDetails(addressType: string, res: any,item) {
     switch (addressType) {
       case 'personal':
-        this.addressDetailsForm.controls.address['controls'].addressLine1.setValue(res.line1);
-        this.addressDetailsForm.controls.address['controls'].addressLine2.setValue(res.line2);
-        this.addressDetailsForm.controls.address['controls'].locality.setValue(res.line4);
-        this.addressDetailsForm.controls.address['controls'].town.setValue(res.line5);
-        this.addressDetailsForm.controls.address['controls'].county.setValue(res.provinceName);
-        this.addressDetailsForm.controls.address['controls'].country.setValue(res.countryName);
+        item.controls.address['controls'].addressLine1.setValue(res.line1);
+        item.controls.address['controls'].addressLine2.setValue(res.line2);
+        item.controls.address['controls'].locality.setValue(res.line4);
+        item.controls.address['controls'].town.setValue(res.line5);
+        item.controls.address['controls'].county.setValue(res.provinceName);
+        item.controls.address['controls'].country.setValue(res.countryName);
         break;
       case 'correspondence-address':
-        this.addressDetailsForm.controls.forwardingAddress['controls'].addressLine1.setValue(res.line1);
-        this.addressDetailsForm.controls.forwardingAddress['controls'].addressLine2.setValue(res.line2);
-        this.addressDetailsForm.controls.forwardingAddress['controls'].locality.setValue(res.line4);
-        this.addressDetailsForm.controls.forwardingAddress['controls'].town.setValue(res.line5);
-        this.addressDetailsForm.controls.forwardingAddress['controls'].county.setValue(res.provinceName);
-        this.addressDetailsForm.controls.forwardingAddress['controls'].country.setValue(res.countryName);
+        item.controls.forwardingAddress['controls'].addressLine1.setValue(res.line1);
+        item.controls.forwardingAddress['controls'].addressLine2.setValue(res.line2);
+        item.controls.forwardingAddress['controls'].locality.setValue(res.line4);
+        item.controls.forwardingAddress['controls'].town.setValue(res.line5);
+        item.controls.forwardingAddress['controls'].county.setValue(res.provinceName);
+        item.controls.forwardingAddress['controls'].country.setValue(res.countryName);
         break;
       case 'guarantor':
-        this.guarantorForm.controls.address['controls'].addressLine1.setValue(res.line1);
-        this.guarantorForm.controls.address['controls'].addressLine2.setValue(res.line2);
-        this.guarantorForm.controls.address['controls'].locality.setValue(res.line4);
-        this.guarantorForm.controls.address['controls'].town.setValue(res.line5);
-        this.guarantorForm.controls.address['controls'].county.setValue(res.provinceName);
-        this.guarantorForm.controls.address['controls'].country.setValue(res.countryName);
+        item.controls.address['controls'].addressLine1.setValue(res.line1);
+        item.controls.address['controls'].addressLine2.setValue(res.line2);
+        item.controls.address['controls'].locality.setValue(res.line4);
+        item.controls.address['controls'].town.setValue(res.line5);
+        item.controls.address['controls'].county.setValue(res.provinceName);
+        item.controls.address['controls'].country.setValue(res.countryName);
         break;
     }
   }
@@ -1323,13 +1342,20 @@ export class ApplicationDetailPage implements OnInit {
 
   /** Application Question Functionality **/
 
-  isGurantorEnable() {
-    if (this.applicantDetailsForm.value.guarantor) {
-      this.applicantDetailsForm.controls.guarantorType.setValidators([Validators.required]);
+  isGurantorEnable(item) {
+    // if (this.applicantDetailsForm.value.guarantor) {
+    //   this.applicantDetailsForm.controls.guarantorType.setValidators([Validators.required]);
+    // } else {
+    //   this.applicantDetailsForm.controls.guarantorType.clearValidators();
+    // }
+    // this.applicantDetailsForm.get('guarantorType').updateValueAndValidity();
+
+    if(item.value.guarantor){
+      item.controls.guarantorType.setValidators([Validators.required]);
     } else {
-      this.applicantDetailsForm.controls.guarantorType.clearValidators();
+      item.controls.guarantorType.clearValidators();
     }
-    this.applicantDetailsForm.get('guarantorType').updateValueAndValidity();
+    item.get('guarantorType').updateValueAndValidity();
   }
 
   private patchApplicantAddressDetail() {
@@ -1396,6 +1422,21 @@ export class ApplicationDetailPage implements OnInit {
         },
         error => {
           reject(undefined);
+        }
+      );
+    });
+  }
+
+  private fetchOnlyAppDetails(applicantId: string) {
+    return new Promise((resolve, reject) => {
+      this._tobService.getApplicantDetails(applicantId).subscribe(
+        res => {
+          if (res) {
+            resolve(res);
+          }
+        },
+        error => {
+          resolve(false);
         }
       );
     });
@@ -1957,5 +1998,97 @@ export class ApplicationDetailPage implements OnInit {
       newEndDate = new Date(newEndDate.setDate(newEndDate.getDate() - 1));
     }
     this.tenancyDetailForm.controls['preferredTenancyEndDate'].setValue(this.commonService.getFormatedDate(newEndDate));
+  }
+
+  async setLeadDetails() {
+    if (!this.checkIfDetailsPresent) {
+      const details = await this.fetchOnlyAppDetails(this.applicantId);
+      this.updateApplicantGrp(details);
+    }
+  }
+
+  async fetchDetailsAndSet(id) {
+    if (!this.checkIfDetailsPresent(id)) {
+      const details = await this.fetchOnlyAppDetails(id);
+      this.updateApplicantGrp(details);
+    }
+  }
+
+  checkIfDetailsPresent(id) {
+    let present = false;
+    const d = this.groupApplicantDetailsForm.get('list').value.filter(r => r.applicantId == id);
+    if (d && d[0]) {
+      present = true;
+    }
+    return present;
+  }
+
+  updateApplicantGrp(details: any) {
+    if (details) {
+      const groupApplicantDetailsFormArray: any = this.groupApplicantDetailsForm.get('list') as FormArray;
+      groupApplicantDetailsFormArray.push(
+        this._formBuilder.group(
+          {
+            applicantId: details.applicantId,
+            title: details.title,
+            forename: details.forename,
+            surname: details.surname,
+            email: [details.email,[Validators.required,ValidationService.emailValidator]],
+            mobile: details.mobile,
+            dateOfBirth: details.dateOfBirth,
+            occupation: details.occupation,
+            hasPets: details.hasPets,
+            petsInfo: details.petsInfo,
+            guarantor: details.guarantorType ? true : false,
+            guarantorType: details.guarantorType,
+            currentPosition: details.currentPosition,
+            isReferencingRequired: details.isReferencingRequired,
+            address: this._formBuilder.group({
+              postcode: [details?.address?.postcode, [Validators.required, ValidationService.postcodeValidator]],
+              addressdetails: [details?.address?.addressdetails],
+              addressLine1: [details?.address?.addressLine1, Validators.required],
+              addressLine2: details?.address?.addressLine2,
+              locality: details?.address?.locality,
+              town: [details?.address?.town, Validators.required],
+              county: details?.address?.county,
+              country: details?.address?.country
+            }),
+            forwardingAddress: this._formBuilder.group({
+              postcode: [details?.address?.postcode,ValidationService.postcodeValidator],
+              addressdetails: [details?.address?.addressdetails],
+              addressLine1: details?.address?.addressLine1,
+              addressLine2: details?.address?.addressLine2,
+              locality: details?.address?.locality,
+              town: details?.address?.town,
+              county: details?.address?.county,
+              country: details?.address?.country
+            })
+          }
+        )
+      );
+      this.leadDetailsFetched = true;
+    }
+  }
+
+  setAppDetDropDown() {
+    if (!this.applicantDetailSelectorControl.value) {
+      let lead = this.occupantForm.value.coApplicants.filter((x => x.isLead));
+      if(lead && lead[0]) {
+        lead = lead[0];
+        this.applicantDetailSelectorControl.setValue(lead.applicantId);
+      }
+    }
+  }
+
+  updateAppDetails() {
+    let details = this.groupApplicantDetailsForm.get('list').value.filter(x => x.applicantId == this.applicantDetailSelectorControl.value)[0];
+    const requestObj = details;
+    requestObj.moveInDate = this.commonService.getFormatedDate(requestObj.moveInDate);
+    requestObj.dateOfBirth = this.commonService.getFormatedDate(requestObj.dateOfBirth);
+    this._tobService.updateApplicantDetails(details.applicantId, requestObj).subscribe(res => {
+      this.commonService.showMessage('updated successfully!', 'Applicant Update', 'success');
+    }, error => {
+      this.commonService.showMessage('updated Failed!', 'Applicant Update', 'error');
+    });
   }
 }
