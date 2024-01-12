@@ -2054,14 +2054,14 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
               country: details?.address?.country
             }),
             forwardingAddress: this._formBuilder.group({
-              postcode: [details?.address?.postcode,ValidationService.postcodeValidator],
-              addressdetails: [details?.address?.addressdetails],
-              addressLine1: details?.address?.addressLine1,
-              addressLine2: details?.address?.addressLine2,
-              locality: details?.address?.locality,
-              town: details?.address?.town,
-              county: details?.address?.county,
-              country: details?.address?.country
+              postcode: [details?.forwardingAddress?.postcode,ValidationService.postcodeValidator],
+              addressdetails: [details?.forwardingAddress?.addressdetails],
+              addressLine1: details?.forwardingAddress?.addressLine1,
+              addressLine2: details?.forwardingAddress?.addressLine2,
+              locality: details?.forwardingAddress?.locality,
+              town: details?.forwardingAddress?.town,
+              county: details?.forwardingAddress?.county,
+              country: details?.forwardingAddress?.country
             })
           }
         )
@@ -2072,7 +2072,7 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
 
   setAppDetDropDown() {
     if (!this.applicantDetailSelectorControl.value) {
-      let lead = this.occupantForm.value.coApplicants.filter((x => x.isLead));
+      let lead = this.occupantForm.getRawValue().coApplicants.filter((x => x.isLead));
       if(lead && lead[0]) {
         lead = lead[0];
         this.applicantDetailSelectorControl.setValue(lead.applicantId);
