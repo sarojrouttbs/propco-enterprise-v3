@@ -480,11 +480,11 @@ export class LandlordInstructionComponent implements OnInit {
 
     switch (this.userSelectedActionControl.value) {
       case LL_INSTRUCTION_TYPES[1].index: //cli006b
-        if (!this.landlordInstFrom.value.confirmedEstimate) {
-          this.commonService.showAlert('Landlord Instructions', 'Please fill the confirmed estimate field.');
-          this.proceeding = false;
-          return;
-        }
+        // if (!this.landlordInstFrom.value.confirmedEstimate) {
+        //   this.commonService.showAlert('Landlord Instructions', 'Please fill the confirmed estimate field.');
+        //   this.proceeding = false;
+        //   return;
+        // }
         if (this.landlordInstFrom.controls['contractor'].invalid) {
           this.proceeding = false;
           return;
@@ -529,11 +529,11 @@ export class LandlordInstructionComponent implements OnInit {
         }
         break;
       case LL_INSTRUCTION_TYPES[5].index: //cli006e
-        if (!this.landlordInstFrom.value.confirmedEstimate) {
-          this.commonService.showAlert('Landlord Instructions', 'Please fill the confirmed estimate field.');
-          this.proceeding = false;
-          return;
-        }
+        // if (!this.landlordInstFrom.value.confirmedEstimate) {
+        //   this.commonService.showAlert('Landlord Instructions', 'Please fill the confirmed estimate field.');
+        //   this.proceeding = false;
+        //   return;
+        // }
         if (this.landlordInstFrom.controls['contractor'].invalid) {
           this.proceeding = false;
           return;

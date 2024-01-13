@@ -1642,7 +1642,7 @@ export class DetailsPage {
         break;
       case LL_INSTRUCTION_TYPES[5].index: //cli006e
         if (!this.landlordInstFrom.value.confirmedEstimate) {
-          this.commonService.showAlert('Landlord Instructions', 'Please fill the confirmed estimate field.');
+          this.commonService.showAlert('Landlord Instructions', 'Please fill the confirmssssssed estimate field.');
           this.proceeding = false;
           return;
         }
