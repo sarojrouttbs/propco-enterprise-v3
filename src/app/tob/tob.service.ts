@@ -118,6 +118,10 @@ export class TobService {
     return this.httpClient.get(environment.API_BASE_URL + `applicants/${applicantId}`);
   }
 
+  getTenantDetails(tenantId: string): Observable<any> {
+    return this.httpClient.get(environment.API_BASE_URL + `tenants/${tenantId}`);
+  }
+
   updateApplicantDetails(applicantId: string, body: any): Observable<any> {
     return this.httpClient.put(environment.API_BASE_URL + `applicants/${applicantId}`, body);
   }
