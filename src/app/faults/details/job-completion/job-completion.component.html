@@ -212,7 +212,7 @@
         </ion-col>
       </ion-row>
     </ion-grid>
-    <ion-row *ngIf="isFormsReady && !showSkeleton && showCloseRepairIfTenancyExpired">
+    <ion-row *ngIf="isFormsReady && !showSkeleton && showCloseRepairIfTenancyExpired && !faultDetails?.isClosed">
       <ng-container >
         <ng-template *ngTemplateOutlet="ifTenantExpired"></ng-template>
       </ng-container>
