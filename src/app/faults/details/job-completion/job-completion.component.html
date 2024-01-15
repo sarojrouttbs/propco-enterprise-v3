@@ -212,6 +212,12 @@
         </ion-col>
       </ion-row>
     </ion-grid>
+    <ion-row *ngIf="isFormsReady && !showSkeleton && showCloseRepairIfTenancyExpired && !faultDetails?.isClosed">
+      <ng-container >
+        <ng-template *ngTemplateOutlet="ifTenantExpired"></ng-template>
+      </ng-container>
+    </ion-row>
+    </ion-grid>
     <ion-row *ngIf="isFormsReady && !showSkeleton">
       
         <ion-col offset-xl="15" size-xl="70" offset="0" size="100" class="secondary-background">
@@ -251,8 +257,6 @@
           </ng-container>
       </ion-col>
   </ion-row>
-
-  </ion-grid>
 <ng-template #worksOrderDetails>
   <form [formGroup]="workOrderForm">
     <ion-row class="row-banner" class="secondary-background">
@@ -639,4 +643,20 @@
       </ion-grid>
     </div>
   </div>
+</ng-template>
+<ng-template #ifTenantExpired>
+    <ion-col offset-xl="15" size-xl="70" offset="0" size="100" class="secondary-background border-top-radious">
+      <ng-container >
+        <div class="question-answer" style="text-align: center;">
+          <h4 class="ion-text-center">Next Step:</h4> 
+            <h6>{{'Tenancy for the tenant ' + tenantAgreementDetails?.name +' has been expired on '+  (tenantAgreementDetails?.end | date: DATE_FORMAT.DATE)}}</h6>
+          <ion-grid>
+            <ion-row class="ion-justify-content-center">
+              <ion-button color="success" expand="block" class="action-btn" fill="{{faultDetails?.isClosed ? 'solid' : 'outline'}}" (click)="closeFault()">
+                Close Repair</ion-button>
+            </ion-row>
+          </ion-grid>
+        </div>
+      </ng-container>
+    </ion-col>
 </ng-template>

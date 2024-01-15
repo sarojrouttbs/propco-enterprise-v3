@@ -101,6 +101,7 @@ export class DetailsPage {
   FAULT_STAGES = FAULT_STAGES;
   isAuthorizationfields = false;
   DEFAULTS = DEFAULTS;
+  agreementDetails;
 
   categoryIconList = [
     'assets/images/fault-categories/alarms-and-smoke-detectors.svg',
@@ -138,7 +139,7 @@ export class DetailsPage {
   hasPropertyCheckedIn: any;
   faultNotificationDetails: any[];
   DATE_FORMAT = DATE_FORMAT;
-  
+
   constructor(
     private faultsService: FaultsService,
     private fb: FormBuilder,
@@ -553,6 +554,7 @@ export class DetailsPage {
       this.faultsService.getPropertyTenancies(this.propertyId).subscribe(
         res => {
           if (res && res.data) {
+            this.checkIfTenantAgreementExpires(res.data);
             const currentTenancyStatuses = [2, 5, 6];
             this.propertyTenancyList = res.data.filter(x => currentTenancyStatuses.indexOf(x.status) != -1);
             if (this.propertyTenancyList && this.propertyTenancyList.length) {
@@ -726,6 +728,29 @@ export class DetailsPage {
         }
       );
     });
+  }
+
+  private checkIfTenantAgreementExpires(propertyAgreements: any) {
+    let tenantAgreementExpired = false;
+    let tenantAgreementDetails;
+    if (propertyAgreements) {
+      let agreement = propertyAgreements.filter(x => x.agreementId == this.faultDetails?.agreementId);
+      if (agreement && agreement.length) {
+        let tenant = agreement[0]?.tenants.filter(t => t.tenantId == this.faultDetails?.tenantId);
+        if (tenant && tenant.length) {
+          const currentTenancyStatuses = [2, 5, 6];
+          if (currentTenancyStatuses.indexOf(agreement[0]?.agreementStatus) == -1) {
+            tenantAgreementExpired = true;
+            tenantAgreementDetails = {
+              name: tenant[0]?.displayAs ? tenant[0]?.displayAs : tenant[0]?.addressee,
+              end: agreement[0]?.tenancyEndDate
+            }
+          }
+        }
+      }
+    }
+
+    this.agreementDetails = { details: tenantAgreementDetails, expired: tenantAgreementExpired };
   }
 
   private getTenantsGuarantors(tenantId) {
@@ -1487,7 +1512,7 @@ export class DetailsPage {
   }
 
   goTolistPage() {
-    if(this.faultId) {
+    if (this.faultId) {
       this.router.navigate(['../../dashboard'], { replaceUrl: true, relativeTo: this.route });
     } else {
       this.router.navigate(['../dashboard'], { replaceUrl: true, relativeTo: this.route });
