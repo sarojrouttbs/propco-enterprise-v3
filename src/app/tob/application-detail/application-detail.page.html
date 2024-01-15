@@ -559,7 +559,7 @@
     </div>
   </div>
  <ion-grid [formGroup]="groupApplicantDetailsForm">
-  <!-- {{groupApplicantDetailsForm.value | json}} -->
+  <!-- <pre>{{groupApplicantDetailsForm.value | json}}</pre> -->
   <ng-container formArrayName="list">
     <ion-row  *ngFor="let item of groupApplicantDetailsForm.get('list')['controls']; let i=index">
       <ion-col size="100" *ngIf="applicantDetailSelectorControl.value == item.controls['applicantId'].value">
@@ -674,14 +674,14 @@
             </ion-row>
           </ion-grid>
           <ion-grid class="ion-padding">
-            <ion-row formGroupName="address" [ngClass]="item.controls.address['controls'].addressdetails.value || (item.controls.address['controls'].addressLine1.value || item.controls.address['controls'].postcode.value || item.controls.address['controls'].county.value) || item.controls.address['controls'].country.value ? 'ion-justify-content-center':''">
+            <ion-row formGroupName="address" [ngClass]="item.controls.address['controls'].addressdetails.value || (item.controls.address['controls'].addressLine1.value && item.controls.address['controls'].postcode.value && item.controls.address['controls'].county.value) || item.controls.address['controls'].country.value ? 'ion-justify-content-center':''">
               <ion-col size-xs="100" size-sm="33.3">
                 <ion-item>
                   <ion-label position="floating"> Postcode <ion-text class="mandatory">*</ion-text>
                   </ion-label>
                   <ion-input type="text" postcode-validator formControlName="postcode"></ion-input>
                   <ion-button color="success" *ngIf="!isStudentProperty" [disabled]="showPostcodeLoader || applicationDetails?.isSubmitted" class="postcode-search"
-                    (click)="getAddressList('personal')">Find
+                    (click)="getAddressList('personal',item)">Find
                     <ion-icon *ngIf="showPostcodeLoader" name="refresh" class="rotating submit-loader"></ion-icon>
                   </ion-button>
                 </ion-item>
@@ -699,8 +699,7 @@
                   </ion-select>
                 </ion-item>
               </ion-col>
-              {{item.controls.address['controls'].value | json}}
-              <ng-container *ngIf="item.controls.address['controls'].addressdetails.value || (item.controls.address['controls'].addressLine1.value || item.controls.address['controls'].postcode.value || item.controls.address['controls'].county.value) || item.controls.address['controls'].country.value">
+              <ng-container *ngIf="item.controls.address['controls'].addressdetails.value || (item.controls.address['controls'].addressLine1.value && item.controls.address['controls'].postcode.value && item.controls.address['controls'].county.value) || item.controls.address['controls'].country.value">
                 <ion-col size-xs="100" size-sm="33.3">
                   <ion-item>
                     <ion-label position="floating"> Address 1 <ion-text class="mandatory">*</ion-text>
@@ -757,7 +756,7 @@
                     </ion-label>
                     <ion-input type="text" postcode-validator formControlName="postcode"></ion-input>
                     <ion-button class="postcode-search" *ngIf="!isStudentProperty" [disabled]="showAddressLoader || applicationDetails?.isSubmitted" color="success"
-                      (click)="getAddressList('correspondence-address')"> Find
+                      (click)="getAddressList('correspondence-address',item)"> Find
                       <ion-icon *ngIf="showAddressLoader" name="refresh" class="rotating submit-loader"></ion-icon>
                     </ion-button>
                   </ion-item>
@@ -1326,7 +1325,7 @@
               </ion-label>
               <ion-input type="text" postcode-validator formControlName="postcode"></ion-input>
               <ion-button color="success" *ngIf="!isStudentProperty" [disabled]="showPostcodeLoader || applicationDetails?.isSubmitted" class="postcode-search"
-                (click)="getAddressList('guarantor')">Find
+                (click)="getAddressList('guarantor',guarantorForm)">Find
                 <ion-icon *ngIf="showPostcodeLoader" name="refresh" class="rotating submit-loader"></ion-icon>
               </ion-button>
             </ion-item>

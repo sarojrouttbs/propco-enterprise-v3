@@ -183,7 +183,7 @@ export class ArrangingContractorComponent implements OnInit {
 
   private initActionForms(): void {
     this.userActionForms = this.fb.group({
-      confirmedEstimate: ['', [Validators.required, Validators.pattern(REGEX.DECIMAL_REGEX)]], 
+      confirmedEstimate: ['', [Validators.pattern(REGEX.DECIMAL_REGEX)]], 
       estimationNotes:'', 
       contractor:['', Validators.required],
       contractorId: ['', Validators.required],
@@ -1068,7 +1068,7 @@ export class ArrangingContractorComponent implements OnInit {
                 faultRequestObj.orderedById = this.loggedInUserData.userId;
               }
               if(this.userSelectedActionControl.value === 'PROCEED_WITH_WORKSORDER' || this.userSelectedActionControl.value === 'OBTAIN_AUTHORISATION') {
-                faultRequestObj.confirmedEstimate = this.userActionForms.value.confirmedEstimate;
+                faultRequestObj.confirmedEstimate = this.userActionForms.value.confirmedEstimate ? this.userActionForms.value.confirmedEstimate : 0;
                 faultRequestObj.contractorId = this.userActionForms.value.contractorId;
               }
               if(this.isUserActionChange) {
@@ -1256,8 +1256,8 @@ export class ArrangingContractorComponent implements OnInit {
     this.userActionForms.get('requiredStartDate').updateValueAndValidity();
     this.userActionForms.get('requiredCompletionDate').setValidators(Validators.required);
     this.userActionForms.get('requiredCompletionDate').updateValueAndValidity();
-    this.userActionForms.get('confirmedEstimate').setValidators(Validators.required);
-    this.userActionForms.get('confirmedEstimate').updateValueAndValidity();
+    // this.userActionForms.get('confirmedEstimate').setValidators(Validators.required);
+    // this.userActionForms.get('confirmedEstimate').updateValueAndValidity();
     this.userActionForms.get('contractor').setValidators(Validators.required);
     this.userActionForms.get('contractor').updateValueAndValidity();
   }
