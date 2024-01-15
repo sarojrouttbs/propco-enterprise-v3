@@ -2034,8 +2034,13 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
   }
 
   async fetchDetailsAndSet(id) {
+    let details;
     if (!this.checkIfDetailsPresent(id)) {
-      const details = await this.fetchOnlyAppDetails(id);
+      if (this.applicationDetails.leadApplicantItemtype === 'M') {
+        details = await this.fetchOnlyTenantDetails(id);
+     } else {
+        details = await this.fetchOnlyAppDetails(id);
+     }
       this.updateApplicantGrp(details);
     }
   }
