@@ -35,6 +35,7 @@ export class JobCompletionComponent implements OnInit {
   @Input() propertyDetails;
   @Input() categoryName;
   @Input() MAX_DOC_UPLOAD_LIMIT;
+  @Input() agreementDetails;
   faultMaintenanceDetails: FaultModels.IMaintenanceQuoteResponse;
   contractors: Observable<FaultModels.IContractorResponse>;
   resultsAvailable = false;
@@ -83,7 +84,8 @@ export class JobCompletionComponent implements OnInit {
   recipientTypes = RECIPIENTS;
   DEFAULTS = DEFAULTS;
   DATE_FORMAT = DATE_FORMAT;
-
+  showCloseRepairIfTenancyExpired = false;
+  tenantAgreementDetails = null;
   constructor(
     private fb: FormBuilder,
     private faultsService: FaultsService,
@@ -173,6 +175,14 @@ export class JobCompletionComponent implements OnInit {
       this.initPatching();
     }
     await this.faultNotification(this.faultDetails.stageAction);
+    if(!this.iacNotification) {
+      this.showSkeleton = false;
+      if(this.agreementDetails && this.agreementDetails.expired) {
+        this.tenantAgreementDetails = this.agreementDetails.details;
+        this.showCloseRepairIfTenancyExpired = true;
+      }
+      return;
+    }
     if (this.iacNotification.templateCode === 'GNR-T-E' || this.iacNotification.templateCode === 'SMF-T-E') {
       await this.getCertificateCategories();
     }
