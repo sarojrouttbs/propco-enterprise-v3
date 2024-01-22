@@ -545,34 +545,34 @@ export class SearchResultsPage implements OnInit {
       propertyRent: [this.priceKnobValues],
       price: [this.priceKnobValues],
       numberOfBedroom: [this.bedKnobValues],
-      managementType: [[]],
+      managementTypeId: [[]],
       propertyStyle: [[]],
       houseType: [[]],
-      status: [[]],
+      statusId: [[]],
       propertyNegotiator: [[]],
       propertyManager: [[]],
       officeCode: [[]],
       propertyTenures: [[]],
     });
     this.landlordFilter = this.fb.group({
-      status: [[]],
+      statusId: [[]],
       officeCode: [[]],
       isOverseas: false,
     });
     this.tenantFilter = this.fb.group({
-      status: [[]],
+      statusId: [[]],
       officeCode: [[]],
       tenantType: [['TENANT']],
     });
     this.agentFilter = this.fb.group({
-      status: [[]],
+      statusId: [[]],
       isJournalExclude: false,
       isVatRegistered: false,
     });
     this.contractorFilter = this.fb.group({
       isVatRegistered: false,
       isAgentContractorApproved: false,
-      status: [[]],
+      statusId: [[]],
       occupation: [[]],
     });
     this.applicantFilter = this.fb.group({
@@ -587,13 +587,13 @@ export class SearchResultsPage implements OnInit {
       officeCode: [[]]
     });
     this.vendorFilter = this.fb.group({
-      status: [[]],
+      statusId: [[]],
       officeCode: [[]],
       isOverseas: false,
       isChain: false,
     });
     this.purchaserFilter = this.fb.group({
-      status: [[]],
+      statusId: [[]],
       officeCode: [[]],
     });
   }
