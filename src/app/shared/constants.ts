@@ -315,6 +315,10 @@ export const CLOSE_REASON = [
     value: 'Close - Internal use only',
   },
   {
+    index: 'IN_WARRANTY_REPAIR',
+    value: 'In-warranty Repair',
+  },
+  {
     index: 'OTHER',
     value: 'Other',
   },
@@ -326,6 +330,7 @@ export const CLOSE_REASON_KEYS = {
   APPOINTMENT_NOT_BOOKED: 'APPOINTMENT_NOT_BOOKED',
   LANDLORD_WOULD_NOT_FIX: 'LANDLORD_WOULD_NOT_FIX',
   CLOSE_INTERNAL_USE_ONLY: 'CLOSE_INTERNAL_USE_ONLY',
+  IN_WARRANTY_REPAIR: 'IN_WARRANTY_REPAIR',
   OTHER: 'OTHER',
 };
 
