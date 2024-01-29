@@ -71,6 +71,8 @@ export class OfferDetailPage implements OnInit {
   applicantConfirmedDateInput = true;
   landlordConfirmedDateInput = true;
   webImageUrl: string;
+  tenantRelationShipsList = [{index:0,value:'Married'},{index:1,value:'Sharers'},{index:2,value:'Spouse'},{index:3,value:'Other'}];
+  employmentContractList = [{index:0,value:'Full-time'},{index:1,value:'Part-time'},{index:2,value:'Contractual'},{index:3,value:'Freelancer'}];
   constructor(
     private route: ActivatedRoute,
     private commonService: CommonService,
@@ -605,6 +607,7 @@ export class OfferDetailPage implements OnInit {
   private setLookupData(): void {
     this.lookupdata = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);
     this.letDurations = this.lookupdata.letDurations;
+    this.letDurations.filter(x => x.value == '6 months' || x.value == '12 months')
     this.tenantCurrentPositionTypes =
       this.lookupdata.tenantCurrentPositionTypes;
     this.applicantGuarantorTypes = this.lookupdata.applicantGuarantorTypes;
@@ -640,6 +643,21 @@ export class OfferDetailPage implements OnInit {
       hasPets: [false],
       petsInfo: [{ value: '', disabled: true }],
       comments: [''],
+      tenantRelationship: [],
+      employmentContract: ['',Validators.required],
+      annualIncome: ['',Validators.required],
+      otherTenantRelationship: [],
+      isEligibileToRent: [],
+      hasAdverseCreditHistory: []
+    });
+    this.makeAnOfferForm.get('tenantRelationship').valueChanges.subscribe((r) => {
+      if(r && r == 3) {
+        this.makeAnOfferForm.get('otherTenantRelationship').setValidators(Validators.required);
+        this.makeAnOfferForm.get('otherTenantRelationship').updateValueAndValidity();
+      }else {
+        this.makeAnOfferForm.get('otherTenantRelationship').clearValidators();
+        this.makeAnOfferForm.get('otherTenantRelationship').updateValueAndValidity();
+      }
     });
   }
 

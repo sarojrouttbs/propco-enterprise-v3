@@ -249,7 +249,24 @@
           </ion-item>
           <app-validation-message [control]="makeAnOfferForm.controls.numberOfAdults"></app-validation-message>
         </ion-col>
-
+        <ion-col [sizeXs]="makeAnOfferForm.controls['tenantRelationship'].value == 3 ? '50' : '100'" [sizeSm]="makeAnOfferForm.controls['tenantRelationship'].value == 3 ? '33.3' : '33.3'">
+          <ion-item>
+            <ion-label position="floating">Tenants relationship*</ion-label>
+            <ion-select formControlName="tenantRelationship" interface="popover">
+              <ion-select-option [value]="item?.index" *ngFor="let item of tenantRelationShipsList">{{ item?.value }}</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <app-validation-message [control]="makeAnOfferForm.controls.tenantRelationship"></app-validation-message>
+        </ion-col>
+        <ion-col size-xs="33.3" size-sm="33.3" *ngIf="makeAnOfferForm.controls['tenantRelationship'].value == 3">
+          <ion-item>
+            <ion-label position="floating">Other relationship*</ion-label>
+            <ion-input type="text"
+              formControlName="otherTenantRelationship">
+            </ion-input>
+          </ion-item>
+          <app-validation-message [control]="makeAnOfferForm.controls.otherTenantRelationship"></app-validation-message>
+        </ion-col>
         <ion-col size-xs="100" size-sm="33.3">
           <ion-item>
             <ion-label position="floating">No. of Children <ion-text class="mandatory">*</ion-text>
@@ -279,7 +296,24 @@
           </ion-item>
           <app-validation-message [control]="makeAnOfferForm.controls.occupation"></app-validation-message>
         </ion-col>
-
+        <ion-col size-xs="100" size-sm="33.3">
+          <ion-item>
+            <ion-label position="floating">Type of employment<ion-text class="mandatory">*</ion-text></ion-label>
+            <ion-select formControlName="employmentContract" interface="popover">
+              <ion-select-option [value]="item?.index" *ngFor="let item of employmentContractList">{{item?.value}}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+          <app-validation-message [control]="makeAnOfferForm.controls.employmentContract"></app-validation-message>
+        </ion-col>
+        <ion-col size-xs="100" size-sm="33.3">
+          <ion-item>
+            <ion-label style="margin-top: 9px;margin-bottom: 5px;" position="stacked">Annual income<ion-text class="mandatory">*</ion-text>
+            </ion-label>
+            <input currencyMask type="tel" formControlName="annualIncome" class="amount-input"/>
+          </ion-item>
+          <app-validation-message [control]="makeAnOfferForm.controls.annualIncome"></app-validation-message>
+        </ion-col>
         <ion-col size-xs="100" size-sm="33.3">
           <ion-item lines="full" class="mt-7">
             <ion-label>Do you have a guarantor?</ion-label>
@@ -619,6 +653,24 @@
             <ion-col size-xs="100" size-sm="50" class="header-content">
               <ion-text class="header ion-text-wrap">Additional Comments</ion-text><br />
               <ion-text class="content">{{makeAnOfferForm.controls.comments.value || DEFAULTS.NOT_AVAILABLE}}</ion-text>
+            </ion-col>
+            <ion-col size-xs="100" size-sm="50" class="header-content">
+              <ion-text class="header ion-text-wrap">Tenants relationship</ion-text><br />
+              <ion-text class="content">{{ makeAnOfferForm.controls.tenantRelationship.value ? (makeAnOfferForm.controls.tenantRelationship.value | lookup
+                : tenantRelationShipsList) : DEFAULTS.NOT_AVAILABLE}}</ion-text>
+            </ion-col>
+            <ion-col size-xs="100" size-sm="50" class="header-content">
+              <ion-text class="header ion-text-wrap">Other relationship</ion-text><br />
+              <ion-text class="content">{{makeAnOfferForm.controls.otherTenantRelationship.value || DEFAULTS.NOT_AVAILABLE}}</ion-text>
+            </ion-col>
+            <ion-col size-xs="100" size-sm="50" class="header-content">
+              <ion-text class="header ion-text-wrap">Type of employment</ion-text><br />
+              <ion-text class="content">{{ makeAnOfferForm.controls.employmentContract.value ? (makeAnOfferForm.controls.employmentContract.value | lookup
+                : employmentContractList) : DEFAULTS.NOT_AVAILABLE}}</ion-text>
+            </ion-col>
+            <ion-col size-xs="100" size-sm="50" class="header-content">
+              <ion-text class="header ion-text-wrap">Annual income</ion-text><br />
+              <ion-text class="content">{{makeAnOfferForm.controls.annualIncome.value || DEFAULTS.NOT_AVAILABLE}}</ion-text>
             </ion-col>
             <ion-col size="100" class="border-bottom"></ion-col>
             <ion-col size="100">

@@ -671,6 +671,24 @@
                     [disabled]="!item.controls['hasPets'].value"></ion-input>
                 </ion-item>
               </ion-col>
+              <ion-col size-xs="100" size-sm="33.3">
+                <ion-item>
+                  <ion-label position="floating">Type of employment<ion-text class="mandatory">*</ion-text></ion-label>
+                  <ion-select formControlName="employmentContract" interface="popover">
+                    <ion-select-option [value]="emp?.index" *ngFor="let emp of employmentContractList">{{emp?.value}}
+                    </ion-select-option>
+                  </ion-select>
+                </ion-item>
+                <app-validation-message [control]="item.controls.employmentContract"></app-validation-message>
+              </ion-col>
+              <ion-col size-xs="100" size-sm="33.3">
+                <ion-item>
+                  <ion-label style="margin-top: 9px;margin-bottom: 5px;" position="stacked">Annual income<ion-text class="mandatory">*</ion-text>
+                  </ion-label>
+                  <input currencyMask type="tel" formControlName="annualIncome" class="amount-input"/>
+                </ion-item>
+                <app-validation-message [control]="item.controls.annualIncome"></app-validation-message>
+              </ion-col>
             </ion-row>
           </ion-grid>
           <ion-grid class="ion-padding">
@@ -1191,7 +1209,24 @@
           <app-validation-message [control]="tenancyDetailForm.controls.hasSameHouseholdApplicants">
           </app-validation-message>
         </ion-col>
-
+        <ion-col [sizeXs]="tenancyDetailForm.controls['tenantRelationship'].value == 3 ? '50' : '100'" [sizeSm]="tenancyDetailForm.controls['tenantRelationship'].value == 3 ? '33.3' : '33.3'">
+          <ion-item>
+            <ion-label position="floating">Tenants relationship*</ion-label>
+            <ion-select formControlName="tenantRelationship" interface="popover">
+              <ion-select-option [value]="item?.index" *ngFor="let item of tenantRelationShipsList">{{ item?.value }}</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <app-validation-message [control]="tenancyDetailForm.controls.tenantRelationship"></app-validation-message>
+        </ion-col>
+        <ion-col size-xs="50" size-sm="33.3" *ngIf="tenancyDetailForm.controls['tenantRelationship'].value == 3">
+          <ion-item>
+            <ion-label position="floating">Other relationship*</ion-label>
+            <ion-input type="text"
+              formControlName="otherTenantRelationship">
+            </ion-input>
+          </ion-item>
+          <app-validation-message [control]="tenancyDetailForm.controls.otherTenantRelationship"></app-validation-message>
+        </ion-col>
         <ion-col size-xs="100" size-sm="33.3">
           <ion-item>
             <ion-label position="floating">No. of households <ion-text class="mandatory">*</ion-text>
@@ -1206,6 +1241,17 @@
           </ion-item>
           <app-validation-message [control]="tenancyDetailForm.controls.numberOfHouseHolds">
           </app-validation-message>
+        </ion-col>
+        <ion-col size-xs="100" size-sm="33.3">
+          <ion-item>
+            <ion-label position="floating">For how long? <ion-text class="mandatory">*</ion-text>
+            </ion-label>
+            <ion-select formControlName="rentingTime" interface="popover">
+              <ion-select-option [value]="item.index" *ngFor="let item of letDurations">{{ item.value }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+          <app-validation-message [control]="tenancyDetailForm.controls.rentingTime"></app-validation-message>
         </ion-col>
       </ion-row>
     </ion-grid>

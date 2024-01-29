@@ -227,3 +227,9 @@ ion-content {
   color: var(--ion-color-step-2000);
   @include set-text-style(22px, 25px);    
 }
+
+.amount-input {
+  border: 0;
+  outline: 0;
+  background: transparent;
+}
