@@ -123,6 +123,8 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
   showCorrespondAddress = false;
   showGuarantorAddress = false;
   agreementTypesLookup;
+  tenantRelationShipsList = [{ index: 0, value: 'Married' }, { index: 1, value: 'Sharers' }, { index: 2, value: 'Spouse' }, { index: 3, value: 'Other' }];
+  employmentContractList = [{ index: 0, value: 'Full-time' }, { index: 1, value: 'Part-time' }, { index: 2, value: 'Contractual' }, { index: 3, value: 'Freelancer' }];
 
   constructor(
     private route: ActivatedRoute,
@@ -319,7 +321,7 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
   /** Submit Application Functionality **/
 
   async submit() {
-    let isValid:any = await this.checkFormsValidity();
+    let isValid: any = await this.checkFormsValidity();
     if (!isValid.valid) {
       this.commonService.showMessage(`Please provide complete information in the below steps: - ${isValid?.invalidList}`, 'Application Details', 'error');
       return;
@@ -337,8 +339,8 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
       var groupValidity = true;
       const groupApplicantDetailsFormArray: any = this.groupApplicantDetailsForm.get('list') as FormArray;
       let lead = this.occupantForm.getRawValue().coApplicants.filter((x => x.isLead));
-      groupApplicantDetailsFormArray.controls.forEach((group:FormGroup) => {
-        if((group.controls['applicantId'].value == lead[0].applicantId) && !group.valid) {
+      groupApplicantDetailsFormArray.controls.forEach((group: FormGroup) => {
+        if ((group.controls['applicantId'].value == lead[0].applicantId) && !group.valid) {
           groupValidity = false;
         }
       });
@@ -346,22 +348,22 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
       const tenancyDetails = this.tenancyDetailForm.valid;
       const guarantorDetails = this.guarantorForm.valid;
       if (tenancyDetails && guarantorDetails && bankDetails && groupValidity) {
-        return resolve({valid:true,invalidList:[]});
+        return resolve({ valid: true, invalidList: [] });
       }
       let invalidList = '';
-      if(!tenancyDetails) {
+      if (!tenancyDetails) {
         invalidList += 'Tenancy Details,';
       }
-      if(!groupValidity) {
+      if (!groupValidity) {
         invalidList += 'Applicant Details,';
       }
-      if(!bankDetails) {
+      if (!bankDetails) {
         invalidList += 'Bank Details,';
       }
-      if(!guarantorDetails) {
+      if (!guarantorDetails) {
         invalidList += 'Guarantor Details';
       }
-      return resolve({valid:false,invalidList:invalidList});
+      return resolve({ valid: false, invalidList: invalidList });
     });
   }
 
@@ -846,6 +848,7 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
   private setLookupData(): void {
     this.lookupdata = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);
     this.letDurations = this.lookupdata.letDurations;
+    this.letDurations = this.letDurations.filter(x => x.value == '6 months' || x.value == '12 months')
     this.tenantCurrentPositionTypes = this.lookupdata.tenantCurrentPositionTypes;
     this.applicantGuarantorTypes = this.lookupdata.applicantGuarantorTypes;
     this.rentFrequencyTypes = this.lookupdata.advertisementRentFrequencies;
@@ -1031,7 +1034,7 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
     });
   }
 
-  getAddressList(addressType: string,item:any) {
+  getAddressList(addressType: string, item: any) {
     let postcode;
     switch (addressType) {
       case 'personal':
@@ -1105,7 +1108,7 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
     );
   }
 
-  getAddressDetails(addressId: string, addressType: string,item) {
+  getAddressDetails(addressId: string, addressType: string, item) {
     if (addressType == 'personal') {
       this.showApplicantAddress = true;
     }
@@ -1121,7 +1124,7 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
     this.commonService.getPostcodeAddressDetails(addressId).subscribe(
       res => {
         if (res && res.line1) {
-          this.setAddressDetails(addressType, res,item);
+          this.setAddressDetails(addressType, res, item);
         }
       },
       error => {
@@ -1133,7 +1136,7 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
     );
   }
 
-  setAddressDetails(addressType: string, res: any,item) {
+  setAddressDetails(addressType: string, res: any, item) {
     switch (addressType) {
       case 'personal':
         item.controls.address['controls'].addressLine1.setValue(res.line1);
@@ -1186,7 +1189,10 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
       hasSameHouseholdApplicants: [false, Validators.required],
       numberOfHouseHolds: [{ value: '', disabled: false }, Validators.required],
       isNoDepositScheme: [''],
-      agreementType: [null, Validators.required]
+      agreementType: [null, Validators.required],
+      rentingTime: ['', Validators.required],
+      tenantRelationship: ['', Validators.required],
+      otherTenantRelationship: ''
     }, {
       validator: Validators.compose([
         ValidationService.dateLessThan('moveInDate', 'preferredTenancyEndDate')
@@ -1199,6 +1205,15 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
         this.calRent(res);
       }
       this.initiaFormlLoaded = true;
+    });
+    this.tenancyDetailForm.get('tenantRelationship').valueChanges.subscribe((r) => {
+      if (r && r == 3) {
+        this.tenancyDetailForm.get('otherTenantRelationship').setValidators(Validators.required);
+        this.tenancyDetailForm.get('otherTenantRelationship').updateValueAndValidity();
+      } else {
+        this.tenancyDetailForm.get('otherTenantRelationship').clearValidators();
+        this.tenancyDetailForm.get('otherTenantRelationship').updateValueAndValidity();
+      }
     });
   }
 
@@ -1356,7 +1371,7 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
     // }
     // this.applicantDetailsForm.get('guarantorType').updateValueAndValidity();
 
-    if(item.value.guarantor){
+    if (item.value.guarantor) {
       item.controls.guarantorType.setValidators([Validators.required]);
     } else {
       item.controls.guarantorType.clearValidators();
@@ -2022,14 +2037,16 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
   }
 
   async setLeadDetails() {
-    if (!this.checkIfDetailsPresent(this.applicantId)) {
-      let details;
-      if (this.applicationDetails.leadApplicantItemtype === 'M') {
-         details = await this.fetchOnlyTenantDetails(this.applicantId);
-      } else {
-         details = await this.fetchOnlyAppDetails(this.applicantId);
+    if (this.applicantId) {
+      if (!this.checkIfDetailsPresent(this.applicantId)) {
+        let details;
+        if (this.applicationDetails.leadApplicantItemtype === 'M') {
+          details = await this.fetchOnlyTenantDetails(this.applicantId);
+        } else {
+          details = await this.fetchOnlyAppDetails(this.applicantId);
+        }
+        this.updateApplicantGrp(details);
       }
-      this.updateApplicantGrp(details);
     }
   }
 
@@ -2038,9 +2055,9 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
     if (!this.checkIfDetailsPresent(id)) {
       if (this.applicationDetails.leadApplicantItemtype === 'M') {
         details = await this.fetchOnlyTenantDetails(id);
-     } else {
+      } else {
         details = await this.fetchOnlyAppDetails(id);
-     }
+      }
       this.updateApplicantGrp(details);
     }
   }
@@ -2056,7 +2073,7 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
   }
 
   updateApplicantGrp(details: any) {
-    const id = this.applicationDetails.leadApplicantItemtype === 'M' ? details.tenantId:details.applicantId;
+    const id = this.applicationDetails.leadApplicantItemtype === 'M' ? details.tenantId : details.applicantId;
     if (this.checkIfDetailsPresent(details?.applicantId)) {
       return;
     }
@@ -2070,7 +2087,7 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
             title: details.title,
             forename: details.forename,
             surname: details.surname,
-            email: [details.email,[Validators.required,ValidationService.emailValidator]],
+            email: [details.email, [Validators.required, ValidationService.emailValidator]],
             mobile: details.mobile,
             dateOfBirth: details.dateOfBirth,
             occupation: details.occupation,
@@ -2080,6 +2097,8 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
             guarantorType: details.guarantorType,
             currentPosition: details.currentPosition,
             isReferencingRequired: details.isReferencingRequired,
+            employmentContract: ['', Validators.required],
+            annualIncome: ['', Validators.required],
             address: this._formBuilder.group({
               postcode: [details?.address?.postcode, [Validators.required, ValidationService.postcodeValidator]],
               addressdetails: [details?.address?.addressdetails],
@@ -2091,7 +2110,7 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
               country: details?.address?.country
             }),
             forwardingAddress: this._formBuilder.group({
-              postcode: [details?.forwardingAddress?.postcode,ValidationService.postcodeValidator],
+              postcode: [details?.forwardingAddress?.postcode, ValidationService.postcodeValidator],
               addressdetails: [details?.forwardingAddress?.addressdetails],
               addressLine1: details?.forwardingAddress?.addressLine1,
               addressLine2: details?.forwardingAddress?.addressLine2,
@@ -2111,7 +2130,7 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
   setAppDetDropDown() {
     if (!this.applicantDetailSelectorControl.value) {
       let lead = this.occupantForm.getRawValue().coApplicants.filter((x => x.isLead));
-      if(lead && lead[0]) {
+      if (lead && lead[0]) {
         lead = lead[0];
         this.applicantDetailSelectorControl.setValue(lead.applicantId);
       }
