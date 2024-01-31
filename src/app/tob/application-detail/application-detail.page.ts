@@ -1,4 +1,4 @@
-import { Component, OnInit, isDevMode } from '@angular/core';
+import { Component, OnInit, ViewChild, isDevMode } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PROPCO, APPLICATION_STATUSES, APPLICATION_ACTION_TYPE, ENTITY_TYPE, PAYMENT_TYPES, PAYMENT_CONFIG, APPLICATION_ENTITIES, DEFAULTS, DATE_FORMAT, SYSTEM_OPTIONS } from 'src/app/shared/constants';
@@ -8,7 +8,7 @@ import { switchMap, debounceTime, delay } from 'rxjs/operators';
 import { forkJoin, Observable, of } from 'rxjs';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { ValidationService } from 'src/app/shared/services/validation.service';
-import { ModalController } from '@ionic/angular';
+import { IonModal, ModalController } from '@ionic/angular';
 import { TermsAndConditionModalPage } from 'src/app/shared/modals/terms-and-condition-modal/terms-and-condition-modal.page';
 import { environment } from 'src/environments/environment';
 import { SimpleModalPage } from 'src/app/shared/modals/simple-modal/simple-modal.page';
@@ -125,7 +125,7 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
   agreementTypesLookup;
   tenantRelationShipsList = [{ index: 0, value: 'Married' }, { index: 1, value: 'Sharers' }, { index: 2, value: 'Spouse' }, { index: 3, value: 'Other' }];
   employmentContractList = [{ index: 0, value: 'Full-time' }, { index: 1, value: 'Part-time' }, { index: 2, value: 'Contractual' }, { index: 3, value: 'Freelancer' }];
-
+  openAddModifyGuarantorModal = false;
   constructor(
     private route: ActivatedRoute,
     private commonService: CommonService,
@@ -246,13 +246,6 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
     });
   }
 
-  private patchTenancyDetail(): void {
-    this.tenancyDetailForm.patchValue({
-      numberOfAdults: this.applicantDetail.numberOfAdults,
-      numberOfChildren: this.applicantDetail.numberOfChildren
-    });
-  }
-
   resetSearch() {
     this.searchApplicantForm.get('searchApplicant').setValue('');
     this.resultsAvailable = false;
@@ -312,7 +305,7 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
       await this.setWorldpayInternalData();
     }
     if (this.applicationStatus === 'Accepted' && !application.isHoldingDepositPaid) {
-      this.currentStepperIndex = 10;
+      this.currentStepperIndex = 8;
       this.showPayment = true;
       this.initPaymentConfiguration();
     }
@@ -346,8 +339,8 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
       });
       const bankDetails = this.bankDetailsForm.valid;
       const tenancyDetails = this.tenancyDetailForm.valid;
-      const guarantorDetails = this.guarantorForm.valid;
-      if (tenancyDetails && guarantorDetails && bankDetails && groupValidity) {
+      // const guarantorDetails = this.guarantorForm.valid;
+      if (tenancyDetails && bankDetails && groupValidity) {
         return resolve({ valid: true, invalidList: [] });
       }
       let invalidList = '';
@@ -360,9 +353,9 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
       if (!bankDetails) {
         invalidList += 'Bank Details,';
       }
-      if (!guarantorDetails) {
-        invalidList += 'Guarantor Details';
-      }
+      // if (!guarantorDetails) {
+      //   invalidList += 'Guarantor Details';
+      // }
       return resolve({ valid: false, invalidList: invalidList });
     });
   }
@@ -1546,18 +1539,18 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
   private initGuarantorForm(): void {
     this.guarantorForm = this._formBuilder.group({
       guarantorId: [''],
-      title: ['', [ValidationService.speacialValidator]],
-      forename: [''],
+      title: ['', [Validators.required, ValidationService.speacialValidator]],
+      forename: ['', Validators.required],
       surname: [''],
-      email: ['', [ValidationService.emailValidator]],
+      email: ['', [Validators.required, ValidationService.emailValidator]],
       mobile: ['', [ValidationService.contactValidator, Validators.minLength(5), Validators.maxLength(15)]],
       address: this._formBuilder.group({
-        postcode: ['', [ValidationService.postcodeValidator]],
+        postcode: ['', [Validators.required, ValidationService.postcodeValidator]],
         addressdetails: [''],
-        addressLine1: [''],
+        addressLine1: ['', Validators.required],
         addressLine2: '',
         locality: '',
-        town: [''],
+        town: ['', Validators.required],
         county: '',
         country: ''
       })
@@ -1588,7 +1581,7 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
       this._tobService.getApplicantGuarantors(applicantId).subscribe(
         res => {
           if (res && res.data) {
-            this.setGuarantorDetails(res.data[0]);
+            // this.setGuarantorDetails(res.data[0]);
           }
           resolve(true);
         }, error => {
@@ -1603,7 +1596,7 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
       this._tobService.getTenantGuarantors(applicantId).subscribe(
         res => {
           if (res && res.data) {
-            this.setGuarantorDetails(res.data[0]);
+            // this.setGuarantorDetails(res.data[0]);
             resolve(true);
           }
         }, error => {
@@ -2040,25 +2033,62 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
     if (this.applicantId) {
       if (!this.checkIfDetailsPresent(this.applicantId)) {
         let details;
+        let guarantorsList;
         if (this.applicationDetails.leadApplicantItemtype === 'M') {
           details = await this.fetchOnlyTenantDetails(this.applicantId);
+          guarantorsList = await this.fetchTenantGuarantors(this.applicantId);
         } else {
           details = await this.fetchOnlyAppDetails(this.applicantId);
+          guarantorsList = await this.fetchApplicantGuarantors(this.applicantId);
         }
-        this.updateApplicantGrp(details);
+        this.updateApplicantGrp(details, guarantorsList);
       }
     }
   }
 
+  async fetchApplicantGuarantors(applicantId: any) {
+    return new Promise((resolve, reject) => {
+      this._tobService.getApplicantGuarantors(applicantId).subscribe(
+        res => {
+          if (res && res.data) {
+            resolve(res.data);
+          } else {
+            resolve([]);
+          }
+        }, error => {
+          reject([]);
+        }
+      )
+    });
+  }
+  async fetchTenantGuarantors(tenantId: any) {
+    return new Promise((resolve, reject) => {
+      this._tobService.getTenantGuarantors(tenantId).subscribe(
+        res => {
+          if (res && res.data) {
+            resolve(res.data);
+          } else {
+            resolve([]);
+          }
+        }, error => {
+          reject([]);
+        }
+      )
+    });
+  }
+
   async fetchDetailsAndSet(id) {
     let details;
+    let guarantorsList;
     if (!this.checkIfDetailsPresent(id)) {
       if (this.applicationDetails.leadApplicantItemtype === 'M') {
         details = await this.fetchOnlyTenantDetails(id);
+        guarantorsList = await this.fetchTenantGuarantors(id);
       } else {
         details = await this.fetchOnlyAppDetails(id);
+        guarantorsList = await this.fetchApplicantGuarantors(id);
       }
-      this.updateApplicantGrp(details);
+      this.updateApplicantGrp(details, guarantorsList);
     }
   }
 
@@ -2072,14 +2102,40 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
     return present;
   }
 
-  updateApplicantGrp(details: any) {
+  updateApplicantGrp(details: any, guarantorList: any = []) {
     const id = this.applicationDetails.leadApplicantItemtype === 'M' ? details.tenantId : details.applicantId;
     if (this.checkIfDetailsPresent(details?.applicantId)) {
       return;
     }
     if (details) {
       const groupApplicantDetailsFormArray: any = this.groupApplicantDetailsForm.get('list') as FormArray;
-      console.log(groupApplicantDetailsFormArray);
+      let guarantorControls = [];
+      if (guarantorList && guarantorList.length) {
+        guarantorList.map((g: any) => {
+          guarantorControls.push(
+            this._formBuilder.group(
+              {
+                guarantorId: g?.guarantorId ? g?.guarantorId : '',
+                title: g?.title ? g?.title : '',
+                forename: g?.forename ? g?.forename : '',
+                surname: g?.surname ? g?.surname : '',
+                email: g?.email ? g?.email : '',
+                mobile: g?.mobile ? g?.mobile : '',
+                address: this._formBuilder.group({
+                  postcode: g?.address?.postcode ? g?.address?.postcode : '',
+                  addressdetails: g?.address?.addressdetails ? g?.address?.addressdetails : '',
+                  addressLine1: g?.address?.addressLine1 ? g?.address?.addressLine1 : '',
+                  addressLine2: g?.address?.addressLine2 ? g?.address?.addressLine2 : '',
+                  locality: g?.address?.locality ? g?.address?.locality : '',
+                  town: g?.address?.town ? g?.address?.town : '',
+                  county: g?.address?.county ? g?.address?.county : '',
+                  country: g?.address?.country ? g?.address?.country : ''
+                })
+              }
+            )
+          );
+        });
+      }
       groupApplicantDetailsFormArray.push(
         this._formBuilder.group(
           {
@@ -2118,13 +2174,14 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
               town: details?.forwardingAddress?.town,
               county: details?.forwardingAddress?.county,
               country: details?.forwardingAddress?.country
-            })
+            }),
+            guarantors: this._formBuilder.array(guarantorControls)
           }
         )
       );
       this.leadDetailsFetched = true;
     }
-    console.log(this.groupApplicantDetailsForm.get('list').value)
+    console.log('LIST ', this.groupApplicantDetailsForm.get('list').value)
   }
 
   setAppDetDropDown() {
@@ -2148,4 +2205,140 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
       this.commonService.showMessage('updated Failed!', 'Applicant Update', 'error');
     });
   }
+
+  async _updateGuarantorDetails() {
+    const data = Object.assign({}, this.guarantorForm.value);
+    const selectedApplicant = this.applicantDetailSelectorControl.value;
+    if (!data?.guarantorId) {
+      // Add new guarantor
+      const added = await this.addGuarantor(data, selectedApplicant);
+      if (added) {
+        const groupApplicantDetailsFormArray: any = this.groupApplicantDetailsForm.get('list') as FormArray;
+        groupApplicantDetailsFormArray.controls.forEach((item: FormGroup) => {
+          if (item.controls['applicantId'].value == selectedApplicant) {
+            // update the selected applicant
+            const guarantorFormArray: any = item.controls['guarantors'] as FormArray;
+            guarantorFormArray.push(this._formBuilder.group(
+              {
+                guarantorId: added,
+                title: data?.title,
+                forename: data?.forename,
+                surname: data?.surname,
+                email: data?.email,
+                mobile: data?.mobile,
+                address: this._formBuilder.group({
+                  postcode: data?.address?.postcode,
+                  addressdetails: data?.address?.addressdetails,
+                  addressLine1: data?.address?.addressLine1,
+                  addressLine2: data?.address?.addressLine2,
+                  locality: data?.address?.locality,
+                  town: data?.address?.town,
+                  county: data?.address?.county,
+                  country: data?.address?.country,
+                })
+              }
+            ));
+          }
+        });
+        this.openAddModifyGuarantorModal = false;
+        this.showGuarantorAddress = false;
+        this.guarantorForm.reset();
+      }
+    } else {
+      const modified = this.updateGuarantorById(data, data?.guarantorId);
+      if (modified) {
+        const groupApplicantDetailsFormArray: any = this.groupApplicantDetailsForm.get('list') as FormArray;
+        groupApplicantDetailsFormArray.controls.forEach((item: FormGroup) => {
+          if (item.controls['applicantId'].value == selectedApplicant) {
+            // update the selected applicant
+            const guarantorFormArray: any = item.controls['guarantors'] as FormArray;
+            guarantorFormArray.controls.forEach((guarantorGrp: FormGroup) => {
+              if (guarantorGrp.controls['guarantorId'].value == data?.guarantorId) {
+                guarantorGrp.patchValue({
+                  title: data?.title,
+                  forename: data?.forename,
+                  surname: data?.surname,
+                  email: data?.email,
+                  mobile: data?.mobile,
+                  address: {
+                    postcode: data?.address?.postcode,
+                    addressdetails: data?.address?.addressdetails,
+                    addressLine1: data?.address?.addressLine1,
+                    addressLine2: data?.address?.addressLine2,
+                    locality: data?.address?.locality,
+                    town: data?.address?.town,
+                    county: data?.address?.county,
+                    country: data?.address?.country,
+                  }
+                });
+              }
+            });
+          }
+        });
+      }
+    }
+  }
+
+  modifyDetails(details: FormArray, guarantorId: any) {
+    details.controls.forEach((element: FormGroup) => {
+      if (element.controls['guarantorId'].value == guarantorId) {
+        this.guarantorForm.patchValue(
+          {
+            guarantorId: element.value.guarantorId,
+            title: element.value.title,
+            forename: element.value.forename,
+            surname: element.value.surname,
+            email: element.value.email,
+            mobile: element.value.mobile,
+            address: {
+              postcode: element.value.address?.postcode,
+              addressdetails: element.value.address?.addressdetails,
+              addressLine1: element.value.address?.addressLine1,
+              addressLine2: element.value.address?.addressLine2,
+              locality: element.value.address?.locality,
+              town: element.value.address?.town,
+              county: element.value.address?.county,
+              country: element.value.address?.country,
+            }
+          }
+        );
+      }
+    });
+    this.showGuarantorAddress = true;
+    this.openAddModifyGuarantorModal = true;
+  }
+
+  private async addGuarantor(guarantorDetails: any, applicantId: any) {
+    return new Promise((resolve, reject) => {
+      guarantorDetails = this.commonService.replaceEmptyStringWithNull(guarantorDetails);
+      this._tobService.createGuarantor(guarantorDetails, applicantId).subscribe(
+        res => {
+          this.guarantorForm.reset();
+          if (res) {
+            this.commonService.showMessage('Guarantor added successfully.', 'Guarantor', 'success');
+            resolve(res.guarantorId);
+          }
+        }, error => {
+          resolve(false);
+        }
+      );
+    });
+  }
+
+  private async updateGuarantorById(guarantorDetails: any, guarantorId: any) {
+    return new Promise((resolve, reject) => {
+      guarantorDetails = this.commonService.replaceEmptyStringWithNull(guarantorDetails);
+      this._tobService.updateGuarantorDetails(guarantorDetails, guarantorId).subscribe(
+        res => {
+          this.commonService.showMessage('Details updated successfully.', 'Guarantor', 'success');
+          resolve(true);
+
+        }, error => {
+          this.commonService.showMessage('Failed to update, Please retry.', 'Guarantor', 'error');
+          resolve(false);
+        }
+      );
+    });
+  }
+
 }
