@@ -1580,9 +1580,6 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
     return new Promise((resolve, reject) => {
       this._tobService.getApplicantGuarantors(applicantId).subscribe(
         res => {
-          if (res && res.data) {
-            // this.setGuarantorDetails(res.data[0]);
-          }
           resolve(true);
         }, error => {
           reject(undefined);
@@ -1595,10 +1592,7 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
     return new Promise((resolve, reject) => {
       this._tobService.getTenantGuarantors(applicantId).subscribe(
         res => {
-          if (res && res.data) {
-            // this.setGuarantorDetails(res.data[0]);
             resolve(true);
-          }
         }, error => {
           reject(undefined);
         }
@@ -2094,7 +2088,7 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
 
   checkIfDetailsPresent(id) {
     let present = false;
-    const d = this.groupApplicantDetailsForm.get('list').value.filter(r => r.applicantId == id);
+    const d = this.groupApplicantDetailsForm.get('list').value.filter(r => this.applicationDetails.leadApplicantItemtype === 'M' ? r.tenantId == id : r.applicantId == id);
     if (d && d[0]) {
       console.log()
       present = true;
@@ -2339,6 +2333,16 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
         }
       );
     });
+  }
+
+  openAddNewGuarantor() {
+    if (!this.applicationDetails?.isSubmitted) {
+      this.guarantorForm.markAsUntouched();
+      this.openAddModifyGuarantorModal = true;
+    } else {
+      this.commonService.showMessage('You have already submitted the Application. Cannot add a new guarantor.','Warning','error');
+    }
+
   }
 
 }
