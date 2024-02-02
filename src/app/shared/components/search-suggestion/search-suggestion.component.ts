@@ -142,7 +142,7 @@ export class SearchSuggestionComponent implements OnInit {
     if (this.commonService.getItem('ENABLE_SEARCH_FOR_ALL_ENTITY', true) != null) {
       this.isAllEntitySearchEnabled = this.commonService.getItem('ENABLE_SEARCH_FOR_ALL_ENTITY', true);
     } else {
-      this.isAllEntitySearchEnabled = await this.getSystemConfigs(SYSTEM_CONFIG.ENABLE_SEARCH_FOR_ALL_ENTITY);
+      this.isAllEntitySearchEnabled = await this.isSystemConfigEnabled(SYSTEM_CONFIG.ENABLE_SEARCH_FOR_ALL_ENTITY);
       this.commonService.setItem('ENABLE_SEARCH_FOR_ALL_ENTITY', this.isAllEntitySearchEnabled);
     }
     this.setSolrSalesEntity();
@@ -527,6 +527,17 @@ export class SearchSuggestionComponent implements OnInit {
     });
   }
 
+  private async isSystemConfigEnabled(key: string): Promise<any> {
+    return new Promise((resolve) => {
+      this.commonService.getSystemConfig(key).subscribe(res => {
+        resolve(res != null && res[key] != null && res[key] == true);
+      }, error => {
+        resolve(false);
+      });
+    });
+  }
+
+  
   private setEntity() {
     return new Promise((resolve) => {
       this.route.queryParams.subscribe((params) => {
