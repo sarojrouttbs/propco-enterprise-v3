@@ -39,7 +39,7 @@ export class AppHttpInterceptor implements HttpInterceptor {
 
       return next.handle(authReq).pipe(catchError((error: HttpErrorResponse) => {
         this._commonService.hideLoader();
-        if (error.url.includes('hmrc')) {
+        if (error.url.includes('hmrc') || error.url.includes('create-application')) {
           return throwError(error);
         }
 
