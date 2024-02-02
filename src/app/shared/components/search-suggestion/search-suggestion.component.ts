@@ -51,6 +51,7 @@ export class SearchSuggestionComponent implements OnInit {
   @Input() loaded: any;
   @ViewChild('solrSearchBar') solrSearchBar: any;
   isProcpcoSearchEnabled = false;
+  isAllEntitySearchEnabled = false;
   solrConfig = SOLR_CONFIG;
   historyItemAvailable = false;
   userAccessDetails = null;
@@ -138,9 +139,16 @@ export class SearchSuggestionComponent implements OnInit {
       this.isProcpcoSearchEnabled = await this.getSystemConfigs(SYSTEM_CONFIG.PROPCO_SEARCH_URL);
       this.commonService.setItem('PROPCO_SEARCH_ENABLED', this.isProcpcoSearchEnabled);
     }
+    if (this.commonService.getItem('ENABLE_SEARCH_FOR_ALL_ENTITY', true) != null) {
+      this.isAllEntitySearchEnabled = this.commonService.getItem('ENABLE_SEARCH_FOR_ALL_ENTITY', true);
+    } else {
+      this.isAllEntitySearchEnabled = await this.getSystemConfigs(SYSTEM_CONFIG.ENABLE_SEARCH_FOR_ALL_ENTITY);
+      this.commonService.setItem('ENABLE_SEARCH_FOR_ALL_ENTITY', this.isAllEntitySearchEnabled);
+    }
     this.setSolrSalesEntity();
     this.setFinderIcon();
     this.initDashboard();
+    this.getQueryParams();
     this.commonService.dataChanged$.subscribe((data) => {
       this.entityControl.setValue(data.entity);
       this.searchTermControl.setValue(data.term);
@@ -377,14 +385,24 @@ export class SearchSuggestionComponent implements OnInit {
   private getQueryParams() {
     return new Promise((resolve) => {
       this.route.queryParams.subscribe((params) => {
-        let entityType = 'Property';
+        let defaultEntityTypes: string[];
+        let entityType  = 'Property';
+        if (this.isAllEntitySearchEnabled) {
+          let selectAllList = [' '];
+          defaultEntityTypes = [...this.entityList, ...selectAllList];
+        } else{
+          defaultEntityTypes = [entityType];
+        }
+
         if (this.router.url.includes('/solr/entity-finder') || this.router.url.includes('/solr/finder-results')) {
           entityType = this.route.snapshot.params['entityType'];
           if (entityType == 'Associate') {
             entityType = 'Landlord';
           }
+          defaultEntityTypes = [entityType];
         }
-        const entityParams = params['type'] ? params['type'] : entityType;
+       
+        const entityParams = params['type'] ? params['type'] : defaultEntityTypes;
         const types: string[] = Array.isArray(entityParams) ? entityParams : [entityParams];
         this.entityControl.setValue(types);
         this.searchTerm = params['searchTerm'];
