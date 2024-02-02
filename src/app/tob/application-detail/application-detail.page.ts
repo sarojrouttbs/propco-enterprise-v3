@@ -742,6 +742,12 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
     this._tobService.createApplication(requestObj).subscribe(
       res => {
         this.router.navigate([`../application/${res.applicationId}`], { relativeTo: this.route });
+      }, async (error) => {
+        const message = error.error ? error.error.message : error.message;
+        const response = await this.commonService.showAlert('Create Application', message);
+        if (response) {
+          this.router.navigate([`../applications`], { replaceUrl: true, relativeTo: this.route });
+        }
       }
     );
   }
@@ -1592,7 +1598,7 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
     return new Promise((resolve, reject) => {
       this._tobService.getTenantGuarantors(applicantId).subscribe(
         res => {
-            resolve(true);
+          resolve(true);
         }, error => {
           reject(undefined);
         }
@@ -2336,11 +2342,13 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
   }
 
   openAddNewGuarantor() {
-    if (!this.applicationDetails?.isSubmitted) {
+    if (!this.applicationDetails?.isSubmitted && !this.isStudentProperty) {
       this.guarantorForm.markAsUntouched();
       this.openAddModifyGuarantorModal = true;
     } else {
-      this.commonService.showMessage('You have already submitted the Application. Cannot add a new guarantor.','Warning','error');
+      if (!this.isStudentProperty) {
+        this.commonService.showMessage('You have already submitted the Application. Cannot add a new guarantor.', 'Warning', 'error');
+      }
     }
 
   }
