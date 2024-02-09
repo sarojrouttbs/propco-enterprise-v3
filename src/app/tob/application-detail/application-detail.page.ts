@@ -1935,8 +1935,8 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
           const weeklyRent = ((currentRent * (12 / this.propertyDetails.rentFrequency)) / 52);
           const depositAmt = weeklyRent * this.depositAutoCalWeeks;
           const holdingDepAmt = weeklyRent * this.holdingDepAutoCalWeek;
-          this.tenancyDetailForm.controls['depositAmount'].setValue(holdingDepAmt.toFixed(2));
-          this.tenancyDetailForm.controls['deposit'].setValue(depositAmt.toFixed(2));
+          this.tenancyDetailForm.controls['depositAmount'].setValue(this.commonService.noRoundOff(holdingDepAmt));
+          this.tenancyDetailForm.controls['deposit'].setValue(this.commonService.noRoundOff(depositAmt));
           break;
       }
     }
