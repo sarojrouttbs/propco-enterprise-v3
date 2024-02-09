@@ -126,6 +126,7 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
   tenantRelationShipsList = [{ index: 0, value: 'Married' }, { index: 1, value: 'Sharers' }, { index: 2, value: 'Spouse' }, { index: 3, value: 'Other' }];
   employmentContractList = [{ index: 0, value: 'Full-time' }, { index: 1, value: 'Part-time' }, { index: 2, value: 'Contractual' }, { index: 3, value: 'Freelancer' }];
   openAddModifyGuarantorModal = false;
+  leadDetails;
   constructor(
     private route: ActivatedRoute,
     private commonService: CommonService,
@@ -206,6 +207,7 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
         }
       }
       this.applicantId = applicantId;
+      this.setLeadDetails();
       this._tobService.getApplicantDetails(applicantId).subscribe(res => {
         if (res) {
           this.applicantDetail = res;
@@ -396,6 +398,7 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
   public onStepChange(event: any): void {
     const nextIndex = event.selectedIndex;
     const previousIndex = event.previouslySelectedIndex;
+    this.fetchLeadApplicantDetails();
     if (nextIndex > previousIndex) {
       /*call API only in next step*/
       this.savePreviousStep(event);
@@ -2351,6 +2354,16 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
       }
     }
 
+  }
+  fetchLeadApplicantDetails() {
+    const groupApplicantDetailsFormArray: any = this.groupApplicantDetailsForm.get('list') as FormArray;
+    const occupationDetails = this.occupantForm.value;
+    groupApplicantDetailsFormArray.controls.forEach((item: FormGroup) => {
+      let lead = occupationDetails.coApplicants.filter(x => x.isLead);
+      if(lead && lead.length && (lead[0].applicantId == item.controls['applicantId'].value)) {
+        this.leadDetails = item.value;
+      }
+    });
   }
 
 }
