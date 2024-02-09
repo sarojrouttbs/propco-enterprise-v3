@@ -344,10 +344,10 @@ export class CommonService {
 
   searchEntityByText(text: string, types: []): Observable<any> {
     let params: any;
-      params = new HttpParams()
-        .set('searchTerm', text)
-        .set('searchSwitch',true)
-        .set('searchTypes', types.toString());
+    params = new HttpParams()
+      .set('searchTerm', text)
+      .set('searchSwitch', true)
+      .set('searchTypes', types.toString());
     return this.httpClient.get(environment.API_BASE_URL + `entities/search`, { params });
   }
 
@@ -659,5 +659,11 @@ export class CommonService {
     return this.httpClient.get(environment.API_BASE_URL + `user/logged-in/node`, {
       params,
     });
+  }
+
+  noRoundOff(val: number) {
+    if (!val) { return null; }
+    let formattedRent: number = Math.floor(val * 100) / 100;
+    return formattedRent;
   }
 }
