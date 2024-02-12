@@ -1,6 +1,6 @@
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   ENTITY_TYPE,
@@ -71,8 +71,9 @@ export class OfferDetailPage implements OnInit {
   applicantConfirmedDateInput = true;
   landlordConfirmedDateInput = true;
   webImageUrl: string;
-  tenantRelationShipsList = [{index:0,value:'Married'},{index:1,value:'Sharers'},{index:2,value:'Spouse'},{index:3,value:'Other'}];
-  employmentContractList = [{index:0,value:'Full-time'},{index:1,value:'Part-time'},{index:2,value:'Contractual'},{index:3,value:'Freelancer'}];
+  tenantRelationShipsList;
+  employmentTypeList;
+  propertyType;
   constructor(
     private route: ActivatedRoute,
     private commonService: CommonService,
@@ -153,6 +154,8 @@ export class OfferDetailPage implements OnInit {
       hasPets: this.applicantDetail.petsInfo ? true : false,
       petsInfo: this.applicantDetail.petsInfo,
       currentPosition: this.applicantDetail.currentPosition,
+      employmentType: this.applicantDetail.employmentType,
+      annualIncome: this.applicantDetail.annualIncome
     });
   }
 
@@ -243,6 +246,10 @@ export class OfferDetailPage implements OnInit {
       rentingTime: this.offerDetails.rentingTime,
       numberOfAdults: this.offerDetails.numberOfAdults,
       numberOfChildren: this.offerDetails.numberOfChildren,
+      tenantRelationship: this.offerDetails.tenantRelationship,
+      relationshipInfo: this.offerDetails.relationshipInfo,
+      isEligibleToRent: this.offerDetails.isEligibleToRent,
+      hasAdverseCreditHistory: this.offerDetails.hasAdverseCreditHistory
     });
     this.propertyClauses = this.offerDetails.offerClauses ? this.offerDetails.offerClauses : [];
     this.propertyRestrictions = this.offerDetails.offerRestrictions ? this.offerDetails.offerRestrictions : [];
@@ -261,6 +268,8 @@ export class OfferDetailPage implements OnInit {
     this.tobService.getPropertyDetails(propertyId, params).subscribe(
       (res) => {
         this.propertyDetails = res.data;
+        this.propertyType = this.commonService.getLookupValue(this.lookupdata.rentCategories, this.propertyDetails.rentCategory);
+        this.updateOfferFormValidation();
         this.propertyDetails.propertyImageUrl = this.commonService.getHeadMediaUrl(res.data.media || []);
         this.propertyDetails.webImageUrl = this.webImageUrl;
         this.getNoDeposit();
@@ -438,6 +447,10 @@ export class OfferDetailPage implements OnInit {
         confirmationForm.applicantConfirmedDate
       )
       : null;
+    requestObj.tenantRelationship = offerFormValues.tenantRelationship;
+    requestObj.relationshipInfo = offerFormValues.relationshipInfo;
+    requestObj.isEligibleToRent = offerFormValues.isEligibleToRent;
+    requestObj.hasAdverseCreditHistory = offerFormValues.hasAdverseCreditHistory;
     requestObj.isLandlordConfirmed = confirmationForm.isLandlordConfirmed;
     requestObj.landlordConfirmedDate = confirmationForm.isLandlordConfirmed
       ? this.commonService.getFormatedDate(
@@ -561,6 +574,10 @@ export class OfferDetailPage implements OnInit {
         });
       }
     });
+    requestObj.tenantRelationship = offerFormValues.tenantRelationship;
+    requestObj.relationshipInfo = offerFormValues.relationshipInfo;
+    requestObj.isEligibleToRent = offerFormValues.isEligibleToRent;
+    requestObj.hasAdverseCreditHistory = offerFormValues.hasAdverseCreditHistory;
     return requestObj;
   }
 
@@ -607,11 +624,12 @@ export class OfferDetailPage implements OnInit {
   private setLookupData(): void {
     this.lookupdata = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);
     this.letDurations = this.lookupdata.letDurations;
-    this.letDurations.filter(x => x.value == '6 months' || x.value == '12 months')
     this.tenantCurrentPositionTypes =
       this.lookupdata.tenantCurrentPositionTypes;
     this.applicantGuarantorTypes = this.lookupdata.applicantGuarantorTypes;
     this.rentFrequencyTypes = this.lookupdata.advertisementRentFrequencies;
+    this.tenantRelationShipsList = this.lookupdata.tenantRelationships;
+    this.employmentTypeList = this.lookupdata.employmentTypes;
   }
 
   private setTobLookupData(): void {
@@ -644,19 +662,19 @@ export class OfferDetailPage implements OnInit {
       petsInfo: [{ value: '', disabled: true }],
       comments: [''],
       tenantRelationship: [],
-      employmentContract: ['',Validators.required],
-      annualIncome: ['',Validators.required],
-      otherTenantRelationship: [],
-      isEligibileToRent: [],
-      hasAdverseCreditHistory: []
+      employmentType: ['', Validators.required],
+      annualIncome: ['', this.requiredIfNotZeroValidator()],
+      relationshipInfo: [],
+      hasAdverseCreditHistory: [],
+      isEligibleToRent: []
     });
     this.makeAnOfferForm.get('tenantRelationship').valueChanges.subscribe((r) => {
-      if(r && r == 3) {
-        this.makeAnOfferForm.get('otherTenantRelationship').setValidators(Validators.required);
-        this.makeAnOfferForm.get('otherTenantRelationship').updateValueAndValidity();
-      }else {
-        this.makeAnOfferForm.get('otherTenantRelationship').clearValidators();
-        this.makeAnOfferForm.get('otherTenantRelationship').updateValueAndValidity();
+      if (r && r == 3) {
+        this.makeAnOfferForm.get('relationshipInfo').setValidators(Validators.required);
+        this.makeAnOfferForm.get('relationshipInfo').updateValueAndValidity();
+      } else {
+        this.makeAnOfferForm.get('relationshipInfo').clearValidators();
+        this.makeAnOfferForm.get('relationshipInfo').updateValueAndValidity();
       }
     });
   }
@@ -926,5 +944,37 @@ export class OfferDetailPage implements OnInit {
           resolve(null);
         });
     });
+  }
+
+  private updateOfferFormValidation(): void {
+    if (this.propertyType != 'Student') {
+      this.letDurations = this.letDurations.filter(x => x.value == '6 months' || x.value == '12 months');
+      return;
+    }
+    this.makeAnOfferForm.controls['tenantRelationship'].clearValidators();
+    this.makeAnOfferForm.controls['tenantRelationship'].updateValueAndValidity();
+    this.makeAnOfferForm.controls['relationshipInfo'].clearValidators();
+    this.makeAnOfferForm.controls['relationshipInfo'].updateValueAndValidity();
+    this.makeAnOfferForm.controls['isEligibleToRent'].clearValidators();
+    this.makeAnOfferForm.controls['isEligibleToRent'].updateValueAndValidity();
+    this.makeAnOfferForm.controls['hasAdverseCreditHistory'].clearValidators();
+    this.makeAnOfferForm.controls['hasAdverseCreditHistory'].updateValueAndValidity();
+    this.makeAnOfferForm.controls['employmentType'].clearValidators();
+    this.makeAnOfferForm.controls['employmentType'].updateValueAndValidity();
+    this.makeAnOfferForm.controls['annualIncome'].clearValidators();
+    this.makeAnOfferForm.controls['annualIncome'].updateValueAndValidity();
+  }
+
+  private requiredIfNotZeroValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const value = control.value;
+      if (value === null || value === undefined || value === '' || value === 0) {
+        return { 'required': true };
+      }
+      if (value === 0) {
+        return null;
+      }
+      return Validators.required(control);
+    };
   }
 }

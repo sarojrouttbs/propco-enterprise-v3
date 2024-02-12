@@ -24,6 +24,7 @@ declare namespace OfferModels {
         alternativeFax: string;
         alternativeNo: string;
         annualIncome: number;
+        employmentType: number;
         booker: string;
         businessTelephoneNo: string;
         company: string;
@@ -99,6 +100,10 @@ declare namespace OfferModels {
         propertyId: string;
         rentingTime: number;
         status: number;
+        tenantRelationship: number;
+        relationshipInfo: string;
+        isEligibleToRent: boolean;
+        hasAdverseCreditHistory: boolean;
     }
 
     export interface OfferClauses {
