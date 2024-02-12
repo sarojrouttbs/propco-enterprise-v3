@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, isDevMode } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl, FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl, FormArray, AbstractControl, ValidatorFn } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PROPCO, APPLICATION_STATUSES, APPLICATION_ACTION_TYPE, ENTITY_TYPE, PAYMENT_TYPES, PAYMENT_CONFIG, APPLICATION_ENTITIES, DEFAULTS, DATE_FORMAT, SYSTEM_OPTIONS } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
@@ -123,12 +123,13 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
   showCorrespondAddress = false;
   showGuarantorAddress = false;
   agreementTypesLookup;
-  tenantRelationShipsList = [{ index: 0, value: 'Married' }, { index: 1, value: 'Sharers' }, { index: 2, value: 'Spouse' }, { index: 3, value: 'Other' }];
-  employmentContractList = [{ index: 0, value: 'Full-time' }, { index: 1, value: 'Part-time' }, { index: 2, value: 'Contractual' }, { index: 3, value: 'Freelancer' }];
+  tenantRelationShipsList;
+  employmentTypeList;
   openAddModifyGuarantorModal = false;
+  leadDetails;
   constructor(
     private route: ActivatedRoute,
-    private commonService: CommonService,
+    public commonService: CommonService,
     public _formBuilder: FormBuilder,
     private _tobService: TobService,
     private router: Router,
@@ -206,6 +207,7 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
         }
       }
       this.applicantId = applicantId;
+      this.setLeadDetails();
       this._tobService.getApplicantDetails(applicantId).subscribe(res => {
         if (res) {
           this.applicantDetail = res;
@@ -396,6 +398,7 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
   public onStepChange(event: any): void {
     const nextIndex = event.selectedIndex;
     const previousIndex = event.previouslySelectedIndex;
+    this.fetchLeadApplicantDetails();
     if (nextIndex > previousIndex) {
       /*call API only in next step*/
       this.savePreviousStep(event);
@@ -764,6 +767,9 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
               this.isStudentProperty = true;
               this.isStudentGuarantor();
             }
+            if (propertyType != 'Student') {
+              this.letDurations = this.letDurations.filter(x => x.value == '6 months' || x.value == '12 months');
+            }
             this.propertyDetails.propertyImageUrl = this.commonService.getHeadMediaUrl(res.data.media || []);
             this.propertyDetails.webImageUrl = this.webImageUrl;
             this.isTobPropertyCardReady = true;
@@ -847,11 +853,12 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
   private setLookupData(): void {
     this.lookupdata = this.commonService.getItem(PROPCO.LOOKUP_DATA, true);
     this.letDurations = this.lookupdata.letDurations;
-    this.letDurations = this.letDurations.filter(x => x.value == '6 months' || x.value == '12 months')
     this.tenantCurrentPositionTypes = this.lookupdata.tenantCurrentPositionTypes;
     this.applicantGuarantorTypes = this.lookupdata.applicantGuarantorTypes;
     this.rentFrequencyTypes = this.lookupdata.advertisementRentFrequencies;
     this.rentCategories = this.lookupdata.rentCategories;
+    this.tenantRelationShipsList = this.lookupdata.tenantRelationships;
+    this.employmentTypeList = this.lookupdata.employmentTypes;
   }
 
   private setTobLookupData(): void {
@@ -1191,7 +1198,7 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
       agreementType: [null, Validators.required],
       rentingTime: ['', Validators.required],
       tenantRelationship: ['', Validators.required],
-      otherTenantRelationship: ''
+      relationshipInfo: ''
     }, {
       validator: Validators.compose([
         ValidationService.dateLessThan('moveInDate', 'preferredTenancyEndDate')
@@ -1207,11 +1214,11 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
     });
     this.tenancyDetailForm.get('tenantRelationship').valueChanges.subscribe((r) => {
       if (r && r == 3) {
-        this.tenancyDetailForm.get('otherTenantRelationship').setValidators(Validators.required);
-        this.tenancyDetailForm.get('otherTenantRelationship').updateValueAndValidity();
+        this.tenancyDetailForm.get('relationshipInfo').setValidators(Validators.required);
+        this.tenancyDetailForm.get('relationshipInfo').updateValueAndValidity();
       } else {
-        this.tenancyDetailForm.get('otherTenantRelationship').clearValidators();
-        this.tenancyDetailForm.get('otherTenantRelationship').updateValueAndValidity();
+        this.tenancyDetailForm.get('relationshipInfo').clearValidators();
+        this.tenancyDetailForm.get('relationshipInfo').updateValueAndValidity();
       }
     });
   }
@@ -1531,7 +1538,10 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
       hasSameHouseholdApplicants: details.hasSameHouseholdApplicants,
       numberOfHouseHolds: details.numberOfHouseHolds,
       isNoDepositScheme: details.isNoDepositScheme,
-      agreementType: details?.agreementType
+      agreementType: details?.agreementType,
+      tenantRelationship: details?.tenantRelationship,
+      relationshipInfo: details?.relationshipInfo,
+      rentingTime: details?.rentingTime
     });
     if (this.isStudentProperty) {
       this.tenancyDetailForm.patchValue({
@@ -2153,8 +2163,8 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
             guarantorType: details.guarantorType,
             currentPosition: details.currentPosition,
             isReferencingRequired: details.isReferencingRequired,
-            employmentContract: ['', Validators.required],
-            annualIncome: ['', Validators.required],
+            employmentType: [details?.employmentType, Validators.required],
+            annualIncome: [details?.annualIncome, this.requiredIfNotZeroValidator()],
             address: this._formBuilder.group({
               postcode: [details?.address?.postcode, [Validators.required, ValidationService.postcodeValidator]],
               addressdetails: [details?.address?.addressdetails],
@@ -2181,7 +2191,6 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
       );
       this.leadDetailsFetched = true;
     }
-    console.log('LIST ', this.groupApplicantDetailsForm.get('list').value)
   }
 
   setAppDetDropDown() {
@@ -2351,6 +2360,29 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
       }
     }
 
+  }
+  fetchLeadApplicantDetails() {
+    const groupApplicantDetailsFormArray: any = this.groupApplicantDetailsForm.get('list') as FormArray;
+    const occupationDetails = this.occupantForm.value;
+    groupApplicantDetailsFormArray.controls.forEach((item: FormGroup) => {
+      let lead = occupationDetails.coApplicants.filter(x => x.isLead);
+      if(lead && lead.length && (lead[0].applicantId == item.controls['applicantId'].value)) {
+        this.leadDetails = item.value;
+      }
+    });
+  }
+
+  private requiredIfNotZeroValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const value = control.value;
+      if (value === null || value === undefined || value === '' || value === 0) {
+        return { 'required': true };
+      }
+      if (value === 0) {
+        return null;
+      }
+      return Validators.required(control);
+    };
   }
 
 }

@@ -262,10 +262,10 @@
           <ion-item>
             <ion-label position="floating">Other relationship*</ion-label>
             <ion-input type="text"
-              formControlName="otherTenantRelationship">
+              formControlName="relationshipInfo">
             </ion-input>
           </ion-item>
-          <app-validation-message [control]="makeAnOfferForm.controls.otherTenantRelationship"></app-validation-message>
+          <app-validation-message [control]="makeAnOfferForm.controls.relationshipInfo"></app-validation-message>
         </ion-col>
         <ion-col size-xs="100" size-sm="33.3">
           <ion-item>
@@ -299,12 +299,12 @@
         <ion-col size-xs="100" size-sm="33.3">
           <ion-item>
             <ion-label position="floating">Type of employment<ion-text class="mandatory">*</ion-text></ion-label>
-            <ion-select formControlName="employmentContract" interface="popover">
-              <ion-select-option [value]="item?.index" *ngFor="let item of employmentContractList">{{item?.value}}
+            <ion-select formControlName="employmentType" interface="popover">
+              <ion-select-option [value]="item?.index" *ngFor="let item of employmentTypeList">{{item?.value}}
               </ion-select-option>
             </ion-select>
           </ion-item>
-          <app-validation-message [control]="makeAnOfferForm.controls.employmentContract"></app-validation-message>
+          <app-validation-message [control]="makeAnOfferForm.controls.employmentType"></app-validation-message>
         </ion-col>
         <ion-col size-xs="100" size-sm="33.3">
           <ion-item>
@@ -346,6 +346,24 @@
           </ion-item>
           <app-validation-message [control]="makeAnOfferForm.controls.petsInfo"></app-validation-message>
         </ion-col>
+        <ng-container *ngIf="propertyType != 'Student'">
+          <ion-col size="100" class="ion-align-self-end no-padd-top-bottom">
+            <ion-item lines="none" class="marg-top-16">
+              <ion-label title="Please confirm you are eligible to rent in the UK and provide documents to support your application?">
+                Please confirm you are eligible to rent in the UK and provide documents to support your application?
+              </ion-label>
+              <ion-toggle [checked]="" formControlName="isEligibleToRent" color="primary"></ion-toggle>
+            </ion-item>
+          </ion-col>
+          <ion-col size="100" class="ion-align-self-end no-padd-top-bottom">
+            <ion-item lines="none" class="marg-top-16">
+              <ion-label title="Please confirm you do not have any adverse credit history that may affect your application or any expected reduction in income in the next 12 months?">
+                Please confirm you do not have any adverse credit history that may affect your application or any expected reduction in income in the next 12 months?
+              </ion-label>
+              <ion-toggle [checked]="" formControlName="hasAdverseCreditHistory" color="primary"></ion-toggle>
+            </ion-item>
+          </ion-col>
+        </ng-container>
       </ion-row>
     </ion-grid>
   </form>
@@ -654,24 +672,38 @@
               <ion-text class="header ion-text-wrap">Additional Comments</ion-text><br />
               <ion-text class="content">{{makeAnOfferForm.controls.comments.value || DEFAULTS.NOT_AVAILABLE}}</ion-text>
             </ion-col>
-            <ion-col size-xs="100" size-sm="50" class="header-content">
-              <ion-text class="header ion-text-wrap">Tenants relationship</ion-text><br />
-              <ion-text class="content">{{ makeAnOfferForm.controls.tenantRelationship.value ? (makeAnOfferForm.controls.tenantRelationship.value | lookup
-                : tenantRelationShipsList) : DEFAULTS.NOT_AVAILABLE}}</ion-text>
-            </ion-col>
-            <ion-col size-xs="100" size-sm="50" class="header-content">
-              <ion-text class="header ion-text-wrap">Other relationship</ion-text><br />
-              <ion-text class="content">{{makeAnOfferForm.controls.otherTenantRelationship.value || DEFAULTS.NOT_AVAILABLE}}</ion-text>
-            </ion-col>
-            <ion-col size-xs="100" size-sm="50" class="header-content">
-              <ion-text class="header ion-text-wrap">Type of employment</ion-text><br />
-              <ion-text class="content">{{ makeAnOfferForm.controls.employmentContract.value ? (makeAnOfferForm.controls.employmentContract.value | lookup
-                : employmentContractList) : DEFAULTS.NOT_AVAILABLE}}</ion-text>
-            </ion-col>
-            <ion-col size-xs="100" size-sm="50" class="header-content">
-              <ion-text class="header ion-text-wrap">Annual income</ion-text><br />
-              <ion-text class="content">{{makeAnOfferForm.controls.annualIncome.value || DEFAULTS.NOT_AVAILABLE}}</ion-text>
-            </ion-col>
+            <ng-container *ngIf="propertyType != 'Student'">
+              <ion-col size-xs="100" size-sm="50" class="header-content">
+                <ion-text class="header ion-text-wrap">Tenants relationship</ion-text><br />
+                <ion-text class="content">{{ makeAnOfferForm.controls.tenantRelationship.value ? (makeAnOfferForm.controls.tenantRelationship.value | lookup
+                  : tenantRelationShipsList) : DEFAULTS.NOT_AVAILABLE}}</ion-text>
+              </ion-col>
+              <ion-col size-xs="100" size-sm="50" class="header-content">
+                <ion-text class="header ion-text-wrap">Other relationship</ion-text><br />
+                <ion-text class="content">{{makeAnOfferForm.controls.relationshipInfo.value || DEFAULTS.NOT_AVAILABLE}}</ion-text>
+              </ion-col>
+              <ion-col size-xs="100" size-sm="50" class="header-content">
+                <ion-text class="header ion-text-wrap">Type of employment</ion-text><br />
+                <ion-text class="content">{{ makeAnOfferForm.controls.employmentType.value ? (makeAnOfferForm.controls.employmentType.value | lookup
+                  : employmentTypeList) : DEFAULTS.NOT_AVAILABLE}}</ion-text>
+              </ion-col>
+              <ion-col size-xs="100" size-sm="50" class="header-content">
+                <ion-text class="header ion-text-wrap">Annual income</ion-text><br />
+                <ion-text class="content">{{makeAnOfferForm.controls.annualIncome.value || DEFAULTS.NOT_AVAILABLE}}</ion-text>
+              </ion-col>
+              <ion-col size-xs="100" size-sm="50" class="header-content">
+                <ion-text class="header">Eligible To Rent</ion-text><br />
+                <ion-text class="content">
+                  {{makeAnOfferForm.controls.isEligibleToRent.value ? 'Yes' : 'No'}}
+                </ion-text>
+              </ion-col>
+              <ion-col size-xs="100" size-sm="50" class="header-content">
+                <ion-text class="header">Adverse Credit History</ion-text><br />
+                <ion-text class="content">
+                  {{makeAnOfferForm.controls.hasAdverseCreditHistory.value ? 'Yes' : 'No'}}
+                </ion-text>
+              </ion-col>
+            </ng-container>
             <ion-col size="100" class="border-bottom"></ion-col>
             <ion-col size="100">
               <div class="sub-heading">Restrictions</div>
