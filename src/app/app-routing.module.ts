@@ -17,6 +17,7 @@ const routes: Routes = [
   {
     path: 'faults',
     loadChildren: () => import('./faults/faults.module').then(m => m.FaultsPageModule),
+    data: { preload: true, delay: 0 },
     canActivate: [AuthGuard]
   },
   {
