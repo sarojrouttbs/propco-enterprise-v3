@@ -675,10 +675,10 @@
             <ng-container *ngIf="propertyType != 'Student'">
               <ion-col size-xs="100" size-sm="50" class="header-content">
                 <ion-text class="header ion-text-wrap">Tenants relationship</ion-text><br />
-                <ion-text class="content">{{ makeAnOfferForm.controls.tenantRelationship.value ? (makeAnOfferForm.controls.tenantRelationship.value | lookup
+                <ion-text class="content">{{ makeAnOfferForm.controls.tenantRelationship.value != null ? (makeAnOfferForm.controls.tenantRelationship.value | lookup
                   : tenantRelationShipsList) : DEFAULTS.NOT_AVAILABLE}}</ion-text>
               </ion-col>
-              <ion-col size-xs="100" size-sm="50" class="header-content">
+              <ion-col size-xs="100" size-sm="50" class="header-content" *ngIf="makeAnOfferForm.controls['tenantRelationship'].value == 3">
                 <ion-text class="header ion-text-wrap">Other relationship</ion-text><br />
                 <ion-text class="content">{{makeAnOfferForm.controls.relationshipInfo.value || DEFAULTS.NOT_AVAILABLE}}</ion-text>
               </ion-col>

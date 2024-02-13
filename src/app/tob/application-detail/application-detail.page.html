@@ -328,7 +328,7 @@
                     </ion-grid>
                   </ng-container>
                   <ng-container *ngIf="!isStudentProperty && !item.controls['isAdded'].value && !applicationDetails?.isSubmitted">
-                    <ion-col size="10">
+                    <ion-col size="15">
                       <ion-item>
                         <ion-label position="floating"> Title </ion-label>
                         <ion-select interface="popover" formControlName="title">
@@ -372,7 +372,7 @@
                       <app-validation-message [control]="item.controls.email"></app-validation-message>
                     </ion-col>
 
-                    <ion-col style="padding-top: 5px" size="15">
+                    <ion-col style="padding-top: 5px" size="10">
                       <ion-button color="success" [disabled]="!occupantForm.valid" (click)="addApplicant(item,i)" *ngIf="!updateOccupantsInProcess">Add
                         New</ion-button>
                         <ion-button color="theme-secondary" class="ion-flot-left" *ngIf="updateOccupantsInProcess">

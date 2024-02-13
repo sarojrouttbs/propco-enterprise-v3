@@ -72,11 +72,7 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
   forwardingAddressList: any[];
   leadApplicationApplicantId: any;
   selectionType: any;
-  titleList = [
-    { index: 0, value: 'Mr' },
-    { index: 1, value: 'Mrs' },
-    { index: 2, value: 'Ms' }
-  ];
+  titleList;
   maxMoveInDate = this.commonService.getFormatedDate(new Date().setFullYear(new Date().getFullYear() + 5));
   currentDate = this.commonService.getFormatedDate(new Date());
   termsConditionControl = false;
@@ -859,6 +855,7 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
     this.rentCategories = this.lookupdata.rentCategories;
     this.tenantRelationShipsList = this.lookupdata.tenantRelationships;
     this.employmentTypeList = this.lookupdata.employmentTypes;
+    this.titleList = this.lookupdata.personTitles;
   }
 
   private setTobLookupData(): void {
@@ -1267,6 +1264,10 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
     requestObj.rent = requestObj.rent ? requestObj.rent : this.propertyDetails.advertisementRent;
     requestObj.depositAmount = requestObj.depositAmount ? requestObj.depositAmount : this.propertyDetails.holdingDeposit;
     requestObj.deposit = requestObj.deposit ? requestObj.deposit : this.propertyDetails.deposit;
+    if(!this.isStudentProperty) {
+      requestObj.tenantRelationship = this.tenancyDetailForm.value.tenantRelationship;
+      requestObj.relationshipInfo = this.tenancyDetailForm.value.relationshipInfo;
+    }
     this._tobService.updateApplicationDetails(requestObj, this.applicationId).subscribe(
       res => {
         if (this.selectionType === APPLICATION_ACTION_TYPE.SAVE_FOR_LATER) {
