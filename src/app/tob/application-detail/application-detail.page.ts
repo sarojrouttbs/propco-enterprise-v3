@@ -1264,6 +1264,10 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
     requestObj.rent = requestObj.rent ? requestObj.rent : this.propertyDetails.advertisementRent;
     requestObj.depositAmount = requestObj.depositAmount ? requestObj.depositAmount : this.propertyDetails.holdingDeposit;
     requestObj.deposit = requestObj.deposit ? requestObj.deposit : this.propertyDetails.deposit;
+    if(!this.isStudentProperty) {
+      requestObj.tenantRelationship = this.tenancyDetailForm.value.tenantRelationship;
+      requestObj.relationshipInfo = this.tenancyDetailForm.value.relationshipInfo;
+    }
     this._tobService.updateApplicationDetails(requestObj, this.applicationId).subscribe(
       res => {
         if (this.selectionType === APPLICATION_ACTION_TYPE.SAVE_FOR_LATER) {
