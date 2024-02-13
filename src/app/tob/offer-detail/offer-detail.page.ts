@@ -661,7 +661,7 @@ export class OfferDetailPage implements OnInit {
       hasPets: [false],
       petsInfo: [{ value: '', disabled: true }],
       comments: [''],
-      tenantRelationship: [],
+      tenantRelationship: ['', Validators.required],
       employmentType: ['', Validators.required],
       annualIncome: ['', this.requiredIfNotZeroValidator()],
       relationshipInfo: [],
