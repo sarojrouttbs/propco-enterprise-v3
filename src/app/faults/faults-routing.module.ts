@@ -17,15 +17,18 @@ const routes: Routes = [
       },
       {
         path: 'dashboard',
-        loadChildren: () => import('./dashboard/dashboard.module').then( m => m.DashboardPageModule)
+        loadChildren: () => import('./dashboard/dashboard.module').then( m => m.DashboardPageModule),
+        data: { preload: true, delay: 0 },
       },
       {
         path: 'add',
-        loadChildren: () => import('./details/details.module').then( m => m.DetailsPageModule)
+        loadChildren: () => import('./details/details.module').then( m => m.DetailsPageModule),
+        data: { preload: true, delay: 0 }
       },
       {
         path: ':id/details',
-        loadChildren: () => import('./details/details.module').then( m => m.DetailsPageModule)
+        loadChildren: () => import('./details/details.module').then( m => m.DetailsPageModule),
+        data: { preload: true, delay: 0 },
       }
     ]
   }
