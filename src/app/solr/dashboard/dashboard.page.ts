@@ -309,7 +309,7 @@ export class DashboardPage implements OnInit {
       return;
     }
     this.isDashboardBannerPresent = true;
-    this.dashboardBannerHtml = this.sanitizer.bypassSecurityTrustHtml(bannerContent);;
+    this.dashboardBannerHtml = this.sanitizer.bypassSecurityTrustHtml(bannerContent);
     return;
   }
 
