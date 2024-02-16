@@ -73,6 +73,9 @@ export class DashboardPage implements OnInit {
   onlySearch = false;
   isFixedGrid = true;
   pageType = 'dashboard';
+  isDashboardBannerPresent = false;
+  dashboardBannerHtml;
+  showDashboardBanner = false;
 
   constructor(
     private solrService: SolrService,
@@ -115,6 +118,10 @@ export class DashboardPage implements OnInit {
     if (accessToken && webKey && userData) {
       this.isCheckForExistingRecordsEnabled = await this.getSystemConfigs(SYSTEM_CONFIG.ENABLE_CHECK_FOR_EXISTING_RECORDS);
       this.commonService.setItem(PROPCO.SALES_MODULE, await this.getSystemConfigs(SYSTEM_CONFIG.ENABLE_SALES_MODULE));
+      if (!this.onlySearch) {
+        await this.getDashboardBanner();
+        this.showBanner();
+      }
       this.setDefaultHome(true);
       this.loggedInUserData = userData;
       this.isSolrTourDone = this.loggedInUserData.isSolrTourDone;
@@ -126,6 +133,10 @@ export class DashboardPage implements OnInit {
     if (isAuthSuccess) {
       this.isCheckForExistingRecordsEnabled = await this.getSystemConfigs(SYSTEM_CONFIG.ENABLE_CHECK_FOR_EXISTING_RECORDS);
       this.commonService.setItem(PROPCO.SALES_MODULE, await this.getSystemConfigs(SYSTEM_CONFIG.ENABLE_SALES_MODULE));
+      if (!this.onlySearch) {
+        await this.getDashboardBanner();
+        this.showBanner();
+      }
       this.setDefaultHome(true);
       const userDetail = await this.getUserDetailsPvt() as any;
       if (userDetail) {
@@ -288,5 +299,31 @@ export class DashboardPage implements OnInit {
       }
     });
     await modal.present();
+  }
+
+  private async getDashboardBanner() {
+    let bannerContent = await this.getSolrBannerConfigs(SYSTEM_CONFIG.SOLR_BANNER);
+    if (!bannerContent) {
+      return;
+    }
+    this.isDashboardBannerPresent = true;
+    this.dashboardBannerHtml = bannerContent;
+    return;
+  }
+
+  private async getSolrBannerConfigs(key: string): Promise<any> {
+    return new Promise((resolve) => {
+      this.commonService.getSystemConfig(key).subscribe(res => {
+        resolve(res != null && res[key] != null && res[key] != '' ? res[key] : false);
+      }, error => {
+        resolve(false);
+      });
+    });
+  }
+
+  private showBanner() {
+    if (this.isDashboardBannerPresent) {
+      this.showDashboardBanner = true;
+    }
   }
 }

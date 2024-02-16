@@ -1,6 +1,9 @@
 <ion-content id="solr-dashboard">
-  <ion-grid *ngIf="!onlySearch">
+  <ion-grid *ngIf="!onlySearch" [ngClass]="showDashboardBanner ? 'grid-padding' : ''">
     <ion-row>
+      <ion-col size="100" class="ion-no-padding" *ngIf="showDashboardBanner">
+        <span class="banner-wrapper" [innerHTML]="dashboardBannerHtml"></span>
+      </ion-col>
       <ion-col>
         <div class="swap-icon" (click)="setDefaultHome(false)">
           <img height="35" width="35" src="assets/images/swap.svg" title="Switch back to the old dashboard" (click)="openHomeCategory('OpenPropcoDashBoard')" alt="swap-image">
