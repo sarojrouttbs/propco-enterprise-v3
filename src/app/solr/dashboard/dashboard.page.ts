@@ -12,6 +12,7 @@ import {
 } from '../../shared/interface/guided-tour.model';
 import { SearchPropertyPage } from 'src/app/shared/modals/search-property/search-property.page';
 import { ModalController } from '@ionic/angular';
+import { DomSanitizer } from '@angular/platform-browser';
 declare function openScreen(key: string, value: any, existing: any): any;
 @Component({
   selector: 'app-dashboard',
@@ -83,7 +84,8 @@ export class DashboardPage implements OnInit {
     private commonService: CommonService,
     private guidedTourService: GuidedTourService,
     private router: Router,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private sanitizer: DomSanitizer
   ) {
     this.routeSnapShot = route.snapshot;
     if (this.router.url) {
@@ -307,7 +309,7 @@ export class DashboardPage implements OnInit {
       return;
     }
     this.isDashboardBannerPresent = true;
-    this.dashboardBannerHtml = bannerContent;
+    this.dashboardBannerHtml = this.sanitizer.bypassSecurityTrustHtml(bannerContent);
     return;
   }
 
