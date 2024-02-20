@@ -99,8 +99,8 @@ export class StripeElementPage implements OnInit {
           this.elementsOptions.clientSecret = pi.client_secret;
           resolve(true);
         }, err => {
-          this.onCancelStripeElement.emit({ type: 'server_error', error: err });
-          this.commonService.showMessage('Payment', 'Something went wrong.', 'error');
+          this.onCancelStripeElement.emit({ type: 'payment-intent-failed', error: err });
+          this.commonService.showMessage('Payment', (err && err?.error) ? err?.error : 'Something went wrong.', 'error');
           resolve(false);
         });
     });

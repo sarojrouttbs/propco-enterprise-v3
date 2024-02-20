@@ -1995,6 +1995,9 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
     if (response.type === 'cancelled') {
       this.showStripeElementForm = false;
     }
+    if(response.type === 'payment-intent-failed') {
+      this.showStripeElementForm = false;
+    }
   }
   stripeIntentResponse: any;
   _handleSuccessStripeElement(response: any) {
