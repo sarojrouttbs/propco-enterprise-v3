@@ -376,7 +376,6 @@ export class SearchSuggestionComponent implements OnInit {
   }
 
   hideSuggestion() {
-    return;
     setTimeout(() => {
       this.isItemAvailable = false;
       this.historyItemAvailable = false;
