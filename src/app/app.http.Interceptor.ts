@@ -48,6 +48,9 @@ export class AppHttpInterceptor implements HttpInterceptor {
           return throwError(error);
         }
         else if (error.status === 400 || error.status === 412) {
+          if(error.status === 400 && error.url.includes('create-payment-intent')) {
+            return throwError(error);
+          }
           this._commonService.showMessage(error.error ? error.error.message : 'Something went wrong', 'Generic Server Error', 'error');
           return throwError(error);
         } else if (error.status === 401) {
