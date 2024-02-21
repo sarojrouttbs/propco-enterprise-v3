@@ -45,16 +45,14 @@ i.search-Finder {
     .solrSuggestionListItem {
         color: var(--ion-text-color);
         cursor: pointer;
-        @include set-text-style(14px, 48px);
+        @include set-text-style(14px, 17px);
         overflow: hidden;
         padding: 0 2px;
-        height: 48px;
         margin: 0;
         white-space: nowrap;
         text-overflow: ellipsis;
 
         i.propcoicon {
-            display: inline-table;
             vertical-align: sub;
         }
 
@@ -65,6 +63,28 @@ i.search-Finder {
             background-color: transparent;
         }
     }
+    div {
+        word-spacing: 1.5px;
+        overflow-wrap: break-word; /* Standard property */
+        word-wrap: break-word;
+        width: 94%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        white-space: normal;
+        .address,
+        .rent {
+          color: var(--ion-color-one);
+        }
+    
+        .ref {
+          color: var(--ion-color-three);
+        }
+    
+        .status {
+          color: var(--ion-color-success);
+        }
+      }
 }
 
 .solr-dashboard {
@@ -135,4 +155,9 @@ i.search-Finder {
             background-color: transparent;
         }
     }
+}
+
+ion-item {
+    --border-color: transparent;
+    --inner-padding-end: 0px;
 }
