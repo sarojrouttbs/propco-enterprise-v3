@@ -79,121 +79,148 @@
 
 <ng-template #propertySuggestion let-item="item">
   <div (click)="openHomeCategory(item?.entityType === 'PROPERTY'?'OpenProperty':'SalesOpenProperty',item)" style="width: 100%">
-    <span>
-      <i class="propcoicon no-background propcoicon-property red-icon"></i>
+    <span style="display: block;float: left;">
+    <i class="propcoicon no-background propcoicon-property red-icon" style="background: transparent;vertical-align:middle"></i>
     </span>
-    <span>{{officeLookupMap.get(item.office)}}</span>&nbsp;
-    <span>{{item.address | slice:0:30}}, {{item.postcode}}</span>&nbsp;
-    <span>{{item.reference}}</span>&nbsp;
-    <span class=" ng-scope">{{item.propertyRent || 0 | currency : "£"}}</span>&nbsp;
-    <span class="text-color-lightgreen">{{item.status}}</span>
+  <div style="display: block;float: right;">
+    <span *ngIf="item.office">{{officeLookupMap.get(item.office)}}&nbsp;</span>
+    <span class="address" *ngIf="item.address">{{item.address}},</span>
+    <span class="address" *ngIf="item.postcode">&nbsp;{{item.postcode}}</span>
+    <span class="ref" *ngIf="item?.reference">&nbsp;{{item?.reference?.split(",")[0]}}&nbsp;</span>
+    <span>{{item.propertyRent || 0 | currency : "£"}}</span>&nbsp;
+    <span class="text-color-lightgreen status">{{item.status}}</span>
+  </div>
   </div>
 </ng-template>
-
-<ng-template #landlordSuggestion let-item="item">
-  <div (click)="openHomeCategory('OpenLandlord',item)" style="width: 100%">
-    <span>
-      <i class="propcoicon no-background propcoicon-landlord red-icon"></i>
+<ng-template #landlordSuggestion  let-item="item">
+  <div style="width: 100%;" (click)="openHomeCategory('OpenLandlord',item)">
+    <span style="display: block;float: left;">
+      <i class="propcoicon no-background propcoicon-landlord red-icon"
+      style="background: transparent;vertical-align:middle"></i>
     </span>
-    <span>{{officeLookupMap.get(item.office)}}</span>&nbsp;
-    <span>{{item.name}}</span>&nbsp;
-    <span>{{item?.reference?.split(",")[0]}}</span>&nbsp;
-    <span>{{item.address | slice:0:30}}, {{item.postcode}}</span>&nbsp;
-    <span>{{item.daytime}}</span>&nbsp;
-    <span>{{item.mobile}}</span>&nbsp;
-    <span class="text-color-lightgreen">{{item.status}}</span>
+    <div style="display: block;float: right;">
+      <span *ngIf="item.office">{{officeLookupMap.get(item.office)}}&nbsp;</span>
+	    <span *ngIf="item.name">{{item.name}}&nbsp;</span>
+	    <span class="ref" *ngIf="item?.reference">{{item?.reference?.split(",")[0]}}&nbsp;</span>
+      <span class="address" *ngIf="item.address">{{item.address}},</span>
+      <span class="address" *ngIf="item.postcode">&nbsp;{{item.postcode}}</span>
+	    <span *ngIf="item.daytime">&nbsp;{{item.daytime}}</span>
+	    <span *ngIf="item.mobile">&nbsp;{{item.mobile}}</span>
+	    <span class="text-color-lightgreen status">&nbsp;{{item.status}}</span>
+    </div>
   </div>
 </ng-template>
 
 <ng-template #applicantSuggestion let-item="item">
   <div (click)="openHomeCategory('OpenApplicant',item)" style="width: 100%">
-    <span>
-      <i class="propcoicon no-background propcoicon-applicant-let red-icon"></i>
+    <span style="display: block;float: left;">
+      <i class="propcoicon no-background propcoicon-applicant-let red-icon" style="background: transparent;vertical-align:middle"></i>
     </span>
-    <span>{{officeLookupMap.get(item.office)}}</span>&nbsp;
-    <span>{{item.name}}</span>&nbsp;
-    <span>{{item.reference}}</span>&nbsp;
-    <span>{{item.address | slice:0:30}}, {{item.postcode}}</span>&nbsp;
-    <span>{{item.daytime}}</span>&nbsp;
-    <span>{{item.mobile}}</span>&nbsp;
-    <span class="text-color-lightgreen">{{item.status}}</span>
+    <div style="display: block;float: right;">
+      <span *ngIf="item.office">{{officeLookupMap.get(item.office)}}&nbsp;</span>
+	    <span *ngIf="item.name">{{item.name}}&nbsp;</span>
+	    <span class="ref" *ngIf="item?.reference">{{item?.reference?.split(",")[0]}}&nbsp;</span>
+      <span class="address" *ngIf="item.address">{{item.address}},</span>
+      <span class="address" *ngIf="item.postcode">&nbsp;{{item.postcode}}</span>
+	    <span *ngIf="item.daytime">&nbsp;{{item.daytime}}</span>
+	    <span *ngIf="item.mobile">&nbsp;{{item.mobile}}</span>
+	    <span class="text-color-lightgreen status">&nbsp;{{item.status}}</span>
+    </div>
   </div>
 </ng-template>
 
 <ng-template #tenantSuggestion let-item="item">
-  <div (click)="openHomeCategory('OpenTenant',item)" style="width: 100%">
-    <span>
-      <i class="propcoicon no-background propcoicon-tenant red-icon"></i>
+<div (click)="openHomeCategory('OpenTenant',item)" style="width: 100%">
+    <span style="display: block;float: left;">
+    <i class="propcoicon no-background propcoicon-tenant red-icon" style="background: transparent;vertical-align:middle"></i>
     </span>
-    <span>{{item.name}}</span>&nbsp;
-    <span>{{item.reference}}</span>&nbsp;
-    <span>{{item.address | slice:0:30}}, {{item.postcode}}</span>&nbsp;
-    <span>{{item.daytime}}</span>&nbsp;
-    <span>{{item.mobile}}</span>&nbsp;
-    <span class="text-color-lightgreen">{{item.status}}</span>
+  <div style="display: block;float: right;">
+    <span *ngIf="item.name">{{item.name}}&nbsp;</span>
+    <span class="ref" *ngIf="item?.reference">{{item?.reference?.split(",")[0]}}&nbsp;</span>
+    <span class="address" *ngIf="item.address">{{item.address}},</span>
+    <span class="address" *ngIf="item.postcode">&nbsp;{{item.postcode}}</span>
+    <span *ngIf="item.daytime">&nbsp;{{item.daytime}}</span>
+    <span *ngIf="item.mobile">&nbsp;{{item.mobile}}</span>
+    <span class="text-color-lightgreen status">&nbsp;{{item.status}}</span>
   </div>
+</div>
 </ng-template>
 
 <ng-template #contractorSuggestion let-item="item">
   <div (click)="openHomeCategory('OpenContractor',item)" style="width: 100%">
-    <span>
-      <i class="propcoicon no-background propcoicon-contractor red-icon"></i>
-    </span>
-    <span>{{item.name}}</span>&nbsp;
-    <span>{{item.reference}}</span>&nbsp;
-    <span>{{item.address | slice:0:30}}, {{item.postcode}}</span>&nbsp;
-    <span>{{item.daytime}}</span>&nbsp;
-    <span>{{item.mobile}}</span>&nbsp;
-    <span class="text-color-lightgreen">{{item.status}}</span>
-  </div>
+    <span style="display: block;float: left;">
+     <i class="propcoicon no-background propcoicon-contractor red-icon" style="background: transparent;vertical-align:middle"></i>
+   </span>
+   <div style="display: block;float: right;">
+     <span *ngIf="item.name">{{item.name}}&nbsp;</span>
+     <span class="ref" *ngIf="item?.reference">{{item?.reference?.split(",")[0]}}&nbsp;</span>
+     <span class="address" *ngIf="item.address">{{item.address}},</span>
+     <span class="address" *ngIf="item.postcode">&nbsp;{{item.postcode}}</span>
+     <span *ngIf="item.daytime">&nbsp;{{item.daytime}}</span>
+     <span *ngIf="item.mobile">&nbsp;{{item.mobile}}</span>
+     <span class="text-color-lightgreen status">&nbsp;{{item.status}}</span>
+   </div>
+ </div>
 </ng-template>
 
 <ng-template #agentSuggestion let-item="item">
   <div (click)="openHomeCategory('OpenAgent',item)" style="width:100%">
-    <span>
-      <i class="propcoicon no-background propcoicon-agent red-icon"></i>
+    <span style="display: block;float: left;">
+      <i class="propcoicon no-background propcoicon-agent red-icon" style="background: transparent;vertical-align:middle"></i>
     </span>
-    <span>{{item.name}}</span>&nbsp;
-    <span>{{item.reference}}</span>&nbsp;
-    <span class="text-color-lightgreen">{{item.status}}</span>
+    <div style="display: block;float: right;">
+	    <span *ngIf="item.name">{{item.name}}&nbsp;</span>
+	    <span class="ref" *ngIf="item?.reference">{{item?.reference?.split(",")[0]}}&nbsp;</span>
+	    <span class="text-color-lightgreen status">&nbsp;{{item.status}}</span>
+    </div>
   </div>
 </ng-template>
 <ng-template #vendorSuggestion let-item="item">
-  <div (click)="openHomeCategory('OpenVendor',item)" style="width:100%">
-    <span>
-      <i class="propcoicon no-background propcoicon-vendor red-icon"></i>
+  <div (click)="openHomeCategory('OpenVendor',item)" style="width: 100%">
+    <span style="display: block;float: left;">
+    <i class="propcoicon no-background propcoicon-vendor red-icon" style="background: transparent;vertical-align:middle"></i>
     </span>
-    <span>{{officeLookupMap.get(item.office)}}</span>&nbsp;
-    <span>{{item.name}}</span>&nbsp;
-    <span>{{item?.reference?.split(",")[0]}}</span>&nbsp;
-    <span>{{item.address | slice:0:30}}, {{item.postcode}}</span>&nbsp;
-    <span>{{item.mobile}}</span>&nbsp;
-    <span class="text-color-lightgreen">{{item.status}}</span>
+  <div style="display: block;float: right;">
+    <span *ngIf="item.office && officeLookupMap.get(item.office)">{{officeLookupMap.get(item.office)}}&nbsp;</span>
+    <span *ngIf="item.name">{{item.name}}&nbsp;</span>
+    <span class="ref" *ngIf="item?.reference">{{item?.reference?.split(",")[0]}}&nbsp;</span>
+    <span class="address" *ngIf="item.address">{{item.address}},</span>
+    <span class="address" *ngIf="item.postcode">&nbsp;{{item.postcode}}</span>
+    <span *ngIf="item.mobile">&nbsp;{{item.mobile}}</span>
+    <span class="text-color-lightgreen status">&nbsp;{{item.status}}</span>
+  </div>
   </div>
 </ng-template>
 <ng-template #purchaserSuggestion let-item="item">
-  <div (click)="openHomeCategory('OpenPurchaser',item)" style="width:100%">
-    <span>
-      <i class="propcoicon no-background propcoicon-purchaser red-icon"></i>
-    </span>
-    <span>{{officeLookupMap.get(item.office)}}</span>&nbsp;
-    <span>{{item.name}}</span>&nbsp;
-    <span>{{item?.reference?.split(",")[0]}}</span>&nbsp;
-    <span>{{item.address | slice:0:30}}, {{item.postcode}}</span>&nbsp;
-    <span>{{item.mobile}}</span>&nbsp;
-    <span class="text-color-lightgreen">{{item.status}}</span>
+      
+<div (click)="openHomeCategory('OpenPurchaser',item)" style="width:100%">
+  <span style="display: block;float: left;">
+    <i class="propcoicon no-background propcoicon-purchaser red-icon" style="background: transparent;vertical-align:middle"></i>
+  </span>
+  <div style="display: block;float: right;">
+    <span *ngIf="item.office && officeLookupMap.get(item.office)">{{officeLookupMap.get(item.office)}}&nbsp;</span>
+    <span *ngIf="item.name">{{item.name}}&nbsp;</span>
+    <span class="ref" *ngIf="item?.reference">{{item?.reference?.split(",")[0]}}&nbsp;</span>
+    <span class="address" *ngIf="item.address">{{item.address}},</span>
+    <span class="address" *ngIf="item.postcode">&nbsp;{{item.postcode}}</span>
+    <span *ngIf="item.mobile">&nbsp;{{item.mobile}}</span>
+    <span class="text-color-lightgreen status">&nbsp;{{item.status}}</span>
   </div>
+</div>
 </ng-template>
 <ng-template #salesApplicantSuggestion let-item="item">
   <div (click)="openHomeCategory('OpenSalesApplicant',item)" style="width:100%">
-    <span>
-      <i class="propcoicon no-background propcoicon-applicant-sale red-icon"></i>
-    </span>
-    <span>{{officeLookupMap.get(item.office)}}</span>&nbsp;
-    <span>{{item.name}}</span>&nbsp;
-    <span>{{item?.reference?.split(",")[0]}}</span>&nbsp;
-    <span>{{item.address | slice:0:30}}, {{item.postcode}}</span>&nbsp;
-    <span>{{item.mobile}}</span>&nbsp;
-    <span class="text-color-lightgreen">{{item.status}}</span>
-  </div>
+    <span style="display: block;float: left;">
+  <i class="propcoicon no-background propcoicon-applicant-sale red-icon" style="background: transparent;vertical-align:middle"></i>
+</span>
+<div style="display: block;float: right;">
+  <span *ngIf="item.office && officeLookupMap.get(item.office)">{{officeLookupMap.get(item.office)}}&nbsp;</span>
+  <span *ngIf="item.name">{{item.name}}&nbsp;</span>
+  <span class="ref" *ngIf="item?.reference">{{item?.reference?.split(",")[0]}}&nbsp;</span>
+  <span class="address" *ngIf="item.address">{{item.address}},</span>
+  <span class="address" *ngIf="item.postcode">&nbsp;{{item.postcode}}</span>
+  <span *ngIf="item.mobile">&nbsp;{{item.mobile}}</span>
+  <span class="text-color-lightgreen status">&nbsp;{{item.status}}</span>
+</div>
+</div>
 </ng-template>
