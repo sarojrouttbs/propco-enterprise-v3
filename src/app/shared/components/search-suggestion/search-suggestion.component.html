@@ -27,7 +27,7 @@
       <ion-progress-bar color="danger" [type]="'indeterminate'" *ngIf="showLoader"
         style="position: absolute;"></ion-progress-bar>
       <ion-list *ngIf="isItemAvailable && !historyItemAvailable" class="solrSuggestionList" [class.solr-dashboard]="pageType === 'dashboard' || pageType === 'finder' || pageType === 'finder-results'">
-        <ion-item *ngFor="let item of suggestions" class="solrSuggestionListItem">
+        <ion-item *ngFor="let item of suggestions" class="solrSuggestionListItem" [ngClass]="pageType === 'solr-resultpage' || pageType === 'agent-header' ? 'add-border' : ''">
           <ng-container [ngTemplateOutlet]="propertySuggestion" *ngIf="item?.entityType === 'PROPERTY'|| item?.entityType === 'SALES_PROPERTY'"
             [ngTemplateOutletContext]="{item:item}">
           </ng-container>
