@@ -72,6 +72,7 @@ i.search-Finder {
         justify-content: center;
         align-items: center;
         white-space: normal;
+        justify-content: flex-start;
         .address,
         .rent {
           color: var(--ion-color-one);
@@ -85,6 +86,10 @@ i.search-Finder {
           color: var(--ion-color-success);
         }
       }
+      ion-item {
+        --border-color: transparent;
+        --inner-padding-end: 0px;
+    }
 }
 
 .solr-dashboard {
@@ -157,7 +162,6 @@ i.search-Finder {
     }
 }
 
-ion-item {
-    --border-color: transparent;
-    --inner-padding-end: 0px;
+.add-border:not(:last-child) {
+    --border-color: var(--ion-color-step-1450)!important;
 }
