@@ -938,3 +938,11 @@ export const STRIPE_ELEMENT_CONFIG = {
 export const SOLR_CONFIG = {
   enableHistory:true
 }
+
+export const postcodeSettings = {
+  maxLength:16,
+  alertMessage: {
+    title: 'Postcode',
+    message: 'Currently, the address search is available for UK postcodes only. Please enter non-UK postcodes & addresses manually'
+  }
+}

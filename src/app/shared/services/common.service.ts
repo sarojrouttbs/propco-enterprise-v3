@@ -11,6 +11,7 @@ const { Network } = Plugins;
 import { ToastrService } from 'ngx-toastr';
 import { saveAs } from 'file-saver';
 import { DomSanitizer } from '@angular/platform-browser';
+import { ValidationService } from './validation.service';
 
 interface Lookupdata {
   obj: Object;
@@ -111,11 +112,13 @@ export class CommonService {
   }
 
   getPostcodeAddressList(postcode: string): Observable<any> {
-    return this.httpClient.get(environment.API_BASE_URL + `postcode/${postcode}/fetch`);
+    const params = new HttpParams().set('hideLoader', 'true');
+    return this.httpClient.get(environment.API_BASE_URL + `postcode/${postcode}/fetch`,{params});
   }
 
   getPostcodeAddressDetails(addressId: string): Observable<any> {
-    return this.httpClient.get(environment.API_BASE_URL + `postcode/${addressId}/retrieve`);
+    const params = new HttpParams().set('hideLoader', 'true');
+    return this.httpClient.get(environment.API_BASE_URL + `postcode/${addressId}/retrieve`,{params});
   }
 
   getUserDetails(): Observable<any> {
@@ -665,5 +668,13 @@ export class CommonService {
     if (!val) { return null; }
     let formattedRent: number = Math.floor(val * 100) / 100;
     return formattedRent;
+  }
+
+  async isUkPostcode(control: any): Promise<boolean> {
+    if (!ValidationService.postcodeValidator(control)) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
