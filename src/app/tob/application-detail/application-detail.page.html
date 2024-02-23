@@ -117,7 +117,7 @@
 <ng-template #saveAndCancel>
   <ion-button color="danger" (click)=onCancel()>Cancel</ion-button>&nbsp;
   <ion-button *ngIf="!isStudentProperty" [disabled]="applicationDetails?.isSubmitted" (click)="saveStepData(stepper.selectedIndex, 'SAVE_FOR_LATER')">Save for Later
-    <ion-icon *ngIf="saveDataLoader" name="refresh" class="rotating submit-loader"></ion-icon>
+    <ion-icon *ngIf="saveDataLoader" name="sync" class="rotating submit-loader"></ion-icon>
   </ion-button>&nbsp;
 </ng-template>
 
@@ -564,9 +564,7 @@
     <ion-row  *ngFor="let item of groupApplicantDetailsForm.get('list')['controls']; let i=index">
       <ng-container *ngIf="applicantDetailSelectorControl.value == item.controls['applicantId'].value">
         <ng-container [formGroupName]="i">
-        <ion-item-divider lines="none">
-          <ion-label> Applicant Details </ion-label>
-        </ion-item-divider>
+        <ion-col size="100"> <div class="page-heading">Applicant Details</div></ion-col>
         <ion-col size="100">
           <ng-container id="applicantDetailsForm">
             <ion-grid class="ion-padding">
@@ -699,32 +697,35 @@
               </ion-row>
             </ion-grid>
             <ion-grid class="ion-padding">
-              <ion-row formGroupName="address" [ngClass]="item.controls.address['controls'].addressdetails.value || (item.controls.address['controls'].addressLine1.value && item.controls.address['controls'].postcode.value && item.controls.address['controls'].county.value) || item.controls.address['controls'].country.value ? 'ion-justify-content-center':''">
+              <ion-row formGroupName="address">
+                <ion-col size="100">
+                  <div class="page-heading" [ngClass]="{'term-time':(isStudentProperty)}">Address</div>
+                </ion-col>
                 <ion-col size-xs="100" size-sm="33.3">
                   <ion-item>
                     <ion-label position="floating"> Postcode <ion-text class="mandatory">*</ion-text>
                     </ion-label>
-                    <ion-input type="text" postcode-validator formControlName="postcode"></ion-input>
-                    <ion-button color="success" *ngIf="!isStudentProperty" [disabled]="showPostcodeLoader || applicationDetails?.isSubmitted" class="postcode-search"
-                      (click)="getAddressList('personal',item)">Find
-                      <ion-icon *ngIf="showPostcodeLoader" name="refresh" class="rotating submit-loader"></ion-icon>
+                    <ion-input type="text" formControlName="postcode"></ion-input>
+                    <ion-button color="success" *ngIf="!isStudentProperty" [disabled]="item.controls.address['controls'].showPostcodeLoader.value || applicationDetails?.isSubmitted" class="postcode-search"
+                      (click)="getAddressList('personal',item)">Find Address
+                      <ion-icon *ngIf="item.controls.address['controls'].showPostcodeLoader.value" name="sync" class="rotating submit-loader"></ion-icon>
                     </ion-button>
                   </ion-item>
                   <app-validation-message [control]="item.controls.address['controls'].postcode">
                   </app-validation-message>
                 </ion-col>
-                <ion-col size-xs="100" size-sm="33.3">
+                <ion-col size-xs="100" size-sm="33.3" *ngIf="item.controls.address['controls'].addressList.value.length || item.controls.address['controls'].disableSelectAddress.value">
                   <ion-item>
                     <ion-label position="floating">Select address</ion-label>
                     <ion-select interface="popover" [interfaceOptions]="addressPopoverOptions" formControlName="addressdetails"
-                      (ionChange)="getAddressDetails(selectedAddress.value, 'personal',item)" [disabled]="!addressList"
+                      (ionChange)="getAddressDetails(selectedAddress.value, 'personal',item)" [disabled]="item.controls.address['controls'].addressList.value.length === 0"
                       #selectedAddress>
-                      <ion-select-option [value]="address?.id" *ngFor="let address of addressList">{{ address?.text }}
+                      <ion-select-option [value]="address?.id" *ngFor="let address of item.controls.address['controls'].addressList.value">{{ address?.text }}
                       </ion-select-option>
                     </ion-select>
                   </ion-item>
                 </ion-col>
-                <ng-container *ngIf="item.controls.address['controls'].addressdetails.value || (item.controls.address['controls'].addressLine1.value && item.controls.address['controls'].postcode.value && item.controls.address['controls'].county.value) || item.controls.address['controls'].country.value">
+                <ng-container *ngIf="item.controls.address['controls'].disableSelectAddress.value">
                   <ion-col size-xs="100" size-sm="33.3">
                     <ion-item>
                       <ion-label position="floating"> Address 1 <ion-text class="mandatory">*</ion-text>
@@ -769,7 +770,7 @@
                   </ion-col>
                 </ng-container>
               </ion-row>
-        
+              <br>
               <ng-container *ngIf="isStudentProperty">
                 <ion-row formGroupName="forwardingAddress">
                   <ion-col size="100">
@@ -779,10 +780,10 @@
                     <ion-item>
                       <ion-label position="floating">Postcode <ion-text class="mandatory">*</ion-text>
                       </ion-label>
-                      <ion-input type="text" postcode-validator formControlName="postcode"></ion-input>
-                      <ion-button class="postcode-search" *ngIf="!isStudentProperty" [disabled]="showAddressLoader || applicationDetails?.isSubmitted" color="success"
-                        (click)="getAddressList('correspondence-address',item)"> Find
-                        <ion-icon *ngIf="showAddressLoader" name="refresh" class="rotating submit-loader"></ion-icon>
+                      <ion-input type="text" formControlName="postcode"></ion-input>
+                      <ion-button class="postcode-search" *ngIf="!isStudentProperty" [disabled]="item.controls.forwardingAddress['controls'].addressList.value.length === 0 || applicationDetails?.isSubmitted" color="success"
+                        (click)="getAddressList('correspondence-address',item)"> Find Address
+                        <ion-icon *ngIf="showAddressLoader" name="sync" class="rotating submit-loader"></ion-icon>
                       </ion-button>
                     </ion-item>
                     <app-validation-message [control]="item.controls.forwardingAddress['controls'].postcode">
@@ -818,8 +819,8 @@
                       <ion-label position="floating">Select address</ion-label>
                       <ion-select interface="popover" [interfaceOptions]="addressPopoverOptions" formControlName="addressdetails"
                         (ionChange)="getAddressDetails(forwardingAddress.value, 'correspondence-address',item)"
-                        [disabled]="!forwardingAddressList" #forwardingAddress>
-                        <ion-select-option [value]="address?.id" *ngFor="let address of forwardingAddressList">
+                        [disabled]="applicationDetails?.isSubmitted" #forwardingAddress>
+                        <ion-select-option [value]="address?.id" *ngFor="let address of item.controls.forwardingAddress['controls'].addressList.value">
                           {{ address?.text }}
                         </ion-select-option>
                       </ion-select>
@@ -858,160 +859,6 @@
  </ion-grid>
 </ng-container>
 </ng-template>
-
-<ng-template #applicantAddress>
-  <!-- <form [formGroup]="addressDetailsForm" id="addressDetailsForm">
-    <ion-grid class="ion-padding">
-      <ion-row formGroupName="address" [ngClass]="showApplicantAddress ? 'ion-justify-content-center':''">
-        <ion-col size-xs="100" size-sm="33.3">
-          <ion-item>
-            <ion-label position="floating"> Postcode <ion-text class="mandatory">*</ion-text>
-            </ion-label>
-            <ion-input type="text" postcode-validator formControlName="postcode"></ion-input>
-            <ion-button color="success" *ngIf="!isStudentProperty" [disabled]="showPostcodeLoader || applicationDetails?.isSubmitted" class="postcode-search"
-              (click)="getAddressList('personal')">Find
-              <ion-icon *ngIf="showPostcodeLoader" name="refresh" class="rotating submit-loader"></ion-icon>
-            </ion-button>
-          </ion-item>
-          <app-validation-message [control]="addressDetailsForm.controls.address['controls'].postcode">
-          </app-validation-message>
-        </ion-col>
-        <ion-col size-xs="100" size-sm="33.3">
-          <ion-item>
-            <ion-label position="floating">Select address</ion-label>
-            <ion-select interface="popover" [interfaceOptions]="addressPopoverOptions" formControlName="addressdetails"
-              (ionChange)="getAddressDetails(selectedAddress.value, 'personal')" [disabled]="!addressList"
-              #selectedAddress>
-              <ion-select-option [value]="address?.id" *ngFor="let address of addressList">{{ address?.text }}
-              </ion-select-option>
-            </ion-select>
-          </ion-item>
-        </ion-col>
-        <ng-container *ngIf="showApplicantAddress">
-          <ion-col size-xs="100" size-sm="33.3">
-            <ion-item>
-              <ion-label position="floating"> Address 1 <ion-text class="mandatory">*</ion-text>
-              </ion-label>
-              <ion-input type="text" formControlName="addressLine1"></ion-input>
-            </ion-item>
-            <app-validation-message [control]="addressDetailsForm.controls.address['controls'].addressLine1">
-            </app-validation-message>
-          </ion-col>
-          <ion-col size-xs="100" size-sm="16.5">
-            <ion-item>
-              <ion-label position="floating">Locality</ion-label>
-              <ion-input type="text" formControlName="locality"></ion-input>
-            </ion-item>
-          </ion-col>
-          <ion-col size-xs="100" size-sm="16.5">
-            <ion-item>
-              <ion-label position="floating">Town <ion-text class="mandatory">*</ion-text>
-              </ion-label>
-              <ion-input type="text" formControlName="town"></ion-input>
-            </ion-item>
-            <app-validation-message [control]="addressDetailsForm.controls.address['controls'].town">
-            </app-validation-message>
-          </ion-col>
-          <ion-col size-xs="100" size-sm="33.3">
-            <ion-item>
-              <ion-label position="floating">Address 2</ion-label>
-              <ion-input type="text" formControlName="addressLine2"></ion-input>
-            </ion-item>
-          </ion-col>
-          <ion-col size-xs="100" size-sm="16.5">
-            <ion-item>
-              <ion-label position="floating">County</ion-label>
-              <ion-input type="text" formControlName="county"></ion-input>
-            </ion-item>
-          </ion-col>
-          <ion-col size-xs="100" size-sm="16.5">
-            <ion-item>
-              <ion-label position="floating">Country</ion-label>
-              <ion-input type="text" formControlName="country"></ion-input>
-            </ion-item>
-          </ion-col>
-        </ng-container>
-      </ion-row>
-
-      <ng-container *ngIf="isStudentProperty">
-        <ion-row formGroupName="forwardingAddress">
-          <ion-col size="100">
-            <div class="page-heading" [ngClass]="{'term-time':(isStudentProperty)}">Term Time Address</div>
-          </ion-col>
-          <ion-col size-xs="100" size-sm="33.3">
-            <ion-item>
-              <ion-label position="floating">Postcode <ion-text class="mandatory">*</ion-text>
-              </ion-label>
-              <ion-input type="text" postcode-validator formControlName="postcode"></ion-input>
-              <ion-button class="postcode-search" *ngIf="!isStudentProperty" [disabled]="showAddressLoader || applicationDetails?.isSubmitted" color="success"
-                (click)="getAddressList('correspondence-address')"> Find
-                <ion-icon *ngIf="showAddressLoader" name="refresh" class="rotating submit-loader"></ion-icon>
-              </ion-button>
-            </ion-item>
-            <app-validation-message [control]="addressDetailsForm.controls.forwardingAddress['controls'].postcode">
-            </app-validation-message>
-          </ion-col>
-          <ion-col size-xs="100" size-sm="33.3">
-            <ion-item>
-              <ion-label position="floating">Address 1 <ion-text class="mandatory">*</ion-text>
-              </ion-label>
-              <ion-input type="text" formControlName="addressLine1"></ion-input>
-            </ion-item>
-            <app-validation-message
-              [control]="addressDetailsForm.controls.forwardingAddress['controls'].addressLine1">
-            </app-validation-message>
-          </ion-col>
-          <ion-col size-xs="100" size-sm="16.5">
-            <ion-item>
-              <ion-label position="floating">Locality</ion-label>
-              <ion-input type="text" formControlName="locality"></ion-input>
-            </ion-item>
-          </ion-col>
-          <ion-col size-xs="100" size-sm="16.5">
-            <ion-item>
-              <ion-label position="floating">Town <ion-text class="mandatory">*</ion-text>
-              </ion-label>
-              <ion-input type="text" formControlName="town"></ion-input>
-            </ion-item>
-            <app-validation-message [control]="addressDetailsForm.controls.forwardingAddress['controls'].town">
-            </app-validation-message>
-          </ion-col>
-          <ion-col size-xs="100" size-sm="33.3">
-            <ion-item>
-              <ion-label position="floating">Select address</ion-label>
-              <ion-select interface="popover" [interfaceOptions]="addressPopoverOptions" formControlName="addressdetails"
-                (ionChange)="getAddressDetails(forwardingAddress.value, 'correspondence-address')"
-                [disabled]="!forwardingAddressList" #forwardingAddress>
-                <ion-select-option [value]="address?.id" *ngFor="let address of forwardingAddressList">
-                  {{ address?.text }}
-                </ion-select-option>
-              </ion-select>
-            </ion-item>
-          </ion-col>
-          <ion-col size-xs="100" size-sm="33.3">
-            <ion-item>
-              <ion-label position="floating">Address 2</ion-label>
-              <ion-input type="text" formControlName="addressLine2"></ion-input>
-            </ion-item>
-          </ion-col>
-          <ion-col size-xs="100" size-sm="16.5">
-            <ion-item>
-              <ion-label position="floating">County</ion-label>
-              <ion-input type="text" formControlName="county"></ion-input>
-            </ion-item>
-          </ion-col>
-          <ion-col size-xs="100" size-sm="16.5">
-            <ion-item>
-              <ion-label position="floating">Country</ion-label>
-              <ion-input type="text" formControlName="country"></ion-input>
-            </ion-item>
-          </ion-col>
-        </ion-row>
-      </ng-container>
-    </ion-grid>
-  </form> -->
-</ng-template>
-
 <ng-template #bankDetails>
   <form id="bank-details" [formGroup]="bankDetailsForm">
     <ion-grid class="ion-padding">
@@ -1323,140 +1170,6 @@
     </ion-row>
   </ion-grid>
 </ng-template>
-
-<ng-template #guarantorDetails>
-  <form id="guarantorDetails" [formGroup]="guarantorForm">
-    <ion-grid class="ion-padding">
-      <ion-row>
-        <ion-col size-xs="100" size-sm="33.3">
-          <ion-item>
-            <ion-label position="floating">Title <span *ngIf="isStudentProperty">
-                <ion-text class="mandatory">*</ion-text>
-              </span>
-            </ion-label>
-            <ion-select interface="popover" formControlName="title">
-              <ion-select-option [value]="item.value" *ngFor="let item of titleList">{{ item.value }}
-              </ion-select-option>
-            </ion-select>
-          </ion-item>
-          <app-validation-message [control]="guarantorForm.controls.title"></app-validation-message>
-        </ion-col>
-        <ion-col size-xs="100" size-sm="33.3">
-          <ion-item>
-            <ion-label position="floating">Forename
-              <ion-text *ngIf="isStudentProperty" class="mandatory">*</ion-text>
-            </ion-label>
-            <ion-input type="text" formControlName="forename"></ion-input>
-          </ion-item>
-          <app-validation-message [control]="guarantorForm.controls.forename"></app-validation-message>
-        </ion-col>
-        <ion-col size-xs="100" size-sm="33.3">
-          <ion-item>
-            <ion-label position="floating">Surname
-              <ion-text *ngIf="isStudentProperty" class="mandatory">*</ion-text>
-            </ion-label>
-            <ion-input type="text" formControlName="surname"></ion-input>
-          </ion-item>
-          <app-validation-message [control]="guarantorForm.controls.surname"></app-validation-message>
-        </ion-col>
-        <ion-col size-xs="100" size-sm="33.3">
-          <ion-item>
-            <ion-label position="floating">Email address
-              <ion-text *ngIf="isStudentProperty" class="mandatory">*</ion-text>
-            </ion-label>
-            <ion-input type="text" formControlName="email"></ion-input>
-          </ion-item>
-          <app-validation-message [control]="guarantorForm.controls.email"></app-validation-message>
-        </ion-col>
-        <ion-col size-xs="100" size-sm="33.3">
-          <ion-item>
-            <ion-label position="floating">Phone
-              <ion-text *ngIf="isStudentProperty" class="mandatory">*</ion-text>
-            </ion-label>
-            <ion-input type="text" formControlName="mobile"></ion-input>
-          </ion-item>
-          <app-validation-message [control]="guarantorForm.controls.mobile"></app-validation-message>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ng-container formGroupName="address">
-          <ion-col size-xs="100" size-sm="33.3">
-            <ion-item>
-              <ion-label position="floating"> Postcode <ion-text *ngIf="isStudentProperty" class="mandatory">*
-                </ion-text>
-              </ion-label>
-              <ion-input type="text" postcode-validator formControlName="postcode"></ion-input>
-              <ion-button color="success" *ngIf="!isStudentProperty" [disabled]="showPostcodeLoader || applicationDetails?.isSubmitted" class="postcode-search"
-                (click)="getAddressList('guarantor',guarantorForm)">Find
-                <ion-icon *ngIf="showPostcodeLoader" name="refresh" class="rotating submit-loader"></ion-icon>
-              </ion-button>
-            </ion-item>
-            <app-validation-message [control]="guarantorForm.controls.address['controls'].postcode">
-            </app-validation-message>
-          </ion-col>
-          <ion-col size-xs="100" size-sm="33.3">
-            <ion-item>
-              <ion-label position="floating">Select address</ion-label>
-              <ion-select interface="popover" [interfaceOptions]="addressPopoverOptions" formControlName="addressdetails"
-                (ionChange)="getAddressDetails(selectedGuarantorAddress.value, 'guarantor',guarantorForm)"
-                [disabled]="!guarantorAddressList" #selectedGuarantorAddress>
-                <ion-select-option [value]="address?.id" *ngFor="let address of guarantorAddressList">{{ address?.text
-                  }}
-                </ion-select-option>
-              </ion-select>
-            </ion-item>
-          </ion-col>
-          <ng-container *ngIf="showGuarantorAddress">
-            <ion-col size-xs="100" size-sm="33.3">
-              <ion-item>
-                <ion-label position="floating"> Address 1 <ion-text *ngIf="isStudentProperty" class="mandatory">*
-                  </ion-text>
-                </ion-label>
-                <ion-input type="text" formControlName="addressLine1"></ion-input>
-              </ion-item>
-              <app-validation-message [control]="guarantorForm.controls.address['controls'].addressLine1">
-              </app-validation-message>
-            </ion-col>
-            <ion-col size-xs="100" size-sm="16.5">
-              <ion-item>
-                <ion-label position="floating">Locality</ion-label>
-                <ion-input type="text" formControlName="locality"></ion-input>
-              </ion-item>
-            </ion-col>
-            <ion-col size-xs="100" size-sm="16.5">
-              <ion-item>
-                <ion-label position="floating">Town <ion-text *ngIf="isStudentProperty" class="mandatory">*</ion-text>
-                </ion-label>
-                <ion-input type="text" formControlName="town"></ion-input>
-              </ion-item>
-              <app-validation-message [control]="guarantorForm.controls.address['controls'].town">
-              </app-validation-message>
-            </ion-col>
-            <ion-col size-xs="100" size-sm="33.3">
-              <ion-item>
-                <ion-label position="floating">Address 2</ion-label>
-                <ion-input type="text" formControlName="addressLine2"></ion-input>
-              </ion-item>
-            </ion-col>
-            <ion-col size-xs="100" size-sm="16.5">
-              <ion-item>
-                <ion-label position="floating">County</ion-label>
-                <ion-input type="text" formControlName="county"></ion-input>
-              </ion-item>
-            </ion-col>
-            <ion-col size-xs="100" size-sm="16.5">
-              <ion-item>
-                <ion-label position="floating">Country</ion-label>
-                <ion-input type="text" formControlName="country"></ion-input>
-              </ion-item>
-            </ion-col>
-          </ng-container>
-        </ng-container>
-      </ion-row>
-    </ion-grid>
-  </form>
-</ng-template>
-
 <ng-template #finalView>
   <ion-grid class="ion-padding">
     <ion-row>
@@ -1870,15 +1583,12 @@
 <ng-template #grpGuarantorsItem let-data='data'>
   
   <div>
-    <ion-item-divider lines="none">
-      <ion-label> Guarantors </ion-label>&nbsp;&nbsp;
-      <!-- <ion-button (click)="openAddModifyGuarantorModal = true" color="primary" style="margin: 0;font-size: 11px;margin-top: 5px;">Add new guarantor</ion-button> -->
-    </ion-item-divider>
     <ion-grid>
       <ion-row>
+        <ion-col size="100"> <div class="page-heading">Guarantors</div></ion-col>
         <ion-col size-sm="20" size-xs="100" size-xl="20" size-md="25" size-lg="25" (click)="openAddNewGuarantor()">
             <ion-card>
-              <ion-card-content style="cursor: pointer; padding: 35px;align-items: center;justify-content: center;display:flex">
+              <ion-card-content style="cursor: pointer; padding: 30px;align-items: center;justify-content: center;display:flex">
                 <ion-icon name="add-sharp" size="medium"></ion-icon>&nbsp;Add Guarantor
               </ion-card-content>
             </ion-card>
@@ -1886,13 +1596,11 @@
         <ng-container *ngIf="data.value.length">
           <ion-col size-sm="20" size-xs="100" size-xl="20" size-md="25" size-lg="25" *ngFor="let d of data.value">
             <ion-card>
-              <ion-card-header style="padding: 7px;overflow:hidden">
-                <ion-card-subtitle><b>{{d?.title +' '+ d?.forename +' '+ (d?.surname || '')}}</b></ion-card-subtitle>
-              </ion-card-header>
-              <ion-card-content style="padding-left: 7px;text-overflow: hidden;">
-                {{d?.email || 'N/A'}}
+              <ion-card-content style="padding:2px 0 0 7px;text-overflow: hidden;">
+                <ion-label class="ion-label">Name: {{d?.title +' '+ d?.forename +' '+ (d?.surname || '')}}</ion-label><br>
+                <ion-label class="ion-label">Email: {{d?.email || 'N/A'}}</ion-label>
               </ion-card-content>
-              <ion-button size="small" style="font-size: 12px;margin-bottom: 8px;margin-left: 7px;" (click)="modifyDetails(data,d.guarantorId)">&nbsp;
+              <ion-button color="success" size="small" style="font-size: 12px;margin-bottom: 8px;margin-left: 7px;" (click)="modifyDetails(data,d.guarantorId)">&nbsp;
                 <ion-icon name="create-outline"></ion-icon>
                 view/edit
               </ion-button>
@@ -1904,13 +1612,13 @@
   </div>
 </ng-template>
 
-<ion-modal [isOpen]="openAddModifyGuarantorModal" [backdropDismiss]="false">
+<ion-modal [isOpen]="openAddModifyGuarantorModal" [backdropDismiss]="false" class="modal-container">
   <ng-template>
     <ion-header>
       <ion-toolbar>
-        <ion-title><b>Add/modify Guarantor</b></ion-title>
+        <ion-title><b>Add/Modify Guarantor</b></ion-title>
         <ion-buttons slot="end">
-          <ion-button  color="medium" fill="outline" (click)="openAddModifyGuarantorModal = false;guarantorForm.reset();showGuarantorAddress = false;">Close</ion-button>
+          <ion-icon name="close" (click)="openAddModifyGuarantorModal = false;guarantorForm.reset();showGuarantorAddress = false;"></ion-icon>
         </ion-buttons>
       </ion-toolbar>
       </ion-header>
@@ -1971,28 +1679,28 @@
                   <ion-label position="floating"> Postcode <ion-text class="mandatory">*
                     </ion-text>
                   </ion-label>
-                  <ion-input type="text" postcode-validator formControlName="postcode"></ion-input>
-                  <ion-button color="success"  [disabled]="showPostcodeLoader || applicationDetails?.isSubmitted" class="postcode-search"
-                    (click)="getAddressList('guarantor',guarantorForm)">Find
-                    <ion-icon *ngIf="showPostcodeLoader" name="refresh" class="rotating submit-loader"></ion-icon>
+                  <ion-input type="text" formControlName="postcode"></ion-input>
+                  <ion-button color="success"  [disabled]="applicationDetails?.isSubmitted" class="postcode-search"
+                    (click)="getAddressList('guarantor',guarantorForm)">Find Address
+                    <ion-icon *ngIf="guarantorForm.controls.address['controls'].showPostcodeLoader.value" name="sync" class="rotating submit-loader"></ion-icon>
                   </ion-button>
                 </ion-item>
                 <app-validation-message [control]="guarantorForm.controls.address['controls'].postcode">
                 </app-validation-message>
               </ion-col>
-              <ion-col size-xs="100" size-sm="50">
+              <ion-col size-xs="100" size-sm="50" *ngIf="(guarantorForm.controls.address['controls'].addressList.value && guarantorForm.controls.address['controls'].addressList.value.length) || guarantorForm.controls.address['controls'].disableSelectAddress.value">
                 <ion-item>
                   <ion-label position="floating">Select address</ion-label>
                   <ion-select interface="popover" [interfaceOptions]="addressPopoverOptions" formControlName="addressdetails"
                     (ionChange)="getAddressDetails(selectedGuarantorAddress.value, 'guarantor',guarantorForm)"
-                    [disabled]="!guarantorAddressList" #selectedGuarantorAddress>
-                    <ion-select-option [value]="address?.id" *ngFor="let address of guarantorAddressList">{{ address?.text
+                    [disabled]="guarantorForm.controls.address['controls'].addressList.value && guarantorForm.controls.address['controls'].addressList.value.length === 0" #selectedGuarantorAddress>
+                    <ion-select-option [value]="address?.id" *ngFor="let address of guarantorForm.controls.address['controls'].addressList.value">{{ address?.text
                       }}
                     </ion-select-option>
                   </ion-select>
                 </ion-item>
               </ion-col>
-              <ng-container *ngIf="showGuarantorAddress">
+              <ng-container *ngIf="guarantorForm.controls.address['controls'].disableSelectAddress.value">
                 <ion-col size-xs="100" size-sm="50">
                   <ion-item>
                     <ion-label position="floating"> Address 1 <ion-text  class="mandatory">*

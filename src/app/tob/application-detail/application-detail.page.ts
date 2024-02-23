@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, isDevMode } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl, FormArray, AbstractControl, ValidatorFn } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PROPCO, APPLICATION_STATUSES, APPLICATION_ACTION_TYPE, ENTITY_TYPE, PAYMENT_TYPES, PAYMENT_CONFIG, APPLICATION_ENTITIES, DEFAULTS, DATE_FORMAT, SYSTEM_OPTIONS } from 'src/app/shared/constants';
+import { PROPCO, APPLICATION_STATUSES, APPLICATION_ACTION_TYPE, ENTITY_TYPE, PAYMENT_TYPES, PAYMENT_CONFIG, APPLICATION_ENTITIES, DEFAULTS, DATE_FORMAT, SYSTEM_OPTIONS, postcodeSettings } from 'src/app/shared/constants';
 import { CommonService } from 'src/app/shared/services/common.service';
 import { TobService } from '../tob.service';
 import { switchMap, debounceTime, delay } from 'rxjs/operators';
@@ -63,7 +63,6 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
   disableSearchApplicant = false;
   resultsAvailable = null;
   isStudentProperty = false;
-  showPostcodeLoader = null;
   showAddressLoader = null;
   showPayment = false;
   saveDataLoader = false;
@@ -1037,72 +1036,110 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
     });
   }
 
-  getAddressList(addressType: string, item: any) {
+  async getAddressList(addressType: string, item: FormGroup) {
+    const postCodeControl = addressType === 'personal' || addressType === 'guarantor' ? item.controls.address['controls'].postcode : item.controls.forwardingAddress['controls'].postcode;                                                                 
+    if(!postCodeControl.value) {
+      return;
+    }
+    const ukPostcode = await this.commonService.isUkPostcode(postCodeControl);
+    if(!ukPostcode) {                                                                      
+      this.commonService.showMessage(postcodeSettings.alertMessage.message, postcodeSettings.alertMessage.title,'success');
+      item.controls.address['controls'].disableSelectAddress.setValue(true);
+      item.controls.address['controls'].addressList.setValue([]);
+      return;
+    }
     let postcode;
     switch (addressType) {
       case 'personal':
         postcode = item.controls.address['controls'].postcode;
         const addressPostcode = postcode.value;
-        this.showPostcodeLoader = postcode.value ? true : '';
-        item.controls.address.reset();
+        if(addressPostcode == null) {
+          item.controls.address['controls'].disableSelectAddress.setValue(true);
+          return;
+        }
+        // item.controls.address.reset();
+        item.controls.address['controls'].showPostcodeLoader.setValue(addressPostcode ? true : false);
         item.controls.address['controls'].postcode.setValue(addressPostcode);
         break;
       case 'correspondence-address':
         postcode = item.controls.forwardingAddress['controls'].postcode;
         const forwardingAddressPostcode = postcode.value;
-        this.showPostcodeLoader = postcode.value ? true : '';
-        item.controls.forwardingAddress.reset();
+        if(forwardingAddressPostcode == null) {
+          item.controls.address['controls'].disableSelectAddress.setValue(true);
+          return;
+        }
+        // item.controls.forwardingAddress.reset();
+        item.controls.forwardingAddress['controls'].showPostcodeLoader.setValue(forwardingAddressPostcode ? true : false);
         item.controls.forwardingAddress['controls'].postcode.setValue(forwardingAddressPostcode);
         break;
       case 'guarantor':
         postcode = item.controls.address['controls'].postcode;
         const guarantorFormPostcode = postcode.value;
-        this.showPostcodeLoader = postcode.value ? true : '';
-        item.controls.address.reset();
+        if(guarantorFormPostcode == null) {
+          item.controls.address['controls'].disableSelectAddress.setValue(true);
+          return;
+        }
+        // item.controls.address.reset();
+        item.controls.address['controls'].showPostcodeLoader.setValue(guarantorFormPostcode ? true : false);
         item.controls.address['controls'].postcode.setValue(guarantorFormPostcode);
         break;
     }
     if (postcode.valid && postcode.value) {
-      this.getPostcodeAddress(addressType, postcode.value);
+      this.getPostcodeAddress(addressType, postcode.value, item);
     }
     else {
-      this.showPostcodeLoader = false;
-      this.showAddressLoader = false;
-      this.addressList = [];
+      switch (addressType) {
+        case 'personal':
+          item.controls.address['controls'].showPostcodeLoader.setValue(false);
+        case 'correspondence-address':
+          item.controls.forwardingAddress['controls'].showPostcodeLoader.setValue(postcode.value ? true : false);
+        case 'guarantor':
+          item.controls.address['controls'].showPostcodeLoader.setValue(postcode.value ? true : false);
+
+      }
+      item.controls.address['controls'].addressList.setValue([]);
       this.guarantorAddressList = [];
       this.forwardingAddressList = [];
     }
   }
 
-  getPostcodeAddress(addressType: string, postcode: string) {
+  getPostcodeAddress(addressType: string, postcode: string, item: FormGroup) {
     this.commonService.getPostcodeAddressList(postcode).subscribe(
       res => {
-        this.addressList = [];
-        this.guarantorAddressList = [];
-        this.forwardingAddressList = [];
+        item.controls.address['controls'].addressList.setValue([]);
         if (res && res.data && res.data.length) {
           switch (addressType) {
             case 'personal':
-              this.addressList = res.data;
-              this.showPostcodeLoader = false;
+              item.controls.address['controls'].addressList.setValue(res.data);
+              item.controls.address['controls'].showPostcodeLoader.setValue(false);
+              item.controls.address['controls'].disableSelectAddress.setValue(false);
               break;
             case 'guarantor':
-              this.guarantorAddressList = res.data;
-              this.showPostcodeLoader = false;
+              item.controls.address['controls'].addressList.setValue(res.data);
+              item.controls.address['controls'].showPostcodeLoader.setValue(false);
+              item.controls.address['controls'].disableSelectAddress.setValue(false);
               break;
             case 'correspondence-address':
-              this.forwardingAddressList = res.data;
-              this.showAddressLoader = false;
+              item.controls.address['controls'].addressList.setValue(res.data);
+              item.controls.forwardingAddress['controls'].showPostcodeLoader.setValue(false);
+              item.controls.address['controls'].disableSelectAddress.setValue(false);
               break;
           }
         }
       },
       error => {
-        this.showPostcodeLoader = false;
-        this.showAddressLoader = false;
-        this.addressList = [];
-        this.guarantorAddressList = [];
-        this.forwardingAddressList = [];
+        switch (addressType) {
+          case 'personal':
+            item.controls.address['controls'].showPostcodeLoader.setValue(false);
+            break;
+          case 'guarantor':
+            item.controls.address['controls'].showPostcodeLoader.setValue(false);
+            break;
+          case 'correspondence-address':
+            item.controls.forwardingAddress['controls'].showPostcodeLoader.setValue(false);
+            break;
+        }
+        item.controls.address['controls'].addressList.setValue([]);
         const data: any = {};
         data.title = 'Postcode Lookup';
         data.message = error.error ? error.error.message : error.message;
@@ -1112,6 +1149,9 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
   }
 
   getAddressDetails(addressId: string, addressType: string, item) {
+    if (!addressId || '') {
+      return;
+    }
     if (addressType == 'personal') {
       this.showApplicantAddress = true;
     }
@@ -1121,12 +1161,10 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
     if (addressType == 'guarantor') {
       this.showGuarantorAddress = true;
     }
-    if (!addressId || '') {
-      return;
-    }
     this.commonService.getPostcodeAddressDetails(addressId).subscribe(
       res => {
         if (res && res.line1) {
+          item.controls.address['controls'].disableSelectAddress.setValue(true);
           this.setAddressDetails(addressType, res, item);
         }
       },
@@ -1264,7 +1302,7 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
     requestObj.rent = requestObj.rent ? requestObj.rent : this.propertyDetails.advertisementRent;
     requestObj.depositAmount = requestObj.depositAmount ? requestObj.depositAmount : this.propertyDetails.holdingDeposit;
     requestObj.deposit = requestObj.deposit ? requestObj.deposit : this.propertyDetails.deposit;
-    if(!this.isStudentProperty) {
+    if (!this.isStudentProperty) {
       requestObj.tenantRelationship = this.tenancyDetailForm.value.tenantRelationship;
       requestObj.relationshipInfo = this.tenancyDetailForm.value.relationshipInfo;
     }
@@ -1562,14 +1600,17 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
       email: ['', [Validators.required, ValidationService.emailValidator]],
       mobile: ['', [ValidationService.contactValidator, Validators.minLength(5), Validators.maxLength(15)]],
       address: this._formBuilder.group({
-        postcode: ['', [Validators.required, ValidationService.postcodeValidator]],
+        postcode: ['', [Validators.required]],
         addressdetails: [''],
         addressLine1: ['', Validators.required],
         addressLine2: '',
         locality: '',
         town: ['', Validators.required],
         county: '',
-        country: ''
+        country: '',
+        showPostcodeLoader: false,
+        disableSelectAddress: false,
+        addressList:[[]]
       })
     });
   }
@@ -1614,30 +1655,6 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
           reject(undefined);
         }
       )
-    });
-  }
-
-  private setGuarantorDetails(details: any): void {
-    if (details.guarantorId) {
-      this.showGuarantorAddress = true;
-    }
-    this.guarantorForm.patchValue({
-      guarantorId: details.guarantorId,
-      title: details.title,
-      forename: details.forename,
-      surname: details.surname,
-      email: details.email,
-      mobile: details.mobile,
-      address: {
-        postcode: details.address.postcode,
-        addressLine1: details.address.addressLine1,
-        addressLine2: details.address.addressLine2,
-        locality: details.address.locality,
-        town: details.address.town,
-        county: details.address.county,
-        country: details.address.country,
-        addressdetails: ''
-      }
     });
   }
 
@@ -1995,7 +2012,7 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
     if (response.type === 'cancelled') {
       this.showStripeElementForm = false;
     }
-    if(response.type === 'payment-intent-failed') {
+    if (response.type === 'payment-intent-failed') {
       this.showStripeElementForm = false;
     }
   }
@@ -2143,7 +2160,7 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
                   locality: g?.address?.locality ? g?.address?.locality : '',
                   town: g?.address?.town ? g?.address?.town : '',
                   county: g?.address?.county ? g?.address?.county : '',
-                  country: g?.address?.country ? g?.address?.country : ''
+                  country: g?.address?.country ? g?.address?.country : '',
                 })
               }
             )
@@ -2170,24 +2187,30 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
             employmentType: [details?.employmentType, Validators.required],
             annualIncome: [details?.annualIncome, this.requiredIfNotZeroValidator()],
             address: this._formBuilder.group({
-              postcode: [details?.address?.postcode, [Validators.required, ValidationService.postcodeValidator]],
+              postcode: [details?.address?.postcode, [Validators.required]],
               addressdetails: [details?.address?.addressdetails],
               addressLine1: [details?.address?.addressLine1, Validators.required],
               addressLine2: details?.address?.addressLine2,
               locality: details?.address?.locality,
               town: [details?.address?.town, Validators.required],
               county: details?.address?.county,
-              country: details?.address?.country
+              country: details?.address?.country,
+              showPostcodeLoader: false,
+              disableSelectAddress: ((details?.address?.addressLine1 || details?.address?.addressLine2 || details?.address?.locality || details?.address?.town || details?.address?.county || details?.address?.country) ? true : false),
+              addressList:[[]]
             }),
             forwardingAddress: this._formBuilder.group({
-              postcode: [details?.forwardingAddress?.postcode, ValidationService.postcodeValidator],
+              postcode: [details?.forwardingAddress?.postcode],
               addressdetails: [details?.forwardingAddress?.addressdetails],
               addressLine1: details?.forwardingAddress?.addressLine1,
               addressLine2: details?.forwardingAddress?.addressLine2,
               locality: details?.forwardingAddress?.locality,
               town: details?.forwardingAddress?.town,
               county: details?.forwardingAddress?.county,
-              country: details?.forwardingAddress?.country
+              country: details?.forwardingAddress?.country,
+              showPostcodeLoader: false,
+              disableSelectAddress: ((details?.address?.addressLine1 || details?.address?.addressLine2 || details?.address?.locality || details?.address?.town || details?.address?.county || details?.address?.country) ? true : false),
+              addressList: [[]]
             }),
             guarantors: this._formBuilder.array(guarantorControls)
           }
@@ -2213,9 +2236,9 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
     requestObj.moveInDate = this.commonService.getFormatedDate(requestObj.moveInDate);
     requestObj.dateOfBirth = this.commonService.getFormatedDate(requestObj.dateOfBirth);
     this._tobService.updateApplicantDetails(details.applicantId, requestObj).subscribe(res => {
-      this.commonService.showMessage('updated successfully!', 'Applicant Update', 'success');
+      this.commonService.showMessage('updated successfully!', 'Applicant Details', 'success');
     }, error => {
-      this.commonService.showMessage('updated Failed!', 'Applicant Update', 'error');
+      this.commonService.showMessage('update Failed!', 'Applicant Details', 'error');
     });
   }
 
@@ -2312,6 +2335,9 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
               town: element.value.address?.town,
               county: element.value.address?.county,
               country: element.value.address?.country,
+              showPostcodeLoader: false,
+              disableSelectAddress: ((element.value?.address?.addressLine1 || element.value?.address?.addressLine2 || element.value?.address?.locality || element.value?.address?.town || element.value?.address?.county || element.value?.address?.country) ? true : false),
+              addressList:[[]]
             }
           }
         );
@@ -2370,7 +2396,7 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
     const occupationDetails = this.occupantForm.value;
     groupApplicantDetailsFormArray.controls.forEach((item: FormGroup) => {
       let lead = occupationDetails.coApplicants.filter(x => x.isLead);
-      if(lead && lead.length && (lead[0].applicantId == item.controls['applicantId'].value)) {
+      if (lead && lead.length && (lead[0].applicantId == item.controls['applicantId'].value)) {
         this.leadDetails = item.value;
       }
     });
