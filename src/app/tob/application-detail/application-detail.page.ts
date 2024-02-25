@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, isDevMode } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl, FormArray, AbstractControl, ValidatorFn } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PROPCO, APPLICATION_STATUSES, APPLICATION_ACTION_TYPE, ENTITY_TYPE, PAYMENT_TYPES, PAYMENT_CONFIG, APPLICATION_ENTITIES, DEFAULTS, DATE_FORMAT, SYSTEM_OPTIONS, postcodeSettings } from 'src/app/shared/constants';
@@ -8,13 +8,14 @@ import { switchMap, debounceTime, delay } from 'rxjs/operators';
 import { forkJoin, Observable, of } from 'rxjs';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { ValidationService } from 'src/app/shared/services/validation.service';
-import { IonModal, ModalController } from '@ionic/angular';
+import { ModalController } from '@ionic/angular';
 import { TermsAndConditionModalPage } from 'src/app/shared/modals/terms-and-condition-modal/terms-and-condition-modal.page';
 import { environment } from 'src/environments/environment';
 import { SimpleModalPage } from 'src/app/shared/modals/simple-modal/simple-modal.page';
 import * as CryptoJS from 'crypto-js/crypto-js';
 import { HttpParams } from '@angular/common/http';
 import { ApplicationDetailsHelper } from './helper-application-details';
+import { MatStepper } from '@angular/material/stepper';
 @Component({
   selector: 'app-application-detail',
   templateUrl: './application-detail.page.html',
@@ -122,13 +123,18 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
   employmentTypeList;
   openAddModifyGuarantorModal = false;
   leadDetails;
+  isApplicantDetailsStepValid = false;
+  isOccupantsStepValid = false;
+  @ViewChild('stepper') stepper: MatStepper;
+  found = false
   constructor(
     private route: ActivatedRoute,
     public commonService: CommonService,
     public _formBuilder: FormBuilder,
     private _tobService: TobService,
     private router: Router,
-    private modalController: ModalController
+    private modalController: ModalController,
+    private cdr: ChangeDetectorRef
   ) {
     super(_formBuilder);
   }
@@ -313,7 +319,7 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
   async submit() {
     let isValid: any = await this.checkFormsValidity();
     if (!isValid.valid) {
-      this.commonService.showMessage(`Please provide complete information in the below steps: - ${isValid?.invalidList}`, 'Application Details', 'error');
+      this.commonService.showAlert('Application Details', `Please provide complete information in the below steps: - <br><b>${isValid?.invalidList}</b>`);
       return;
     }
     if (!this.applicationDetails.isTermsAndConditionsAccepted) {
@@ -326,38 +332,53 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
 
   private checkFormsValidity() {
     return new Promise((resolve) => {
+      if (this.occupantForm.getRawValue().coApplicants.length === 1) {
+        this.isOccupantsStepValid = true;
+        return resolve({ valid: false, invalidList: ['Occupants - Please add applicants.'] });
+      } else {
+        this.isOccupantsStepValid = false;
+      }
       var groupValidity = true;
       const groupApplicantDetailsFormArray: any = this.groupApplicantDetailsForm.get('list') as FormArray;
-      let lead = this.occupantForm.getRawValue().coApplicants.filter((x => x.isLead));
+      let lead = this._getLead();
       groupApplicantDetailsFormArray.controls.forEach((group: FormGroup) => {
-        if ((group.controls['applicantId'].value == lead[0].applicantId) && !group.valid) {
+        if ((group.controls['applicantId'].value == lead.applicantId) && !group.valid) {
+          group.markAllAsTouched();
           groupValidity = false;
         }
       });
       const bankDetails = this.bankDetailsForm.valid;
       const tenancyDetails = this.tenancyDetailForm.valid;
-      // const guarantorDetails = this.guarantorForm.valid;
       if (tenancyDetails && bankDetails && groupValidity) {
         return resolve({ valid: true, invalidList: [] });
       }
       let invalidList = '';
       if (!tenancyDetails) {
-        invalidList += 'Tenancy Details,';
+        this.tenancyDetailForm.markAllAsTouched();
+        invalidList += 'Tenancy Details';
       }
       if (!groupValidity) {
-        invalidList += 'Applicant Details,';
+        this.isApplicantDetailsStepValid = true;
+        invalidList += ', Applicant Details(Details & Address)';
+      } else {
+        this.isApplicantDetailsStepValid = false;
       }
       if (!bankDetails) {
-        invalidList += 'Bank Details,';
+        this.bankDetailsForm.markAllAsTouched();
+        invalidList += ', Bank Details';
       }
-      // if (!guarantorDetails) {
-      //   invalidList += 'Guarantor Details';
-      // }
+      this.stepper.steps.forEach((step) => {
+        step.interacted = true;
+      });
+      this.currentStepperIndex = 7;
       return resolve({ valid: false, invalidList: invalidList });
     });
   }
 
-
+  private _getLead() {
+    let lead = this.occupantForm.getRawValue().coApplicants.filter((x => x.isLead));
+    return lead && lead.length ? lead[0] : false;
+  }
 
   private async onSubmit() {
     const response = await this.commonService.showConfirm('Application', 'Do you want to submit the application?');
@@ -397,21 +418,6 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
     if (nextIndex > previousIndex) {
       /*call API only in next step*/
       this.savePreviousStep(event);
-      if (this.applicantDetailsForm.invalid) {
-        this.applicantDetailsForm.markAllAsTouched();
-      }
-      if (this.addressDetailsForm.invalid) {
-        this.addressDetailsForm.markAllAsTouched();
-      }
-      if (this.bankDetailsForm.invalid) {
-        this.bankDetailsForm.markAllAsTouched();
-      }
-      if (this.tenancyDetailForm.invalid) {
-        this.tenancyDetailForm.markAllAsTouched();
-      }
-      if (this.guarantorForm.invalid) {
-        this.guarantorForm.markAllAsTouched();
-      }
       if (nextIndex === 10) {
         this.initPaymentConfiguration();
       }
@@ -433,32 +439,39 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
         if (!this.applicationDetails.isSubmitted)
           this.saveApplicantsToApplication();
         this.setAppDetDropDown();
+        if (this.occupantForm.getRawValue().coApplicants.length === 1) {
+          this.isOccupantsStepValid = true;
+        } else {
+          this.isOccupantsStepValid = false;
+        }
         break;
       case 1:
+        const groupApplicantDetailsFormArray: any = this.groupApplicantDetailsForm.get('list') as FormArray;
+        let lead = this._getLead();
+        groupApplicantDetailsFormArray.controls.forEach((group: FormGroup) => {
+          if ((group.controls['applicantId'].value == lead.applicantId) && !group.valid) {
+            group.markAllAsTouched();
+            this.isApplicantDetailsStepValid = true;
+          } else {
+            this.isApplicantDetailsStepValid = false;
+          }
+        });
         if (!this.applicationDetails.isSubmitted && this.applicantId)
           this.saveApplicantDetails();
         break;
       case 2:
         if (!this.applicationDetails.isSubmitted && this.applicantId)
-          this.saveAddressDetails();
+          this.saveBankDetails();
         break;
       case 3:
         if (!this.applicationDetails.isSubmitted && this.applicantId)
-          this.saveBankDetails();
-        break;
-      case 4:
-        if (!this.applicationDetails.isSubmitted && this.applicantId)
           this.saveApplicationQuestions();
         break;
-      case 5:
+      case 4:
         if (!this.applicationDetails.isSubmitted)
           this.saveTenancyDetail();
         break;
       case 8:
-        if (!this.applicationDetails.isSubmitted)
-          this.saveGuarantorDetails();
-        break;
-      case 10:
         this.initPaymentConfiguration();
         break;
       default:
@@ -1037,13 +1050,13 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
   }
 
   async getAddressList(addressType: string, item: FormGroup) {
-    const postCodeControl = addressType === 'personal' || addressType === 'guarantor' ? item.controls.address['controls'].postcode : item.controls.forwardingAddress['controls'].postcode;                                                                 
-    if(!postCodeControl.value) {
+    const postCodeControl = addressType === 'personal' || addressType === 'guarantor' ? item.controls.address['controls'].postcode : item.controls.forwardingAddress['controls'].postcode;
+    if (!postCodeControl.value) {
       return;
     }
     const ukPostcode = await this.commonService.isUkPostcode(postCodeControl);
-    if(!ukPostcode) {                                                                      
-      this.commonService.showMessage(postcodeSettings.alertMessage.message, postcodeSettings.alertMessage.title,'success');
+    if (!ukPostcode) {
+      this.commonService.showMessage(postcodeSettings.alertMessage.message, postcodeSettings.alertMessage.title, 'success');
       item.controls.address['controls'].disableSelectAddress.setValue(true);
       item.controls.address['controls'].addressList.setValue([]);
       return;
@@ -1053,7 +1066,7 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
       case 'personal':
         postcode = item.controls.address['controls'].postcode;
         const addressPostcode = postcode.value;
-        if(addressPostcode == null) {
+        if (addressPostcode == null) {
           item.controls.address['controls'].disableSelectAddress.setValue(true);
           return;
         }
@@ -1064,7 +1077,7 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
       case 'correspondence-address':
         postcode = item.controls.forwardingAddress['controls'].postcode;
         const forwardingAddressPostcode = postcode.value;
-        if(forwardingAddressPostcode == null) {
+        if (forwardingAddressPostcode == null) {
           item.controls.address['controls'].disableSelectAddress.setValue(true);
           return;
         }
@@ -1075,7 +1088,7 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
       case 'guarantor':
         postcode = item.controls.address['controls'].postcode;
         const guarantorFormPostcode = postcode.value;
-        if(guarantorFormPostcode == null) {
+        if (guarantorFormPostcode == null) {
           item.controls.address['controls'].disableSelectAddress.setValue(true);
           return;
         }
@@ -1220,8 +1233,8 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
   initTenancyDetailsForm(): void {
     this.tenancyDetailForm = this._formBuilder.group({
       rent: ['', [Validators.min(1), Validators.required]],
-      depositAmount: ['', Validators.required],
-      deposit: ['', Validators.required],
+      depositAmount: [''],
+      deposit: [''],
       moveInDate: ['', Validators.required],
       preferredTenancyEndDate: ['', Validators.required],
       rentDueDay: ['', [Validators.required, Validators.max(31), Validators.min(1)]],
@@ -1248,7 +1261,7 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
       this.initiaFormlLoaded = true;
     });
     this.tenancyDetailForm.get('tenantRelationship').valueChanges.subscribe((r) => {
-      if (r && r == 3) {
+      if (r && r == 5) {
         this.tenancyDetailForm.get('relationshipInfo').setValidators(Validators.required);
         this.tenancyDetailForm.get('relationshipInfo').updateValueAndValidity();
       } else {
@@ -1312,7 +1325,7 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
           this.onSave();
         }
         this.applicationDetails.depositAmount = requestObj.depositAmount ? requestObj.depositAmount : this.propertyDetails.holdingDeposit;
-        this.tenancyDetailForm.reset(this.tenancyDetailForm.value);
+        // this.tenancyDetailForm.reset(this.tenancyDetailForm.value);
       },
     );
   }
@@ -1610,7 +1623,7 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
         country: '',
         showPostcodeLoader: false,
         disableSelectAddress: false,
-        addressList:[[]]
+        addressList: [[]]
       })
     });
   }
@@ -2197,7 +2210,7 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
               country: details?.address?.country,
               showPostcodeLoader: false,
               disableSelectAddress: ((details?.address?.addressLine1 || details?.address?.addressLine2 || details?.address?.locality || details?.address?.town || details?.address?.county || details?.address?.country) ? true : false),
-              addressList:[[]]
+              addressList: [[]]
             }),
             forwardingAddress: this._formBuilder.group({
               postcode: [details?.forwardingAddress?.postcode],
@@ -2337,7 +2350,7 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
               country: element.value.address?.country,
               showPostcodeLoader: false,
               disableSelectAddress: ((element.value?.address?.addressLine1 || element.value?.address?.addressLine2 || element.value?.address?.locality || element.value?.address?.town || element.value?.address?.county || element.value?.address?.country) ? true : false),
-              addressList:[[]]
+              addressList: [[]]
             }
           }
         );
@@ -2413,6 +2426,25 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
       }
       return Validators.required(control);
     };
+  }
+
+  getStepControl(): FormGroup {
+    const lead = this._getLead();
+    if (lead) {
+      const groupApplicantDetailsFormArray: any = this.groupApplicantDetailsForm.get('list') as FormArray;
+      groupApplicantDetailsFormArray.controls.forEach((group: FormGroup) => {
+        if ((group.controls['applicantId'].value == lead.applicantId)) {
+          if (!this.found) {
+            console.log(group.controls)
+            this.found = true;
+            return group;
+          }
+
+        }
+      });
+    } else {
+      return this._formBuilder.group({});
+    }
   }
 
 }
