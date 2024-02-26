@@ -7,7 +7,7 @@
         <ion-col size="100">
           <mat-horizontal-stepper id="tob-application-stepper" (selectionChange)="onStepChange($event)" [selectedIndex]="currentStepperIndex"
             class="stepper-section" #stepper labelPosition="bottom">
-            <mat-step [completed]="applicationDetails?.isSubmitted">
+            <mat-step [completed]="applicationDetails?.isSubmitted" [hasError]="isOccupantsStepValid">
               <ng-container *ngTemplateOutlet="occupants"></ng-container>
               <ng-template matStepLabel>Occupants</ng-template>
               <div class="action-btn-section">
@@ -18,9 +18,7 @@
               </div>
             </mat-step>
            <ng-container *ngIf="isApplicantDetailsAvailable">
-            <!-- <mat-step [completed]="applicationDetails?.isSubmitted" [stepControl]="applicantDetailsForm"> -->
-              <mat-step [completed]="applicationDetails?.isSubmitted">
-              <!-- <ng-container *ngTemplateOutlet="applicantDetails"></ng-container> -->
+              <mat-step [completed]="applicationDetails?.isSubmitted" [hasError]="isApplicantDetailsStepValid">
               <ng-container *ngTemplateOutlet="groupApplicantDetails"></ng-container>
               <ng-template matStepLabel>Applicant <br/> Details</ng-template>
               <div class="action-btn-section">
@@ -29,15 +27,6 @@
                 <button mat-button matStepperNext class="stepper-next">Next</button>
               </div>
             </mat-step>
-            <!-- <mat-step [completed]="applicationDetails?.isSubmitted" [stepControl]="addressDetailsForm">
-              <ng-container *ngTemplateOutlet="applicantAddress"></ng-container>
-              <ng-template matStepLabel>Address</ng-template>
-              <div class="action-btn-section">
-                <ng-container *ngTemplateOutlet="saveAndCancel"></ng-container>
-                <button mat-button matStepperPrevious class="stepper-back">Back</button>&nbsp;
-                <button mat-button matStepperNext class="stepper-next">Next</button>
-              </div>
-            </mat-step> -->
             <mat-step [completed]="applicationDetails?.isSubmitted" [stepControl]="bankDetailsForm">
               <ng-container *ngTemplateOutlet="bankDetails"></ng-container>
               <ng-template matStepLabel>Bank <br/> Details</ng-template>
@@ -1069,7 +1058,7 @@
           </app-validation-message>
         </ion-col>
         <ng-container *ngIf="!isStudentProperty">
-          <ion-col [sizeXs]="tenancyDetailForm.controls['tenantRelationship'].value == 3 ? '50' : '100'" [sizeSm]="tenancyDetailForm.controls['tenantRelationship'].value == 3 ? '33.3' : '33.3'">
+          <ion-col [sizeXs]="tenancyDetailForm.controls['tenantRelationship'].value == 5 ? '50' : '100'" [sizeSm]="tenancyDetailForm.controls['tenantRelationship'].value == 5 ? '33.3' : '33.3'">
             <ion-item>
               <ion-label position="floating">Tenants relationship*</ion-label>
               <ion-select formControlName="tenantRelationship" interface="popover">
@@ -1078,7 +1067,7 @@
             </ion-item>
             <app-validation-message [control]="tenancyDetailForm.controls.tenantRelationship"></app-validation-message>
           </ion-col>
-          <ion-col size-xs="50" size-sm="33.3" *ngIf="tenancyDetailForm.controls['tenantRelationship'].value == 3">
+          <ion-col size-xs="50" size-sm="33.3" *ngIf="tenancyDetailForm.controls['tenantRelationship'].value == 5">
             <ion-item>
               <ion-label position="floating">Other relationship*</ion-label>
               <ion-input type="text"
@@ -1367,7 +1356,7 @@
                   {{tenancyDetailForm.getRawValue().tenantRelationship != null ? this.commonService.getLookupValue(tenancyDetailForm.getRawValue().tenantRelationship,tenantRelationShipsList) : 'N/A'}}
                 </ion-text>
               </ion-col>
-              <ion-col size-xs="100" size-sm="50" class="header-content" *ngIf="tenancyDetailForm.getRawValue().tenantRelationship == 3">
+              <ion-col size-xs="100" size-sm="50" class="header-content" *ngIf="tenancyDetailForm.getRawValue().tenantRelationship == 5">
                 <ion-text class="header">Other Relationship</ion-text><br />
                 <ion-text class="content">
                   {{tenancyDetailForm.getRawValue().relationshipInfo || 'N/A'}}

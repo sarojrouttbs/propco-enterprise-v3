@@ -249,7 +249,7 @@
           </ion-item>
           <app-validation-message [control]="makeAnOfferForm.controls.numberOfAdults"></app-validation-message>
         </ion-col>
-        <ion-col [sizeXs]="makeAnOfferForm.controls['tenantRelationship'].value == 3 ? '50' : '100'" [sizeSm]="makeAnOfferForm.controls['tenantRelationship'].value == 3 ? '33.3' : '33.3'">
+        <ion-col [sizeXs]="makeAnOfferForm.controls['tenantRelationship'].value == 5 ? '50' : '100'" [sizeSm]="makeAnOfferForm.controls['tenantRelationship'].value == 5 ? '33.3' : '33.3'">
           <ion-item>
             <ion-label position="floating">Tenants relationship*</ion-label>
             <ion-select formControlName="tenantRelationship" interface="popover">
@@ -258,7 +258,7 @@
           </ion-item>
           <app-validation-message [control]="makeAnOfferForm.controls.tenantRelationship"></app-validation-message>
         </ion-col>
-        <ion-col size-xs="33.3" size-sm="33.3" *ngIf="makeAnOfferForm.controls['tenantRelationship'].value == 3">
+        <ion-col size-xs="33.3" size-sm="33.3" *ngIf="makeAnOfferForm.controls['tenantRelationship'].value == 5">
           <ion-item>
             <ion-label position="floating">Other relationship*</ion-label>
             <ion-input type="text"
@@ -330,6 +330,7 @@
               </ion-select-option>
             </ion-select>
           </ion-item>
+          <app-validation-message [control]="makeAnOfferForm.controls.guarantorType"></app-validation-message>
         </ion-col>
 
         <ion-col size-xs="100" size-sm="33.3">
@@ -678,7 +679,7 @@
                 <ion-text class="content">{{ makeAnOfferForm.controls.tenantRelationship.value != null ? (makeAnOfferForm.controls.tenantRelationship.value | lookup
                   : tenantRelationShipsList) : DEFAULTS.NOT_AVAILABLE}}</ion-text>
               </ion-col>
-              <ion-col size-xs="100" size-sm="50" class="header-content" *ngIf="makeAnOfferForm.controls['tenantRelationship'].value == 3">
+              <ion-col size-xs="100" size-sm="50" class="header-content" *ngIf="makeAnOfferForm.controls['tenantRelationship'].value == 5">
                 <ion-text class="header ion-text-wrap">Other relationship</ion-text><br />
                 <ion-text class="content">{{makeAnOfferForm.controls.relationshipInfo.value || DEFAULTS.NOT_AVAILABLE}}</ion-text>
               </ion-col>

@@ -669,7 +669,7 @@ export class OfferDetailPage implements OnInit {
       isEligibleToRent: []
     });
     this.makeAnOfferForm.get('tenantRelationship').valueChanges.subscribe((r) => {
-      if (r && r == 3) {
+      if (r && r == 5) {
         this.makeAnOfferForm.get('relationshipInfo').setValidators(Validators.required);
         this.makeAnOfferForm.get('relationshipInfo').updateValueAndValidity();
       } else {
