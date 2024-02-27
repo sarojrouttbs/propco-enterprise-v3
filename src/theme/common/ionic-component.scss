@@ -696,6 +696,10 @@ ion-alert.common-alert-box {
         color: var(--ion-color-one) !important;
       }
     }
+
+    ion-item[aria-disabled="true"],ion-select[disabled="true"] {
+      opacity: 0.8; 
+    }
   }
 
   #property-keys {

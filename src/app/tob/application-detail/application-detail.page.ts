@@ -282,10 +282,27 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
     this.initApplicantDetailsForm();
     this.initOccupantForm();
     this.initAddressDetailsForm();
-    this.initBankDetailsForm();
     this.initApplicantQuestionForm();
     this.initTenancyDetailsForm();
     this.initGuarantorForm();
+  }
+
+  private initApplicantDetailsForm(): void {
+    this.applicantDetailsForm = this._formBuilder.group({
+      title: [''],
+      forename: [''],
+      surname: [''],
+      email: ['', [ValidationService.emailValidator]],
+      mobile: ['', [ValidationService.contactValidator]],
+      dateOfBirth: [''],
+      occupation: [''],
+      hasPets: false,
+      petsInfo: ['', { disabled: false }],
+      guarantor: false,
+      guarantorType: ['', { disabled: false }],
+      currentPosition: '',
+      isReferencingRequired: false
+    });
   }
 
   private async initCreateApiCalls() {
@@ -308,7 +325,7 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
       await this.setWorldpayInternalData();
     }
     if (this.applicationStatus === 'Accepted' && !application.isHoldingDepositPaid) {
-      this.currentStepperIndex = 8;
+      this.currentStepperIndex = 7;
       this.showPayment = true;
       this.initPaymentConfiguration();
     }
@@ -347,9 +364,8 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
           groupValidity = false;
         }
       });
-      const bankDetails = this.bankDetailsForm.valid;
       const tenancyDetails = this.tenancyDetailForm.valid;
-      if (tenancyDetails && bankDetails && groupValidity) {
+      if (tenancyDetails && groupValidity) {
         return resolve({ valid: true, invalidList: [] });
       }
       let invalidList = '';
@@ -363,14 +379,10 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
       } else {
         this.isApplicantDetailsStepValid = false;
       }
-      if (!bankDetails) {
-        this.bankDetailsForm.markAllAsTouched();
-        invalidList += ', Bank Details';
-      }
       this.stepper.steps.forEach((step) => {
         step.interacted = true;
       });
-      this.currentStepperIndex = 7;
+      this.currentStepperIndex = 6;
       return resolve({ valid: false, invalidList: invalidList });
     });
   }
@@ -418,7 +430,7 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
     if (nextIndex > previousIndex) {
       /*call API only in next step*/
       this.savePreviousStep(event);
-      if (nextIndex === 10) {
+      if (nextIndex === 7) {
         this.initPaymentConfiguration();
       }
     }
@@ -444,6 +456,10 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
         } else {
           this.isOccupantsStepValid = false;
         }
+        /* Auto populate no. of adult occupants according to the no. of occupants added by user*/
+        if (this.occupantForm.getRawValue().coApplicants.length > 0) {
+          this.tenancyDetailForm.controls['numberOfAdults'].setValue(this.occupantForm.getRawValue().coApplicants.length - 1);
+        }
         break;
       case 1:
         const groupApplicantDetailsFormArray: any = this.groupApplicantDetailsForm.get('list') as FormArray;
@@ -456,22 +472,18 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
             this.isApplicantDetailsStepValid = false;
           }
         });
-        if (!this.applicationDetails.isSubmitted && this.applicantId)
-          this.saveApplicantDetails();
+        if (!this.applicationDetails.isSubmitted)
+          this.updateAppDetails();
         break;
       case 2:
         if (!this.applicationDetails.isSubmitted && this.applicantId)
-          this.saveBankDetails();
-        break;
-      case 3:
-        if (!this.applicationDetails.isSubmitted && this.applicantId)
           this.saveApplicationQuestions();
         break;
-      case 4:
+      case 3:
         if (!this.applicationDetails.isSubmitted)
           this.saveTenancyDetail();
         break;
-      case 8:
+      case 7:
         this.initPaymentConfiguration();
         break;
       default:
@@ -882,24 +894,6 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
     });
   }
 
-  private initApplicantDetailsForm(): void {
-    this.applicantDetailsForm = this._formBuilder.group({
-      title: [''],
-      forename: [''],
-      surname: [''],
-      email: ['', [ValidationService.emailValidator]],
-      mobile: ['', [ValidationService.contactValidator]],
-      dateOfBirth: [''],
-      occupation: [''],
-      hasPets: false,
-      petsInfo: ['', { disabled: false }],
-      guarantor: false,
-      guarantorType: ['', { disabled: false }],
-      currentPosition: '',
-      isReferencingRequired: false
-    });
-  }
-
   async onCancel() {
     const isCancel: boolean = await this.commonService.showConfirm('Cancel', 'Are you sure, you want to cancel this operation?', '', 'Yes', 'No') as boolean;
     if (isCancel) {
@@ -1219,17 +1213,6 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
     }
   }
 
-  initBankDetailsForm(): void {
-    this.bankDetailsForm = this._formBuilder.group({
-      bankDetails: this._formBuilder.group({
-        bankName: '',
-        sortcode: ['', [ValidationService.bankCodeValidator, Validators.maxLength(8)]],
-        accountNumber: ['', [Validators.maxLength(8)]],
-        accountName: ''
-      })
-    });
-  }
-
   initTenancyDetailsForm(): void {
     this.tenancyDetailForm = this._formBuilder.group({
       rent: ['', [Validators.min(1), Validators.required]],
@@ -1244,7 +1227,7 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
       numberOfHouseHolds: [{ value: '', disabled: false }, Validators.required],
       isNoDepositScheme: [''],
       agreementType: [null, Validators.required],
-      rentingTime: ['', Validators.required],
+      // rentingTime: ['', Validators.required],
       tenantRelationship: ['', Validators.required],
       relationshipInfo: ''
     }, {
@@ -1277,7 +1260,21 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
       this.tenancyDetailForm.get('numberOfHouseHolds').disable();
     } else {
       this.tenancyDetailForm.get('hasSameHouseholdApplicants').enable();
-      this.tenancyDetailForm.get('numberOfHouseHolds').enable();
+      if (!this.tenancyDetailForm.get('hasSameHouseholdApplicants').value) {
+        this.tenancyDetailForm.get('numberOfHouseHolds').setValue('');
+        this.tenancyDetailForm.get('numberOfHouseHolds').enable();
+      }
+    }
+  }
+
+  updateHouseholdValidation(hasSameHouseholdApplicants: any) {
+    this.tenancyDetailForm.get('numberOfHouseHolds').setValue('');
+    if (hasSameHouseholdApplicants) {
+      this.tenancyDetailForm.get('numberOfHouseHolds').clearValidators();
+      this.tenancyDetailForm.get('numberOfHouseHolds').updateValueAndValidity();
+    } else {
+      this.tenancyDetailForm.get('numberOfHouseHolds').setValidators(Validators.required);
+      this.tenancyDetailForm.get('numberOfHouseHolds').updateValueAndValidity();
     }
   }
 
@@ -1304,13 +1301,13 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
     const requestObj = JSON.parse(JSON.stringify(this.applicationDetails));
     requestObj.applicationRestrictions.map(restrict => { delete restrict.restrictionName; }
     );
-    if (requestObj.numberOfAdults) {
-      requestObj.hasSameHouseholdApplicants = true;
-      requestObj.numberOfHouseHolds = 1;
-    }
-    if (requestObj.hasSameHouseholdApplicants) {
-      requestObj.numberOfHouseHolds = 1;
-    }
+    // if (requestObj.numberOfAdults) {
+    //   requestObj.hasSameHouseholdApplicants = true;
+    //   requestObj.numberOfHouseHolds = 1;
+    // }
+    // if (requestObj.hasSameHouseholdApplicants) {
+    //   requestObj.numberOfHouseHolds = 1;
+    // }
     requestObj.isTermsAndConditionsAccepted = true;
     requestObj.rent = requestObj.rent ? requestObj.rent : this.propertyDetails.advertisementRent;
     requestObj.depositAmount = requestObj.depositAmount ? requestObj.depositAmount : this.propertyDetails.holdingDeposit;
@@ -1495,12 +1492,13 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
       this._tobService.getApplicantBankDetails(applicantId).subscribe(
         res => {
           if (res) {
-            this.patchBankDetails(res);
+            resolve(res);
+          } else {
+            resolve(false)
           }
-          resolve(true);
         },
         error => {
-          reject(undefined);
+          resolve(false);
         }
       );
     });
@@ -1540,12 +1538,13 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
     return new Promise((resolve, reject) => {
       this._tobService.getTenantBankDetails(applicantId).subscribe(res => {
         if (res) {
-          this.patchBankDetails(res);
+          resolve(res);
+        } else {
+          resolve(false)
         }
-        resolve(true);
       },
         error => {
-          reject(undefined);
+          resolve(false)
         }
       );
     });
@@ -1562,19 +1561,16 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
     });
   }
 
-  private saveBankDetails() {
-    const bankDetails = this.bankDetailsForm.value.bankDetails;
-    if (this.checkFormDirty(this.bankDetailsForm)) {
-      this.updateBankDetails(bankDetails);
-    }
-  }
-
-  private updateBankDetails(bankDetails: any) {
-    this._tobService.updateBankDetails(this.applicantId, bankDetails).subscribe(
-      res => {
-        this.bankDetailsForm.reset(this.bankDetailsForm.value);
-      }
-    );
+  private updateBankDetails(applicantId: any, bankDetails: any) {
+    return new Promise((resolve) => {
+      this._tobService.updateBankDetails(applicantId, bankDetails).subscribe(
+        res => {
+          resolve(true);
+        }, err => {
+          resolve(false)
+        }
+      );
+    });
   }
 
   setTenancyDetails(details: any) {
@@ -1599,6 +1595,11 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
       this.tenancyDetailForm.patchValue({
         numberOfHouseHolds: this.propertyDetails.numberOfBedroom
       });
+    }
+    if(!this.tenancyDetailForm.controls['hasSameHouseholdApplicants'].value) {
+      this.tenancyDetailForm.controls['numberOfHouseHolds'].setValue('');
+      this.tenancyDetailForm.controls['numberOfHouseHolds'].setValidators(Validators.required);
+      this.tenancyDetailForm.controls['numberOfHouseHolds'].updateValueAndValidity();
     }
   }
 
@@ -2078,14 +2079,17 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
       if (!this.checkIfDetailsPresent(this.applicantId)) {
         let details;
         let guarantorsList;
+        let bankDetails;
         if (this.applicationDetails.leadApplicantItemtype === 'M') {
           details = await this.fetchOnlyTenantDetails(this.applicantId);
           guarantorsList = await this.fetchTenantGuarantors(this.applicantId);
+          bankDetails = await this.getTenantBankDetails(this.applicantId);
         } else {
           details = await this.fetchOnlyAppDetails(this.applicantId);
           guarantorsList = await this.fetchApplicantGuarantors(this.applicantId);
+          bankDetails = await this.getApplicantBankDetails(this.applicantId);
         }
-        this.updateApplicantGrp(details, guarantorsList);
+        this.updateApplicantGrp(details, guarantorsList, bankDetails);
       }
     }
   }
@@ -2124,15 +2128,18 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
   async fetchDetailsAndSet(id) {
     let details;
     let guarantorsList;
+    let bankDetails;
     if (!this.checkIfDetailsPresent(id)) {
       if (this.applicationDetails.leadApplicantItemtype === 'M') {
         details = await this.fetchOnlyTenantDetails(id);
         guarantorsList = await this.fetchTenantGuarantors(id);
+        bankDetails = await this.getTenantBankDetails(id);
       } else {
         details = await this.fetchOnlyAppDetails(id);
         guarantorsList = await this.fetchApplicantGuarantors(id);
+        bankDetails = await this.getApplicantBankDetails(id);
       }
-      this.updateApplicantGrp(details, guarantorsList);
+      this.updateApplicantGrp(details, guarantorsList, bankDetails);
     }
   }
 
@@ -2146,7 +2153,7 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
     return present;
   }
 
-  updateApplicantGrp(details: any, guarantorList: any = []) {
+  async updateApplicantGrp(details: any, guarantorList: any = [], bankDetails: any) {
     const id = this.applicationDetails.leadApplicantItemtype === 'M' ? details.tenantId : details.applicantId;
     if (this.checkIfDetailsPresent(details?.applicantId)) {
       return;
@@ -2225,7 +2232,13 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
               disableSelectAddress: ((details?.address?.addressLine1 || details?.address?.addressLine2 || details?.address?.locality || details?.address?.town || details?.address?.county || details?.address?.country) ? true : false),
               addressList: [[]]
             }),
-            guarantors: this._formBuilder.array(guarantorControls)
+            guarantors: this._formBuilder.array(guarantorControls),
+            bankDetails: this._formBuilder.group({
+              bankName: bankDetails && bankDetails.bankName ? bankDetails.bankName : '',
+              sortcode: [bankDetails && bankDetails.sortcode ? bankDetails.sortcode : '', [ValidationService.bankCodeValidator, Validators.maxLength(8)]],
+              accountNumber: [bankDetails && bankDetails.accountNumber ? bankDetails.accountNumber : '', [Validators.maxLength(8)]],
+              accountName: bankDetails && bankDetails.accountName ? bankDetails.accountName : ''
+            })
           }
         )
       );
@@ -2243,13 +2256,25 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
     }
   }
 
-  updateAppDetails() {
+  updateAppDetails(showMessage = false) {
     let details = this.groupApplicantDetailsForm.get('list').value.filter(x => x.applicantId == this.applicantDetailSelectorControl.value)[0];
     const requestObj = details;
+    /* update applicant bank details if any */
+    const groupApplicantDetailsFormArray: any = this.groupApplicantDetailsForm.get('list') as FormArray;
+    groupApplicantDetailsFormArray.controls.forEach(async (group: FormGroup) => {
+      if (group.controls['applicantId'].value == (details.applicantId)) {
+        group.markAllAsTouched();
+        if (this.checkFormDirty(group.controls['bankDetails'])) {
+          await this.updateBankDetails(details.applicantId, group.controls['bankDetails'].value);
+        }
+      }
+    });
     requestObj.moveInDate = this.commonService.getFormatedDate(requestObj.moveInDate);
     requestObj.dateOfBirth = this.commonService.getFormatedDate(requestObj.dateOfBirth);
     this._tobService.updateApplicantDetails(details.applicantId, requestObj).subscribe(res => {
-      this.commonService.showMessage('updated successfully!', 'Applicant Details', 'success');
+      if (showMessage) {
+        this.commonService.showMessage('updated successfully!', 'Applicant Details', 'success');
+      }
     }, error => {
       this.commonService.showMessage('update Failed!', 'Applicant Details', 'error');
     });
