@@ -2460,7 +2460,6 @@ export class ApplicationDetailPage extends ApplicationDetailsHelper implements O
       groupApplicantDetailsFormArray.controls.forEach((group: FormGroup) => {
         if ((group.controls['applicantId'].value == lead.applicantId)) {
           if (!this.found) {
-            console.log(group.controls)
             this.found = true;
             return group;
           }
